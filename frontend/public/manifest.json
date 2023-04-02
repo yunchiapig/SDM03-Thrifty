@@ -1,8 +1,8 @@
 {
-    "short_name": "城市辭典",
-    "name": "城市辭典",
+    "short_name": "Thrifty",
+    "name": "Thrifty",
     "icons": [
-    
+      
     ],
     "start_url": ".",
     "display": "standalone",
