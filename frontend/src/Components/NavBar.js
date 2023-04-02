@@ -1,13 +1,13 @@
-import { Box, Flex, Text, IconButton, Button, Stack, Collapse, Icon, Link,
+import { Box, Container, Flex, Text, IconButton, Button, Stack, Collapse, Icon, Link,
     Popover, PopoverTrigger, PopoverContent, useColorModeValue, useDisclosure, Square} from '@chakra-ui/react';
 import {HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon} from '@chakra-ui/icons';
 import Logo from '../images/logo.png';
 
-export default function WithSubnavigation() {
+export default function NavBar() {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
-    <Box w="100%" bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+    <Box w="100%" bg={useColorModeValue('gray.100', 'gray.900')} px={4} pos="fixed">
       <Flex
         bg={useColorModeValue('white', 'gray.800')}
         color={useColorModeValue('gray.600', 'white')}
@@ -32,7 +32,7 @@ export default function WithSubnavigation() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Box maxW='3xs'>
+          <Box maxW='20vh'>
             <img id="logo" src={Logo} alt="Thrifty"/>
           </Box>
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
