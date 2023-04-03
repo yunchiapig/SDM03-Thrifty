@@ -1,22 +1,22 @@
-let express = require('express');
-let router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 // 引入 StoreInfo model
 const StoreInfo = require('../model/store_info');
 
 // 引入檢查格式的 middleware function
-const {checkStoreInfo, checkStoreID, checkStoreUpdateInfo} = require('./utilities/format_check');
+const {checkStoreInfo, checkID, checkStoreUpdateInfo} = require('./utilities/format_check');
 
 
 // 讀取店家資訊
-router.get('/', checkStoreID, async function(req, res, next) {
+router.get('/', checkID, async function(req, res, next) {
   
-  //取得店家ID，並進行檢查
+  //取得店家ID
   const storeID = req.query.id;
 
   // 透過 ID 查詢店家資訊
   try{
-    const storeInfo = await StoreInfo.findById(storeID);
+    const storeInfo = await StoreInfo.findById(storeID).select('-__v');
 
     // 查無店家資訊
     if (storeInfo === null) {
@@ -27,7 +27,7 @@ router.get('/', checkStoreID, async function(req, res, next) {
     }
 
     res.send(
-      {message: storeInfo}
+      {data: storeInfo}
     );
 
   } catch(error) {
@@ -50,13 +50,13 @@ router.post('/', checkStoreInfo, async function(req, res, next) {
     longitude: req.body.longitude,
     latitude: req.body.latitude,
     updateDate: Date.now(),
-    stock_id: []
+    stocks: []
   });
 
   try{
     const newStoreInfo = await storeInfo.save();
     res.send(
-      {message: newStoreInfo}
+      {data: newStoreInfo}
     );
 
   } catch(error) {
@@ -77,11 +77,12 @@ router.put('/', checkStoreUpdateInfo, async function(req, res, next) {
 
   // 取得更新資訊 updateInfo
   const updateInfo = req.updateInfo;
-  console.log(updateInfo);
+  // console.log(updateInfo);
 
   try {
     // 透過 ID 更新店家資訊
-    const updateResult = await StoreInfo.findByIdAndUpdate(storeID, updateInfo);
+    const options = {new: true}
+    const updateResult = await StoreInfo.findByIdAndUpdate(storeID, updateInfo, options);
     // console.log(updateResult);
 
     // 查無店家資訊
@@ -94,7 +95,7 @@ router.put('/', checkStoreUpdateInfo, async function(req, res, next) {
     
     res.send(
       {message: '更新店家資訊成功!'}
-    )
+    );
 
   } catch(error) {
     console.log(error);
@@ -106,7 +107,7 @@ router.put('/', checkStoreUpdateInfo, async function(req, res, next) {
 
 
 // 刪除店家資訊
-router.delete('/', checkStoreID, async function(req, res, next) {
+router.delete('/', checkID, async function(req, res, next) {
   // console.log(req.body);
 
   // 取得店家ID

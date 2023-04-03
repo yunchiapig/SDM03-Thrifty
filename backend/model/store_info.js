@@ -5,7 +5,7 @@ const connectDB = require('./DB_connection');
 connectDB();
 
 // create store info schema
-let storeInfoSchema = mongoose.Schema({
+let storeInfoSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -38,7 +38,7 @@ let storeInfoSchema = mongoose.Schema({
     required: true,
     default: Date.now
   },
-  stock_id: {
+  stocks: {
     type: Array,
   }
 });

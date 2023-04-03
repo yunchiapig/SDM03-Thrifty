@@ -17,7 +17,7 @@ paths:
         - name: id
           in: query
           description: |-
-            The Store's that ID you want to access. 
+            The Store's ID that you want to access. 
 
              *Example*: 64297c685d38da6c6aec99d2
           required: false
@@ -26,7 +26,7 @@ paths:
             example: '64297c685d38da6c6aec99d2'
       responses:
         '200':
-          description: 回傳 storeInfo Object
+          description: 回傳含有 storeInfo 的 data Object
         '400':
           description: 查無店家資訊
         '500':
@@ -44,7 +44,7 @@ paths:
 
       responses:
         '200':
-          description: 回傳 storeInfo Object
+          description: 回傳含有 storeInfo 的 data Object
         '400':
           description: Bad request，回傳 message Object
         '500':
@@ -64,7 +64,7 @@ paths:
 
       responses:
         '200':
-          description: 回傳 message Object
+          description: 回傳含有 storeInfo 的 data Object
         '400':
           description: Bad request，回傳 message Object
         '500':
@@ -80,18 +80,105 @@ paths:
         - name: id
           in: query
           description: |-
-            The Store's that ID you want to delete. 
+            The Store's ID that you want to delete. 
 
              *Example*: 64297c685d38da6c6aec99d2
           required: false
           schema:
             type: string
             example: '64297c685d38da6c6aec99d2'
-      responses:
+      responses: 
         '200':
           description: 回傳 message Object
         '400':
           description: 無對應店家的ID，或是該店家已被刪除。
+                        <br>回傳 message Object
+        '500':
+          description: Internal Server Error
+
+  /admin/food:
+    get:
+      summary: Returns food's information.
+      description: |-
+        Example 的 Food ID 可能會因為資料庫的變動而改變，請以 POST method 實際回傳的 Food ID 作為測試 ID。
+      tags:
+        - Food Admin API
+      parameters:
+        - name: id
+          in: query
+          description: |-
+            The Food's ID that you want to access. 
+
+             *Example*: 642a70ecd0781a1d4a5ab4e4
+          required: false
+          schema:
+            type: string
+            example: '642a70ecd0781a1d4a5ab4e4'
+      responses:
+        '200':
+          description: 回傳含有 foodInfo 的 data Object
+        '400':
+          description: 查無店家資訊
+        '500':
+          description: Internal Server Error
+
+    post:
+      summary: Create a food's information.
+      tags:
+        - Food Admin API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FoodInfo'
+
+      responses:
+        '200':
+          description: 回傳含有 foodInfo 的 data Object
+        '400':
+          description: Bad request，回傳 message Object
+        '500':
+          description: Internal Server Error
+
+    put:
+      summary: Update a food's information.
+      tags:
+        - Food Admin API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FoodUpdate'
+
+      responses:
+        '200':
+          description: 回傳含有 foodInfo 的 data Object
+        '400':
+          description: Bad request，回傳 message Object
+        '500':
+          description: Internal Server Error
+
+    delete:
+      summary: Delete a food's information.
+      tags:
+        - Food Admin API
+      parameters:
+        - name: id
+          in: query
+          description: |-
+            The Food's ID that you want to delete. 
+
+             *Example*: 642a7d4c70a28783d10cd54f
+          required: false
+          schema:
+            type: string
+            example: '642a7d4c70a28783d10cd54f'
+
+      responses:
+        '200':
+          description: 回傳 message Object
+        '400':
+          description: 無對應食物品項的ID，或是該食物品項已被刪除。
                         <br>回傳 message Object
         '500':
           description: Internal Server Error
@@ -142,3 +229,47 @@ components:
             tel:
               type: string
               example: 02-98938953
+    
+    FoodInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 黯然銷魂飯
+        category:
+          type: string
+          example: 飯
+        tag:
+          type: string
+          example: 港式
+        original_price:
+          type: integer
+          example: 100
+        discount_price:
+          type: integer
+          example: 80
+
+    FoodUpdate:
+      type: object
+      properties:
+        foodID:
+          type: string
+          example: 642a70ecd0781a1d4a5ab4e4
+        updateInfo:
+          type: object
+          properties:
+            name:
+              type: string
+              example: 番茄公仔麵
+            category:
+              type: string
+              example: 飯
+            tag:
+              type: string
+              example: 港式
+            original_price:
+              type: integer
+              example: 200
+            discount_price:
+              type: integer
+              example: 125
