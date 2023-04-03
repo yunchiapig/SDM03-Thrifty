@@ -1,0 +1,144 @@
+openapi: 3.0.0
+
+info:
+  title: Thrifty API
+  description: ''
+  version: '1.0'
+
+paths:
+  /admin/store:
+    get:
+      summary: Returns store's information.
+      description: |-
+        Example 的 Store ID 可能會因為資料庫的變動而改變，請以 POST method 實際回傳的 Store ID 作為測試 ID。
+      tags:
+        - Store Admin API
+      parameters:
+        - name: id
+          in: query
+          description: |-
+            The Store's that ID you want to access. 
+
+             *Example*: 64297c685d38da6c6aec99d2
+          required: false
+          schema:
+            type: string
+            example: '64297c685d38da6c6aec99d2'
+      responses:
+        '200':
+          description: 回傳 storeInfo Object
+        '400':
+          description: 查無店家資訊
+        '500':
+          description: Internal Server Error
+
+    post:
+      summary: Create a store's information.
+      tags:
+        - Store Admin API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreInfo'
+
+      responses:
+        '200':
+          description: 回傳 storeInfo Object
+        '400':
+          description: Bad request，回傳 message Object
+        '500':
+          description: Internal Server Error
+
+    put:
+      summary: Update store's information.
+      description: |-
+        Example 的 Store ID 可能會因為資料庫的變動而改變，請以 POST method 實際回傳的 Store ID 作為測試 ID。
+      tags:
+        - Store Admin API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreUpdate'
+
+      responses:
+        '200':
+          description: 回傳 message Object
+        '400':
+          description: Bad request，回傳 message Object
+        '500':
+          description: Internal Server Error
+
+    delete:
+      summary: Delete store's information.
+      description: |-
+        Example 的 Store ID 可能會因為資料庫的變動而改變，請以 POST method 實際回傳的 Store ID 作為測試 ID。
+      tags:
+        - Store Admin API
+      parameters:
+        - name: id
+          in: query
+          description: |-
+            The Store's that ID you want to delete. 
+
+             *Example*: 64297c685d38da6c6aec99d2
+          required: false
+          schema:
+            type: string
+            example: '64297c685d38da6c6aec99d2'
+      responses:
+        '200':
+          description: 回傳 message Object
+        '400':
+          description: 無對應店家的ID，或是該店家已被刪除。
+                        <br>回傳 message Object
+        '500':
+          description: Internal Server Error
+
+
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+
+  schemas:
+    StoreInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 好食咖哩
+        category:
+          type: string
+          example: 其他
+        tel:
+          type: string
+          example: 02-58758758
+        address:
+          type: string
+          example: 台北市中正區重慶南路一段122號
+        longitude:
+          type: double
+          example: 121.55765
+        latitude:
+          type: double
+          example: 25.0352
+    
+    StoreUpdate:
+      type: object
+      properties:
+        storeID:
+          type: string
+          example: 64297c685d38da6c6aec99d2
+        updateInfo:
+          type: object
+          properties:
+            name:
+              type: string
+              example: 燒烤王
+            tel:
+              type: string
+              example: 02-98938953
