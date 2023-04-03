@@ -1,12 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 
 // 引入 FoodInfo model
 const FoodInfo = require('../model/food_info');
 
+// 引入 StoreInfo model
+const StoreInfo = require('../model/store_info');
+
 // 引入檢查格式的 middleware function
 const {checkID, checkFoodPrice} = require('./utilities/format_check');
 
+
+// 讀取食物品項資訊
 router.get('/', checkID, async function(req, res, next) {
   
   // 取得食物品項 ID
@@ -36,18 +42,37 @@ router.get('/', checkID, async function(req, res, next) {
 });
 
 
+// 建立食物品項資訊
 router.post('/', checkFoodPrice, async function(req, res, next) {
   // console.log(req.body);
+  const storeID = req.body.storeID;
+  const updateInfo = req.body.updateInfo;
   const foodInfo = new FoodInfo({
-    name: req.body.name,
-    category: req.body.category,
-    tag: req.body.tag,
-    original_price: req.body.original_price,
-    discount_price: req.body.discount_price,
+    name: updateInfo.name,
+    category: updateInfo.category,
+    tag: updateInfo.tag,
+    original_price: updateInfo.original_price,
+    discount_price: updateInfo.discount_price,
   });
 
   try{
+    // 建立食物品項資訊
     const newFoodInfo = await foodInfo.save();
+    const foodID = newFoodInfo._id;
+
+    // 將食物品項 ID 加入店家 stock 中
+    const stockUpdateResult = await StoreInfo.findByIdAndUpdate(
+      storeID, 
+      {$push: {stocks: {_id: foodID, quantity: 0}}}
+    );
+
+    if (stockUpdateResult === null ){
+      res.status(400).send(
+        {message: "查無該店家"}
+      );
+      return;
+    }
+
     res.send(
       {data: newFoodInfo}
     );
@@ -60,6 +85,7 @@ router.post('/', checkFoodPrice, async function(req, res, next) {
 });
 
 
+// 更新食物品項資訊
 router.put('/', checkFoodPrice, async function(req, res, next) {
   // 取得食物品項 ID
   const foodID = req.body.foodID;
@@ -94,9 +120,11 @@ router.put('/', checkFoodPrice, async function(req, res, next) {
 });
 
 
+// 刪除食物品項資訊
 router.delete('/', async function(req, res, next) {
   // 取得食物品項 ID
-  const foodID = req.query.id;
+  const foodID = new mongoose.Types.ObjectId(req.query.foodID);
+  const storeID = req.query.storeID;
 
   try{
     // 透過 ID 刪除食物品項資訊
@@ -107,6 +135,21 @@ router.delete('/', async function(req, res, next) {
     if (deleteResult === null ){
       res.status(400).send(
         {message: "查無食物品項資訊"}
+      );
+      return;
+    }
+
+    // 將食物品項 ID 從店家 stock 中移除
+    const stockDeleteResult = await StoreInfo.findByIdAndUpdate(
+      storeID,
+      {$pull: {stocks: {_id: foodID}}},
+      {new: true} // to return the modified document
+    );
+
+    // 查無該項商品庫存
+    if (stockDeleteResult === null ){
+      res.status(400).send(
+        {message: "查無該項商品庫存"}
       );
       return;
     }

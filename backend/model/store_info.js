@@ -40,7 +40,8 @@ let storeInfoSchema = new mongoose.Schema({
   },
   stocks: {
     type: Array,
-  }
+    default: []
+  },
 });
 
 // create store info model
