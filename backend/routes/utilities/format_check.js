@@ -1,9 +1,9 @@
-// 檢查店家ID格式
-function checkStoreID(req, res, next){
+// 檢查 ID 格式
+function checkID(req, res, next){
   const storeID = req.query.id;
   if (storeID === undefined || storeID.length !== 24) {
     res.status(400).send(
-      {message: "店家ID格式錯誤"}
+      {message: "ID 格式錯誤"}
     );
     return;
   }
@@ -199,6 +199,6 @@ function checkStoreUpdateInfo(req, res, next){
 
 module.exports = {
   checkStoreInfo,
-  checkStoreID,
+  checkID,
   checkStoreUpdateInfo
 }

@@ -14,7 +14,8 @@ const swaggerDocument =  YAML.load(fs.readFileSync('./swagger.yaml', 'utf8'));
 
 const healthcheckRouter = require('./routes/healthcheck');
 const usersRouter = require('./routes/users');
-const storeAdminRouter = require('./routes/store_info_api')
+const storeAdminRouter = require('./routes/store_info_api');
+const foodAdminRouter = require('./routes/food_info_api');
 
 
 const app = express();
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/healthcheck', healthcheckRouter);
 app.use('/users', usersRouter);
 app.use('/admin/store', storeAdminRouter);
+app.use('/admin/food', foodAdminRouter);
 
 // swagger ui
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
