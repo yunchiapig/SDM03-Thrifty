@@ -5,7 +5,7 @@ const router = express.Router();
 const FoodInfo = require('../model/food_info');
 
 // 引入檢查格式的 middleware function
-const {checkID} = require('./utilities/format_check');
+const {checkID, checkFoodPrice} = require('./utilities/format_check');
 
 router.get('/', checkID, async function(req, res, next) {
   
@@ -36,7 +36,7 @@ router.get('/', checkID, async function(req, res, next) {
 });
 
 
-router.post('/', async function(req, res, next) {
+router.post('/', checkFoodPrice, async function(req, res, next) {
   // console.log(req.body);
   const foodInfo = new FoodInfo({
     name: req.body.name,
@@ -60,7 +60,7 @@ router.post('/', async function(req, res, next) {
 });
 
 
-router.put('/', async function(req, res, next) {
+router.put('/', checkFoodPrice, async function(req, res, next) {
   // 取得食物品項 ID
   const foodID = req.body.foodID;
 
@@ -91,7 +91,6 @@ router.put('/', async function(req, res, next) {
       {message: "Internal Server Error!"}
     );
   }
-
 });
 
 

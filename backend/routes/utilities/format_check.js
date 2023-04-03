@@ -197,8 +197,28 @@ function checkStoreUpdateInfo(req, res, next){
 }
 
 
+// 檢查食物價格格式
+function checkFoodPrice(req, res, next){
+  const original_price = req.body.original_price;
+  const discount_price = req.body.discount_price;
+  const price = [original_price, discount_price];
+
+  for (let i = 0; i < price.length; i++) {
+    // 檢查價格是否為數字
+    if (!(/^\d+$/.test(price[i]))){
+      res.status(400).send(
+        {message: "價格格式錯誤"}
+      );
+      return;
+    }
+  }
+
+  next();
+}
+
 module.exports = {
   checkStoreInfo,
   checkID,
-  checkStoreUpdateInfo
+  checkStoreUpdateInfo,
+  checkFoodPrice
 }
