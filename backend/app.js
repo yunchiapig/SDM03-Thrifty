@@ -16,6 +16,7 @@ const healthcheckRouter = require('./routes/healthcheck');
 const usersRouter = require('./routes/users');
 const storeAdminRouter = require('./routes/store_info_api');
 const foodAdminRouter = require('./routes/food_info_api');
+const stockAdminRouter = require('./routes/stock_info_api');
 
 
 const app = express();
@@ -36,6 +37,7 @@ app.use('/healthcheck', healthcheckRouter);
 app.use('/users', usersRouter);
 app.use('/admin/store', storeAdminRouter);
 app.use('/admin/food', foodAdminRouter);
+app.use('/admin/stock', stockAdminRouter);
 
 // swagger ui
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

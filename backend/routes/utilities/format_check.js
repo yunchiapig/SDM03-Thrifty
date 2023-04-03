@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 // 檢查 ID 格式
 function checkID(req, res, next){
   const storeID = req.query.id;
@@ -189,7 +191,7 @@ function checkStoreUpdateInfo(req, res, next){
     }
   }
 
-  console.log(updateInfo);
+  // console.log(updateInfo);
 
   // 將 updateInfo 放入 req.locals
   req.updateInfo = updateInfo;
@@ -199,8 +201,9 @@ function checkStoreUpdateInfo(req, res, next){
 
 // 檢查食物價格格式
 function checkFoodPrice(req, res, next){
-  const original_price = req.body.original_price;
-  const discount_price = req.body.discount_price;
+  const updateInfo = req.body.updateInfo;
+  const original_price = updateInfo.original_price;
+  const discount_price = updateInfo.discount_price;
   const price = [original_price, discount_price];
 
   for (let i = 0; i < price.length; i++) {
@@ -216,9 +219,44 @@ function checkFoodPrice(req, res, next){
   next();
 }
 
+// 檢查 stock updateInfo 格式
+function checkStockUpdateInfo(req, res, next){
+  const storeID = req.body.storeID;
+  const foodID = req.body.foodID;
+  const updateQty = req.body.updateQty;
+
+  // 檢查 StoreID 格式
+  if (storeID === undefined || storeID.length !== 24) {
+    res.status(400).send(
+      {message: "StoreID 格式錯誤"}
+    );
+    return;
+  }
+
+  // 檢查 FoodID 格式
+  if (foodID === undefined || foodID.length !== 24) {
+    res.status(400).send(
+      {message: "FoodID 格式錯誤"}
+    );
+    return;
+  }
+
+  // 檢查 updateQty 格式
+  if (!(/^\d+$/.test(updateQty))) {
+    res.status(400).send(
+      {message: "updateQty 格式錯誤"}
+    );
+    return;
+  }
+
+  next();
+}
+
+
 module.exports = {
   checkStoreInfo,
   checkID,
   checkStoreUpdateInfo,
-  checkFoodPrice
+  checkFoodPrice,
+  checkStockUpdateInfo
 }

@@ -163,7 +163,7 @@ paths:
       tags:
         - Food Admin API
       parameters:
-        - name: id
+        - name: foodID
           in: query
           description: |-
             The Food's ID that you want to delete. 
@@ -174,6 +174,17 @@ paths:
             type: string
             example: '642a7d4c70a28783d10cd54f'
 
+        - name: storeID
+          in: query
+          description: |-
+            The store's ID. 
+
+             *Example*: 642a9a4510330d767c0fd0e7
+          required: false
+          schema:
+            type: string
+            example: '642a9a4510330d767c0fd0e7'
+
       responses:
         '200':
           description: 回傳 message Object
@@ -182,6 +193,56 @@ paths:
                         <br>回傳 message Object
         '500':
           description: Internal Server Error
+
+  /admin/stock:
+    summary: 測試
+    get:
+      summary: Returns stock's information with food's information.
+      description: |-
+        Example 的 Food ID 可能會因為資料庫的變動而改變，請以 POST method 實際回傳的 Food ID 作為測試 ID。
+      tags:
+        - Stock Admin API
+      parameters:
+        - name: id
+          in: query
+          description: |-
+            The Store's ID that you want to get its stock. 
+
+             *Example*: 642a9a4510330d767c0fd0e7
+          required: false
+          schema:
+            type: string
+            example: '642a9a4510330d767c0fd0e7'
+      responses:
+        '200':
+          description: 回傳裝有 stocks 資訊的 data Object。<br>
+                       沒有品項會回傳 message Object。
+        '400':
+          description: id 格式錯誤
+        '500':
+          description: Internal Server Error
+
+
+    put:
+      summary: Update stock's quantity.
+      description: |-
+        Example 的多個 ID 可能會因為資料庫的變動而改變，請確認各個 ID 都存在後再作為測試 ID 使用。
+      tags:
+        - Stock Admin API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StocksUpdate'
+
+      responses:
+        '200':
+          description: 回傳含有 stocks 資訊的 data Object
+        '400':
+          description: Bad request，回傳 message Object
+        '500':
+          description: Internal Server Error
+
 
 
 components:
@@ -233,21 +294,27 @@ components:
     FoodInfo:
       type: object
       properties:
-        name:
+        storeID:
           type: string
-          example: 黯然銷魂飯
-        category:
-          type: string
-          example: 飯
-        tag:
-          type: string
-          example: 港式
-        original_price:
-          type: integer
-          example: 100
-        discount_price:
-          type: integer
-          example: 80
+          example: 642a9a4510330d767c0fd0e7
+        updateInfo:
+          type: object
+          properties:
+            name:
+              type: string
+              example: 黯然銷魂飯
+            category:
+              type: string
+              example: 飯
+            tag:
+              type: string
+              example: 港式
+            original_price:
+              type: integer
+              example: 100
+            discount_price:
+              type: integer
+              example: 80
 
     FoodUpdate:
       type: object
@@ -273,3 +340,16 @@ components:
             discount_price:
               type: integer
               example: 125
+
+    StocksUpdate:
+      type: object
+      properties:
+        storeID:
+          type: string
+          example: 642a9a4510330d767c0fd0e7
+        foodID:
+          type: string
+          example: 642acf92fe71d1fc244d85fc
+        updateQty:
+          type: integer
+          example: 10

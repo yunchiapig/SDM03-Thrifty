@@ -24,7 +24,7 @@ let foodInfoSchema = new mongoose.Schema({
   discount_price: {
     type: Number,
     required: true
-  },
+  }
 });
 
 //create food info model
