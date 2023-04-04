@@ -268,12 +268,17 @@ components:
         address:
           type: string
           example: 台北市中正區重慶南路一段122號
-        longitude:
-          type: double
-          example: 121.55765
-        latitude:
-          type: double
-          example: 25.0352
+        location:
+          type: object
+          properties:
+            type:
+              type: string
+              example: Point
+            coordinates:
+              type: array
+              items:
+                type: number
+              example: [121.513, 25.032]
     
     StoreUpdate:
       type: object
@@ -290,6 +295,17 @@ components:
             tel:
               type: string
               example: 02-98938953
+            location:
+              type: object
+              properties:
+                type:
+                  type: string
+                  example: Point
+                coordinates:
+                  type: array
+                  items:
+                    type: number
+                  example: [81.513, 46.032]
     
     FoodInfo:
       type: object

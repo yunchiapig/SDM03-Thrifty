@@ -47,8 +47,7 @@ router.post('/', checkStoreInfo, async function(req, res, next) {
     category: req.body.category,
     tel: req.body.tel,
     address: req.body.address,
-    longitude: req.body.longitude,
-    latitude: req.body.latitude,
+    location: req.body.location,
     updateDate: Date.now(),
     stocks: []
   });

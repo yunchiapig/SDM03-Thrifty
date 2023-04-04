@@ -87,12 +87,12 @@ function checkStoreInfo(req, res, next){
   const category = req.body.category;
   const tel = req.body.tel;
   const address = req.body.address;
-  const longitude = req.body.longitude;
-  const latitude = req.body.latitude;
+  const longitude = req.body.location.coordinates[0];
+  const latitude = req.body.location.coordinates[1];
   
   // 檢查 req.body 是否有缺漏
   const bodyKeys = Object.keys(req.body);
-  if (bodyKeys.length !== 6){
+  if (bodyKeys.length !== 5){
     res.status(400).send(
       {message: "店家資訊格式錯誤，請檢查是否有缺漏。"}
     );
