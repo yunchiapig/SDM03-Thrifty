@@ -204,7 +204,15 @@ function checkFoodPrice(req, res, next){
   const updateInfo = req.body.updateInfo;
   const original_price = updateInfo.original_price;
   const discount_price = updateInfo.discount_price;
-  const price = [original_price, discount_price];
+  let price = [];
+
+  if (original_price !== undefined){
+    price.push(original_price);
+  }
+
+  if (discount_price !== undefined){
+    price.push(discount_price);
+  }
 
   for (let i = 0; i < price.length; i++) {
     // 檢查價格是否為數字
