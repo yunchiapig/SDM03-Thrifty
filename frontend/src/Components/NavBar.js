@@ -8,7 +8,7 @@ export default function NavBar() {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
-    <Box w="100%" bg={useColorModeValue('gray.100', 'gray.900')} px={4} position="fixed">
+    <Box w="100%" bg={useColorModeValue('gray.100', 'gray.900')} px={4} position="fixed" id="navbar">
       <Flex
         bg={useColorModeValue('white', 'gray.800')}
         color={useColorModeValue('gray.600', 'white')}

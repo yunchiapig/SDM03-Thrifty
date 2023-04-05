@@ -7,6 +7,10 @@
   height: null;
   resize: 'contain';
 } */
+.sticky {
+  position: fixed;
+  width: 100%;
+}
 
 .card{
   justify-content: center; 
