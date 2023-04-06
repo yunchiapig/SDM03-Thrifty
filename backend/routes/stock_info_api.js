@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const {checkID, checkStockUpdateInfo} = require('./utilities/format_check');
+const cors = require('cors');
 
 // 引入 StoreInfo model
 const StoreInfo = require('../model/store_info');
 const FoodInfo = require('../model/food_info');
-
+router.use(cors());
 // 取得 Stock 資訊
 router.get('/', checkID, async function(req, res, next) {
   const storeID = req.query.id;
