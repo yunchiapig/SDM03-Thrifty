@@ -260,11 +260,27 @@ function checkStockUpdateInfo(req, res, next){
   next();
 }
 
+function checkUserLocation(req, res, next){
+  const { longitude, latitude } = req.query;
+
+  // 檢查經度格式是否正確
+  if (checkLongitude(longitude, res)){
+    return;
+  }
+
+  // 檢查緯度格式是否正確
+  if (checkLatitude(latitude, res)){
+    return;
+  }
+
+  next();
+}
 
 module.exports = {
   checkStoreInfo,
   checkID,
   checkStoreUpdateInfo,
   checkFoodPrice,
-  checkStockUpdateInfo
+  checkStockUpdateInfo,
+  checkUserLocation
 }

@@ -5,17 +5,20 @@ const router = express.Router();
 const FoodInfo = require('../model/food_info');
 const StoreInfo = require('../model/store_info');
 
-router.get('/', async function (req, res) {
-    const { store_id } = req.query;
+// 引入檢查格式的 middleware function
+const { checkID } = require('./utilities/format_check');
+
+router.get('/', checkID, async function (req, res) {
+    const store_id = req.query.id;
 
     try {
-      const store_exist = await StoreInfo.findOne({ family_id: store_id })
+      const store_exist = await StoreInfo.findById(store_id)
   
       if(!store_exist) {
           res.status(400).send({ message: "查無店家資訊" });
       } else {
           if (store_exist.stocks.length == 0) {
-              res.status(200).send({ message: "店家目前無食物" });
+              res.status(400).send({ message: "店家目前無食物" });
           }
           else {
               var foods = Array()
