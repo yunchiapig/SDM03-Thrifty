@@ -4,7 +4,10 @@ const router = express.Router();
 // 引入 StoreInfo model
 const StoreInfo = require('../model/store_info');
 
-router.get('/', async function (req, res) {
+// 引入檢查格式的 middleware function
+const { checkUserLocation } = require('./utilities/format_check');
+
+router.get('/', checkUserLocation, async function (req, res) {
     const { longitude, latitude } = req.query;
   
     try {

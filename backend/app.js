@@ -47,8 +47,8 @@ app.use('/api/1.0/admin/food', foodAdminRouter);
 app.use('/api/1.0/admin/stock', stockAdminRouter);
 
 // get routers
-app.use('/get/stores', getStoresRouter);
-app.use('/get/foods', getFoodsRouter);
+app.use('/api/1.0/get/stores', getStoresRouter);
+app.use('/api/1.0/get/foods', getFoodsRouter);
 
 // swagger ui
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
