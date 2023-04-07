@@ -260,6 +260,7 @@ function checkStockUpdateInfo(req, res, next){
   next();
 }
 
+
 function checkUserLocation(req, res, next){
   const { longitude, latitude } = req.query;
 

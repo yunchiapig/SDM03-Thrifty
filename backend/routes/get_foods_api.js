@@ -13,7 +13,7 @@ router.get('/', checkID, async function (req, res) {
 
     try {
       const store_exist = await StoreInfo.findById(store_id)
-  
+
       if(!store_exist) {
           res.status(400).send({ message: "查無店家資訊" });
       } else {
