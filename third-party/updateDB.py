@@ -12,7 +12,7 @@ CONNECTION_STRING = "mongodb+srv://{}:{}@thrifty.0xdedx2.mongodb.net/?retryWrite
     .format(os.getenv('MONGODB_USER'), os.getenv('MONGODB_PASSWORD'))
 
 
-def requestFamily(codes):
+def requestFamily(familyKeys):
     family_api = "https://stamp.family.com.tw/api/maps/MapProductInfo"
     headers = {
         'content-type': 'application/json', 
@@ -28,12 +28,12 @@ def requestFamily(codes):
         def run(self):
             while self.queue.qsize() > 0:
                 i = self.queue.get()
-                p = {"OldPKeys":codes[200*i:200*(i+1)],"PostInfo":"", "Latitude":0,"Longitude":0,"ProjectCode":"202106302"}
+                p = {"OldPKeys":familyKeys[200*i:200*(i+1)],"PostInfo":"", "Latitude":0,"Longitude":0,"ProjectCode":"202106302"}
                 raw_response = requests.post(family_api, headers = headers, json = p).json()['data']
                 store_infos.extend(raw_response)
     
     my_queue = queue.Queue()
-    for i in range(len(codes)//200):
+    for i in range(len(familyKeys)//200):
         my_queue.put(i)
     
     workers = [Worker(my_queue) for _ in range(4)]
@@ -42,8 +42,8 @@ def requestFamily(codes):
     for worker in workers:
         worker.join()
 
-    # for i in range(len(codes)//200):
-    #     p = {"OldPKeys":codes[200*i:200*(i+1)],"PostInfo":"","Latitude":0,"Longitude":0,"ProjectCode":"202106302"}
+    # for i in range(len(familyKeys)//200):
+    #     p = {"OldPKeys":familyKeys[200*i:200*(i+1)],"PostInfo":"","Latitude":0,"Longitude":0,"ProjectCode":"202106302"}
     #     raw_response = requests.post(family_api, headers = headers, json = p).json()['data']
     #     store_infos.extend(raw_response)
     return store_infos
@@ -74,7 +74,7 @@ def reformatFamily(store_infos, familyPIDs):
                         '_id': pid,
                         'name': prod['name'],
                         'category': category,
-                        'tag': tag,
+                        'tag': [tag],
                         'original_price' : 0,
                         'discount_price' : 0
                     }
@@ -114,15 +114,15 @@ def updateFamily():
     else:
         familyPIDs = set()
 
-    # load area codes
-    if os.path.isfile('areaCodes.pickle'):
-        with open("areaCodes.pickle", "rb") as f:
-            codes = pickle.load(f)
+    # load familyKeys
+    if os.path.isfile('familyKeys.pickle'):
+        with open("familyKeys.pickle", "rb") as f:
+            familyKeys = pickle.load(f)
     else:
-        codes = [[]]
+        familyKeys = []
 
     # request family api
-    store_infos = requestFamily(codes)
+    store_infos = requestFamily(familyKeys)
 
     # reformat raw result
     new_foods, stores, familyPIDs = reformatFamily(store_infos, familyPIDs)
