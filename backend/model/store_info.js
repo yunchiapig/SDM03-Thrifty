@@ -39,6 +39,7 @@ let storeInfoSchema = new mongoose.Schema({
     default: []
   },
 });
+storeInfoSchema.index({ location: '2dsphere' });
 
 // create store info model
 const StoreInfo = mongoose.model('store', storeInfoSchema, 'store');
