@@ -1,0 +1,4 @@
+pymongo == 4.3.3
+requests == 2.28.2
+python-dotenv == 1.0.0
+APScheduler == 3.10.1
