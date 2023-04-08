@@ -19,7 +19,7 @@ router.get('/', checkID, async function(req, res, next) {
   const foodID = req.query.id;
 
   try{
-    const foodInfo = await FoodInfo.findById(foodID).select('-__v');
+    const foodInfo = await FoodInfo.findById(foodID).select('-__v').lean();
 
     // 查無食物品項資訊
     if (foodInfo === null ){
@@ -53,9 +53,30 @@ router.post('/', checkFoodPrice, async function(req, res, next) {
     tag: updateInfo.tag,
     original_price: updateInfo.original_price,
     discount_price: updateInfo.discount_price,
+    description: updateInfo.description,
   });
 
   try{
+    // 檢查店家是否存在
+    const storeExists = await StoreInfo.exists({ _id: storeID });
+    if (!storeExists) {
+      res.status(400).send({message: "店家不存在。"});
+      return;
+    }
+
+    // 取得店家的庫存資訊
+    const stockIds = await StoreInfo.findOne({ _id: storeID })
+    .select('stocks._id')
+    .lean() // return plain JavaScript objects to get better performance
+    .then(store => store.stocks.map(stock => stock._id));
+
+    // 檢查食物品項是否已存在
+    const foodExists = await FoodInfo.exists({ _id: {$in: stockIds}, name: updateInfo.name });
+    if (foodExists) {
+      res.status(400).send({message: "食物品項已存在。"});
+      return;
+    }
+
     // 建立食物品項資訊
     const newFoodInfo = await foodInfo.save();
     const foodID = newFoodInfo._id;
@@ -65,13 +86,6 @@ router.post('/', checkFoodPrice, async function(req, res, next) {
       storeID, 
       {$push: {stocks: {_id: foodID, quantity: 0}}}
     );
-
-    if (stockUpdateResult === null ){
-      res.status(400).send(
-        {message: "查無該店家"}
-      );
-      return;
-    }
 
     res.send(
       {data: newFoodInfo}
