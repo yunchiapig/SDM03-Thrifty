@@ -45,7 +45,7 @@ router.get('/', checkID, async function(req, res, next) {
 
 // 建立食物品項資訊
 router.post('/', checkFoodPrice, async function(req, res, next) {
-  // console.log(req.body);
+  //console.log(req.body);
   const storeID = req.body.storeID;
   const updateInfo = req.body.updateInfo;
   const foodInfo = new FoodInfo({
