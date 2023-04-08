@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const cors = require('cors');
+router.use(cors());
 
 // 引入 FoodInfo model
 const FoodInfo = require('../model/food_info');
@@ -12,7 +13,6 @@ const StoreInfo = require('../model/store_info');
 // 引入檢查格式的 middleware function
 const {checkID, checkFoodPrice} = require('./utilities/format_check');
 
-router.use(cors());
 // 讀取食物品項資訊
 router.get('/', checkID, async function(req, res, next) {
   
