@@ -23,10 +23,10 @@ router.get('/', checkID, async function (req, res) {
           else {
               var foods = Array()
               for (const stock of store_exist.stocks) {
-                  const food_id = stock.family_pid
+                  const food_id = stock._id
                   const quantity = stock.quantity
   
-                  const food_exist = await FoodInfo.findOne({ family_pid: food_id })
+                  const food_exist = await FoodInfo.findById(food_id)
                   if(!food_exist) {
                       res.status(400).send({ message: "查無食物資訊" });
                   } else {
