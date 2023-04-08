@@ -6,6 +6,10 @@ connectDB();
 
 // create store info schema
 let storeInfoSchema = new mongoose.Schema({
+  original_id: {
+    type: String,
+    required: true
+  },
   name: {
     type: String,
     required: true
@@ -17,9 +21,6 @@ let storeInfoSchema = new mongoose.Schema({
   tel: {
     type: String,
     required: true
-  },
-  rating: {
-    type: Number,
   },
   address: {
     type: String,

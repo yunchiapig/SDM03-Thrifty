@@ -6,6 +6,10 @@ connectDB();
 
 // create food info schema
 let foodInfoSchema = new mongoose.Schema({
+  original_id: {
+    type: String,
+    required: true
+  },
   name: {
     type: String,
     required: true
