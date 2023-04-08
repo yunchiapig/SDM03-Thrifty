@@ -16,7 +16,7 @@ router.get('/', checkID, async function(req, res, next) {
 
   // 透過 ID 查詢店家資訊
   try{
-    const storeInfo = await StoreInfo.findById(storeID).select('-__v');
+    const storeInfo = await StoreInfo.findById(storeID).select('-__v').lean();
 
     // 查無店家資訊
     if (storeInfo === null) {

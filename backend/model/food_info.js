@@ -28,6 +28,12 @@ let foodInfoSchema = new mongoose.Schema({
   discount_price: {
     type: Number,
     required: true
+  },
+  description: {
+    type: String
+  },
+  image: {
+    type: String
   }
 });
 

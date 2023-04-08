@@ -390,6 +390,9 @@ components:
             discount_price:
               type: integer
               example: 80
+            description:
+              type: string
+              example: 濃郁的咖哩配上嫩雞，完美絕配！
 
     FoodUpdate:
       type: object

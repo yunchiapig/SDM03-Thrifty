@@ -227,6 +227,7 @@ function checkFoodPrice(req, res, next){
   next();
 }
 
+
 // 檢查 stock updateInfo 格式
 function checkStockUpdateInfo(req, res, next){
   const storeID = req.body.storeID;
@@ -261,6 +262,7 @@ function checkStockUpdateInfo(req, res, next){
 }
 
 
+// 檢查使用者的經緯度格式
 function checkUserLocation(req, res, next){
   const { longitude, latitude } = req.query;
 
