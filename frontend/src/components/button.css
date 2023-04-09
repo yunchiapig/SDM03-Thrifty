@@ -1,0 +1,9 @@
+.iconButton:hover > svg{
+    fill: black;
+    cursor: pointer;
+}
+
+.iconButton2:hover > svg{
+    color: black;
+    cursor: pointer;
+}
