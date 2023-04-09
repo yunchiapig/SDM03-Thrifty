@@ -138,6 +138,7 @@ router.put('/', checkFoodPrice, async function(req, res, next) {
 // 刪除食物品項資訊
 router.delete('/', async function(req, res, next) {
   // 取得食物品項 ID
+  console.log(req.query);
   const foodID = new mongoose.Types.ObjectId(req.query.foodID);
   const storeID = req.query.storeID;
 
