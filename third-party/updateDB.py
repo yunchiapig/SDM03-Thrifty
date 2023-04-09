@@ -1,10 +1,9 @@
-from pymongo import MongoClient, InsertOne, UpdateOne
+from pymongo import MongoClient, UpdateOne
 import requests
-import pickle
 import os
 from dotenv import load_dotenv
 import threading
-import queue
+from queue import Queue
 
 # Global Settings
 load_dotenv()
@@ -13,6 +12,7 @@ CONNECTION_STRING = "mongodb+srv://{}:{}@thrifty.0xdedx2.mongodb.net/?retryWrite
 db = MongoClient(CONNECTION_STRING).Thrifty
 store_collection = db['store']
 food_collection = db["food"]
+meta_collection = db["meta"]
 
 
 def threadingFamily():
@@ -39,7 +39,7 @@ def threadingFamily():
                 if updateDate[0] == '' and store_infos != []:
                     updateDate[0] = store_infos[0]['updateDate']
     
-    my_queue = queue.Queue()
+    my_queue = Queue()
     for i in range(len(familyKeys)//200):
         my_queue.put(i)
     
@@ -70,6 +70,7 @@ def reformatFamily(store_infos):
                 else:
                     food = {
                         'original_id': pid,
+                        'brand': '全家',
                         'name': prod['name'],
                         'category': category,
                         'tag': [tag],
@@ -85,72 +86,32 @@ def reformatFamily(store_infos):
                     'quantity': prod['qty'],
                     'updateDate': updateDate
                 })
-        
-        id = data['oldPKey']
-        if id in familyIDs:
-            msg = UpdateOne({"original_id": data['oldPKey'], 'category': '全家'}, 
-                            {'$set': {'updateDate': updateDate, 'stocks': stocks}}, upsert=True)
-        else:
-            store = {
-                'original_id': id,
-                'name': data['name'],
-                'category': '全家',
-                'tel': data['tel'],
-                'address': data['address'],
-                'location': {
-                    'type': 'Point', 
-                    'coordinates':[data['longitude'], data['latitude']]
-                    },
-                'updateDate': updateDate,
-                'stocks': stocks
-            }
-            msg = InsertOne(store)
-            familyIDs.add(id)
             
-        msgs.append(msg)
+        msgs.append(UpdateOne({"original_id": data['oldPKey'], 'category': '全家'}, 
+                        {'$set': {'updateDate': updateDate, 'stocks': stocks}}, upsert=True))
     
     return msgs
 
 def updateFamily():
     global familyKeys
-    global familyIDs
     global familyPIDs
 
-    # load familyKeys
-    if os.path.isfile('utils/familyKeys.pickle'):
-        with open("utils/familyKeys.pickle", "rb") as f:
-            familyKeys = pickle.load(f)
-    else:
-        familyKeys = []
-
-    # load familyIDs
-    if os.path.isfile('utils/familyIDs.pickle'):
-        with open("utils/familyIDs.pickle", "rb") as f:
-            familyIDs = pickle.load(f)
-    else:
-        familyIDs = set()
-
-    # load familyPIDs
-    if os.path.isfile('utils/familyPIDs.pickle'):
-        with open('utils/familyPIDs.pickle', 'rb') as f:
-            familyPIDs = pickle.load(f)
-    else:
-        familyPIDs = {}
+    # load family meta data
+    meta_family = meta_collection.find_one({'brand': "全家"})
+    familyKeys = meta_family['familyKeys']
+    familyPIDs = meta_family['familyPIDs']
+    n = len(familyPIDs)
 
     # update
     updateDate = threadingFamily()
     store_collection.update_many({"category": '全家', "updateDate": {"$ne": updateDate}}, 
                                  {'$set': {'updateDate': updateDate, 'stocks': []}})
 
-    # save familyPIDs
-    with open('utils/familyIDs.pickle', 'wb') as f:
-        pickle.dump(familyIDs, f)
-
-    # save familyPIDs
-    with open('utils/familyPIDs.pickle', 'wb') as f:
-        pickle.dump(familyPIDs, f)
+    # update familyPIDs
+    if len(familyPIDs) > n:
+        meta_collection.update_one({'brand': "全家"},{'$set':{'familyPIDs':familyPIDs}})
 
 
 if __name__ == "__main__":
     updateFamily()
-    print('test success!')
+    print('Test success!')

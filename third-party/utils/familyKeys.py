@@ -483,28 +483,62 @@ CityList = [
 ]
 
 
+from pymongo import MongoClient
 import requests
-import pickle
 import os
+from dotenv import load_dotenv
 import threading
-import queue
+from queue import Queue
+
+# Global Settings
+load_dotenv()
+CONNECTION_STRING = "mongodb+srv://{}:{}@thrifty.0xdedx2.mongodb.net/?retryWrites=true&w=majority"\
+    .format(os.getenv('MONGODB_USER'), os.getenv('MONGODB_PASSWORD'))
+db = MongoClient(CONNECTION_STRING).Thrifty
+meta_collection = db['meta']
+store_collection = db['store']
+
+
+def initializeFamily(store_infos):
+    msgs = []
+
+    for data in store_infos:
+        id = data['oldPKey']
+
+        if id not in familyKeys:
+          familyKeys.add(id)
+          
+          store = {
+              'original_id': id,
+              'name': data['name'],
+              'category': '全家',
+              'tel': data['tel'],
+              'address': data['address'],
+              'location': {
+                  'type': 'Point', 
+                  'coordinates':[data['longitude'], data['latitude']]
+                  }
+          }
+          msgs.append(store)
+    
+    if msgs:
+      store_collection.insert_many(msgs)
+
+
 
 
 if __name__ == "__main__":
     
+    familyKeys = set(meta_collection.find_one({'brand':'全家'})['familyKeys'])
+    n = len(familyKeys)
+
     family_api = "https://stamp.family.com.tw/api/maps/MapProductInfo"
     headers = {
         'content-type': 'application/json', 
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
         }
 
-    if os.path.isfile('familyKeys.pickle'):
-      with open("familyKeys.pickle", "rb") as f:
-          familyKeys = set(pickle.load(f))
-    else:
-        familyKeys = set()
-
-    my_queue = queue.Queue()
+    my_queue = Queue()
     for city in CityList:
         for district in city['districts']:
             my_queue.put(district['code'])
@@ -518,8 +552,8 @@ if __name__ == "__main__":
             while self.queue.qsize() > 0:
                 code = self.queue.get()
                 p = {"OldPKeys":[],"PostInfo": code, "Latitude":0,"Longitude":0,"ProjectCode":"202106302"}
-                raw_response = requests.post(family_api, headers = headers, json = p).json()['data']
-                familyKeys.update([data["oldPKey"] for data in raw_response])
+                store_infos = requests.post(family_api, headers = headers, json = p).json()['data']
+                initializeFamily(store_infos)
 
     workers = [Worker(my_queue) for _ in range(4)]
     for worker in workers:
@@ -527,5 +561,9 @@ if __name__ == "__main__":
     for worker in workers:
         worker.join()
 
-    with open('familyKeys.pickle', 'wb') as f:
-        pickle.dump(list(familyKeys), f)  
+    if len(familyKeys) > n:
+        meta_collection.update_one({'brand':'全家'},
+                                   {'$set': {'familyKeys': list(familyKeys)}})
+        print(f'{len(familyKeys)-n} new stores inserted.')
+        
+    print('Test success!')
