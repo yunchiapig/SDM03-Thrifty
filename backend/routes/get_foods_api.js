@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
-router.use(cors());
 
 // 引入 FoodINfo 和 StoreInfo model
 const FoodInfo = require('../model/food_info');
