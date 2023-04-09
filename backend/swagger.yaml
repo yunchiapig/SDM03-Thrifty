@@ -243,7 +243,7 @@ paths:
         '500':
           description: Internal Server Error
 
-  /api/1.0/get/stores:
+  /api/1.0/stores:
       summary: 測試
       get:
         summary: Return stores' information around the user.
@@ -279,7 +279,7 @@ paths:
           '500':
             description: Internal Server Error
   
-  /api/1.0/get/foods:
+  /api/1.0/foods:
       summary: 測試
       get:
         summary: Return foods' information of the store.
