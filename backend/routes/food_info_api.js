@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const cors = require('cors');
+router.use(cors());
 
 // 引入 FoodInfo model
 const FoodInfo = require('../model/food_info');
@@ -10,7 +12,6 @@ const StoreInfo = require('../model/store_info');
 
 // 引入檢查格式的 middleware function
 const {checkID, checkFoodPrice} = require('./utilities/format_check');
-
 
 // 讀取食物品項資訊
 router.get('/', checkID, async function(req, res, next) {
@@ -44,7 +45,7 @@ router.get('/', checkID, async function(req, res, next) {
 
 // 建立食物品項資訊
 router.post('/', checkFoodPrice, async function(req, res, next) {
-  // console.log(req.body);
+  //console.log(req.body);
   const storeID = req.body.storeID;
   const updateInfo = req.body.updateInfo;
   const foodInfo = new FoodInfo({
@@ -137,6 +138,7 @@ router.put('/', checkFoodPrice, async function(req, res, next) {
 // 刪除食物品項資訊
 router.delete('/', async function(req, res, next) {
   // 取得食物品項 ID
+  console.log(req.query);
   const foodID = new mongoose.Types.ObjectId(req.query.foodID);
   const storeID = req.query.storeID;
 
