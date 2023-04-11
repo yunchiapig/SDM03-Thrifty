@@ -15,8 +15,6 @@ function App() {
         <NavBar zIndex={100}/>
         {/* <SimpleSidebar/> */}
         <Box w="100%" h="19vh"/>
-
-        {/* {heroes.map(hero => (<Link to={'heroes/' + hero.id} />)} */}
         
         <Routes>
           <Route path="/" element={<HomePage/>} />
