@@ -1,7 +1,7 @@
-import { Box, Flex, Stack, Image, Heading, useColorModeValue, VStack, Text, Square, HStack } from "@chakra-ui/react";
+import { Box, Flex, Image, Heading, useColorModeValue, VStack, Text, Square, HStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import ItemCard from "../Components/ItemCard";
-import Rating from "../Components/Rating";
+// import Rating from "../Components/Rating";
 import { withRouter } from "../Hooks/withRouter";
 import axios from "axios";
 import { useParams, useLocation } from 'react-router-dom';
@@ -16,7 +16,7 @@ import { useParams, useLocation } from 'react-router-dom';
 //     classes:['炸物', '沙拉', '湯品', '鹹比薩', '甜比薩'],
 //     items: [1,2,3,4,5,6,7,8],
 // };
-const imageURL = "https://images.1111.com.tw/discussPic/63/51562263_97023180.2701459.jpg";
+const imageURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/FamilyMart_Logo_%282016-%29.svg/1280px-FamilyMart_Logo_%282016-%29.svg.png";
 
 const StorePage = () => {
     let { id } = useParams();
@@ -81,8 +81,8 @@ const StorePage = () => {
                 direction={{ base: 'column', md: 'row' }}
                 bg={useColorModeValue('white', 'gray.900')}
                 boxShadow={'md'}>
-                <Flex flex={1} 
-                    bg="blue.200" position="relative" overflowX={"hidden"} 
+                <Flex flex={1}  minH={{ sm: '476px', md: '10rem' }}
+                    bg="white" position="relative" overflowX={"hidden"} borderBottomColor="gray"
                     w="100%" boxSizing='border-box' flexDirection="column">
                     <Image
                         position="absolute"
@@ -90,6 +90,13 @@ const StorePage = () => {
                         boxSize="100%"
                         src={ imageURL }/>
                 </Flex>
+                <hr
+                    style={{
+                        width:"100%",
+                        color: "grey",
+                        backgroundColor: "grey",
+                    }}
+                />
                 <VStack
                     id="store-large-card-components"
                     flex={1} w="100%"
@@ -117,19 +124,15 @@ const StorePage = () => {
 
                     <Box ml={5} w="full">
                         {foodData?
-                            foodData.map((twoFoodData, i) =>{
-                                return(
-                                    <Flex w="full" key={i}>
-                                        {twoFoodData.map((aFood, ii)=>{
-                                            return(
-                                                <Flex w={{ sm: '100%', md: '50%' }} key={ii}>
-                                                    <ItemCard foodData={aFood}/>
-                                                </Flex>
-                                            )                                        
-                                        })}
-                                    </Flex>
-                                )
-                            })
+                            foodData.map((twoFoodData, i) =>{ return(
+                                <Flex w="full" key={i}>
+                                    {twoFoodData.map((aFood, ii)=>{return(
+                                        <Flex w={{ sm: '100%', md: '50%' }} key={ii}>
+                                            <ItemCard foodData={aFood}/>
+                                        </Flex>
+                                    )})}
+                                </Flex>
+                            )})
                         : <></>}
                     </Box>
                 </VStack>

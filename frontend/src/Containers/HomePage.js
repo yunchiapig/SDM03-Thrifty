@@ -1,4 +1,4 @@
-import { Box, Flex, Link } from "@chakra-ui/react"
+import { Box, Flex } from "@chakra-ui/react"
 import StoreSmallCard from "../Components/StoreSmallCard"
 import Toggle from 'react-styled-toggle';
 import { useEffect, useState } from "react";
@@ -32,26 +32,21 @@ export default function HomePage(){
                 <Flex>
                     {/* <SimpleSidebar/> */}
                     {ifMapMode?
-                        <></>:
-                        <Box>
-                            {storesData.map((twoStoresData, i)=>{
-                                return(
-                                    <Flex key={i}>
-                                    {twoStoresData.map((storeData, ii)=>{
-                                        return(
-                                            <Flex onClick={()=>{
-                                                navigate(`/store/${storeData._id}`, 
-                                                    { state: { storeData: storeData } });}} 
-                                                w={{ sm: '100%', md: '45%vw' }} key={ii}>
-                                                <StoreSmallCard storeData={storeData}/>
-                                            </Flex>
-                                        )
-                                    })}
-                                </Flex>
-                                )
-                            })}
-                        </Box>
-                    }
+                    <></>:
+                    <Box>
+                        {storesData.map((twoStoresData, i)=>{ return(
+                        <Flex key={i}>
+                            {twoStoresData.map((storeData, ii)=>{return(
+                            <Flex onClick={()=>{
+                                navigate(`/store/${storeData._id}`, 
+                                    { state: { storeData: storeData } });}} 
+                                w={{ sm: '100%', md: '45%vw' }} key={ii}>
+                                <StoreSmallCard storeData={storeData}/>
+                            </Flex>
+                            )})}
+                        </Flex>)
+                        })}
+                    </Box>}
                 </Flex>
             </Box>
         </Box>

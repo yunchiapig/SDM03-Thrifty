@@ -1,10 +1,12 @@
-import { Box, Container, Flex, Text, IconButton, Button, Stack, Collapse, Icon, Link,
+import { Box, Flex, Text, IconButton, Button, Stack, Collapse, Icon, Link,
     Popover, PopoverTrigger, PopoverContent, useColorModeValue, useDisclosure, Square} from '@chakra-ui/react';
 import {HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon} from '@chakra-ui/icons';
 import Logo from '../images/logo.png';
 import { Input } from "antd";
+import { useNavigate } from 'react-router-dom';
 
 export default function NavBar() {
+  const navigate = useNavigate();
   const { isOpen, onToggle } = useDisclosure();
 
   return (
@@ -33,7 +35,7 @@ export default function NavBar() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Box maxW='20vh'>
+          <Box maxW='20vh' onClick={()=>{ navigate(`/`);}} >
             <img id="logo" src={Logo} alt="Thrifty"/>
           </Box>
           <Flex display={{ base: 'none', md: 'flex' }} ml={10} w="100%">

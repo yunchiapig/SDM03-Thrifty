@@ -8,7 +8,7 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import Rating from './Rating';
+// import Rating from './Rating';
 
 // const data = {
 //     itemName: "夏威夷披薩",
@@ -23,9 +23,6 @@ const image = "https://www.7-11.com.tw/freshfoods/1_Ricerolls/images/ricerolls_2
   
 export default function ItemCard(foodData) {
     const [foodInfo, setFoodInfo] = useState(foodData.foodData);
-    useEffect(()=>{
-        console.log(foodInfo)
-    }, [foodInfo])
 
     return (
         <Box py={4} px={5} w={{ sm: '100%', md: '100%' }}>
