@@ -1,11 +1,25 @@
 import { Box, Flex } from "@chakra-ui/react"
-import ShopInfoCard from "../Components/StoreSmallCard"
+import StoreSmallCard from "../Components/StoreSmallCard"
 import Toggle from 'react-styled-toggle';
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 export default function HomePage(){
     const [ifMapMode, setIfMapMode] = useState(true);
+    const [storesData, setStoresData] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        axios.get(`http://52.193.252.15/api/1.0/stores?longitude=${121.55}&latitude=${25.03}`,  { crossdomain: true })
+            .then(response => {
+                const data = response.data.message.reduce(function (rows, key, index) { 
+                    return (index % 2 == 0 ? rows.push([key]) 
+                      : rows[rows.length-1].push(key)) && rows;
+                }, []);
+                setStoresData(data);
+            });
+    }, [])
 
     return(
         <Box ml={5}>
@@ -18,22 +32,21 @@ export default function HomePage(){
                 <Flex>
                     {/* <SimpleSidebar/> */}
                     {ifMapMode?
-                        <></>:
-                        <Box>
-                            <Flex>
-                                <ShopInfoCard/>
-                                <ShopInfoCard/>
+                    <></>:
+                    <Box>
+                        {storesData.map((twoStoresData, i)=>{ return(
+                        <Flex key={i}>
+                            {twoStoresData.map((storeData, ii)=>{return(
+                            <Flex onClick={()=>{
+                                navigate(`/store/${storeData._id}`, 
+                                    { state: { storeData: storeData } });}} 
+                                w={{ sm: '100%', md: '45%vw' }} key={ii}>
+                                <StoreSmallCard storeData={storeData}/>
                             </Flex>
-                            <Flex>
-                                <ShopInfoCard/>
-                                <ShopInfoCard/>
-                            </Flex>
-                            <Flex>
-                                <ShopInfoCard/>
-                                <ShopInfoCard/>
-                            </Flex>
-                        </Box>
-                    }
+                            )})}
+                        </Flex>)
+                        })}
+                    </Box>}
                 </Flex>
             </Box>
         </Box>
