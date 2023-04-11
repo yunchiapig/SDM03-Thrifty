@@ -12,8 +12,8 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs';
-import Rating from './Rating';
+// import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs';
+// import Rating from './Rating';
 
 // const data = {
 //     shopName: "披薩有張臉 Pizza Has a Face",

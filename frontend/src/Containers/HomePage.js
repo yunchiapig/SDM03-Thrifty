@@ -39,7 +39,9 @@ export default function HomePage(){
                                     <Flex key={i}>
                                     {twoStoresData.map((storeData, ii)=>{
                                         return(
-                                            <Flex onClick={()=>{navigate('/store/01');}} 
+                                            <Flex onClick={()=>{
+                                                navigate(`/store/${storeData._id}`, 
+                                                    { state: { storeData: storeData } });}} 
                                                 w={{ sm: '100%', md: '45%vw' }} key={ii}>
                                                 <StoreSmallCard storeData={storeData}/>
                                             </Flex>
@@ -48,22 +50,6 @@ export default function HomePage(){
                                 </Flex>
                                 )
                             })}
-                            {/* <Flex >
-                                <Flex onClick={()=>{navigate('/store/01');}} w={{ sm: '100%', md: '45%vw' }}>
-                                    <ShopInfoCard/>
-                                </Flex>
-                                <Flex onClick={()=>{navigate('/store/01');}} w={{ sm: '100%', md: '45%vw' }}>
-                                    <ShopInfoCard/>
-                                </Flex>
-                            </Flex>
-                            <Flex>
-                                <Flex onClick={()=>{navigate('/store/01');}} w={{ sm: '100%', md: '45%vw' }}>
-                                    <ShopInfoCard/>
-                                </Flex>
-                                <Flex onClick={()=>{navigate('/store/01');}} w={{ sm: '100%', md: '45%vw' }}>
-                                    <ShopInfoCard/>
-                                </Flex>
-                            </Flex> */}
                         </Box>
                     }
                 </Flex>

@@ -7,20 +7,28 @@ import {
     Text,
     useColorModeValue,
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import Rating from './Rating';
 
-const data = {
-    itemName: "夏威夷披薩",
-    description: "新鮮現做，番茄、九層塔、馬札瑞拉起士",
-    sellingPrice: 100,
-    originalPrice: 250,
-    image: "https://tokyo-kitchen.icook.network/uploads/recipe/cover/380644/d3dae1cadb3764f0.jpg",
-    number: 3,
-};
+// const data = {
+//     itemName: "夏威夷披薩",
+//     description: "新鮮現做，番茄、九層塔、馬札瑞拉起士",
+//     sellingPrice: 100,
+//     originalPrice: 250,
+//     image: "https://tokyo-kitchen.icook.network/uploads/recipe/cover/380644/d3dae1cadb3764f0.jpg",
+//     number: 3,
+// };
+const image = "https://www.7-11.com.tw/freshfoods/1_Ricerolls/images/ricerolls_266.png";
+
   
-export default function ItemCard() {
+export default function ItemCard(foodData) {
+    const [foodInfo, setFoodInfo] = useState(foodData.foodData);
+    useEffect(()=>{
+        console.log(foodInfo)
+    }, [foodInfo])
+
     return (
-        <Box py={4} px={5} minW={{ sm: '100%', md: '50%' }}>
+        <Box py={4} px={5} w={{ sm: '100%', md: '100%' }}>
             <Stack
                 borderWidth="1px"
                 borderRadius="lg"
@@ -34,7 +42,7 @@ export default function ItemCard() {
                     <Image
                     objectFit="cover"
                     boxSize="100%"
-                    src={ data.image }
+                    src={ image }
                     />
                 </Flex>
                 <Stack
@@ -44,13 +52,13 @@ export default function ItemCard() {
                     alignItems="left"
                     p={1} pl={2} pt={2} 
                     spacing="12px">
-                    <Heading fontSize={'xl'} fontFamily={'body'}> {data.itemName} </Heading>
-                    <Text  size="sm" mb={4} color={"gray.500"}> {data.description} </Text>
+                    <Heading fontSize={'xl'} fontFamily={'body'}> {foodInfo.food.name} </Heading>
+                    {/* <Text  size="sm" mb={4} color={"gray.500"}> {data.description} </Text> */}
                     <Box w="100%">
-                        <Heading fontSize={'xl'} fontFamily={'body'} color="red.400"> ＄{data.sellingPrice} </Heading>
-                        <Text  size="lg"  textDecoration="line-through" color={"red.200"}> ＄{data.originalPrice} </Text>
+                        <Heading fontSize={'xl'} fontFamily={'body'} color="red.400"> ＄{foodInfo.food.discount_price} </Heading>
+                        <Text  size="lg"  textDecoration="line-through" color={"red.200"}> ＄{foodInfo.food.original_price} </Text>
                     </Box>
-                    <Text  size="sm" mb={4}> 庫存：{data.number} </Text>
+                    <Text  size="sm" mb={4}> 庫存：{foodInfo.quantity} </Text>
                 </Stack>
             </Stack>
         </Box>
