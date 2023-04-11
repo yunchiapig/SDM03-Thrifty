@@ -22,9 +22,6 @@ const imageURL = "https://images.1111.com.tw/discussPic/63/51562263_97023180.270
 
 export default function StoreSmallCard(storeData) {
     const [data, setData] = useState(storeData.storeData);
-    useEffect(()=>{
-        console.log(data)
-    }, [])
 
     return (
         <Box py={4} px={5} w={{ sm: '100%', md: '45%vw' }}>

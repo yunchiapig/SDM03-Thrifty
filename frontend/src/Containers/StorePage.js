@@ -34,7 +34,7 @@ const StorePage = () => {
         axios.get(`http://52.193.252.15/api/1.0/foods?id=${storeID}`,  { crossdomain: true })
             .then(response => {
                 var categories = []
-                response.data.message.map((foodItem)=>{
+                response.data.message.forEach((foodItem)=>{
                     if (categories.indexOf(foodItem.food.category) === -1) {
                         categories.push(foodItem.food.category);
                     }
@@ -42,7 +42,7 @@ const StorePage = () => {
                 setFoodCategories(categories);
 
                 const data = response.data.message.reduce(function (rows, key, index) { 
-                    return (index % 2 == 0 ? rows.push([key]) 
+                    return (index % 2 === 0 ? rows.push([key]) 
                       : rows[rows.length-1].push(key)) && rows;
                 }, []);
                 setFoodData(data);

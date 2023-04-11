@@ -1,8 +1,8 @@
 import './App.css';
-import { Box, VStack, useColorModeValue, Flex } from '@chakra-ui/react';
+import { Box, VStack, useColorModeValue } from '@chakra-ui/react';
 // import Card from "./Components/ShopInfoCard";
 import NavBar from './Components/NavBar';
-import React, { useEffect, useState } from "react";
+import React from "react";
 import HomePage from './Containers/HomePage';
 import SimpleSidebar from './Components/SideBar';
 import StorePage from './Containers/StorePage';
