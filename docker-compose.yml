@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  backend:
+    image: /thrifty-backend
+    restart: always
+    networks:
+      - thrifty_network
+  frontend-admin:
+    image: /thrifty-frontend-admin
+    restart: always
+    networks:
+      - thrifty_network
+  nginx:
+    image: nginx
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    networks:
+      - thrifty_network
+
+networks:
+  thrifty_network:
+    driver: bridge
+ 
