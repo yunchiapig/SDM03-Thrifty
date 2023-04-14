@@ -34,7 +34,7 @@ jobs:
          cd ..
          cd frontend
          docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin .
-         docker push  ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend
+         docker push  ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin
          
   deploy:
     needs: build
