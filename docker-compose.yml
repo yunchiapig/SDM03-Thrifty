@@ -2,12 +2,12 @@ version: '3'
 
 services:
   backend:
-    image: /thrifty-backend
+    image: lee920024/thrifty-backend
     restart: always
     networks:
       - thrifty_network
   frontend-admin:
-    image: /thrifty-frontend-admin
+    image: lee920024/thrifty-frontend-admin
     restart: always
     networks:
       - thrifty_network
