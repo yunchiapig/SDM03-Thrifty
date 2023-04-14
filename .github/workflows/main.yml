@@ -51,7 +51,7 @@ jobs:
            cd github/SDM03-Thrifty/
            git pull
            docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-backend
-           docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend
+           docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin
            docker-compose down
            docker-compose up -d
            docker image prune -af
