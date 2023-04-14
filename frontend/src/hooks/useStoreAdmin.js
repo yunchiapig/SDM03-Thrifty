@@ -9,7 +9,7 @@ const StoreAdminContext = createContext({
 const StoreAdminProvider = (props) => {
     const [title, setTitle] = useState("");
     const [stocks, setStocks] = useState(null);
-    const [store, setStore] = useState("64315cfd0bbed873067133fc");
+    const [store, setStore] = useState("6433a8510c114b2bafa70664");
     const [loading, setLoading] = useState(false);
     const [drawerMount, setDrawerMount] = useState(false);
     const [selectedType, setSelectedType] = useState("");
@@ -17,7 +17,7 @@ const StoreAdminProvider = (props) => {
     const getItems = async() => {
         setLoading(true);
         const res
-         = await instance.get('/api/1.0/get/foods', { 
+         = await instance.get('/api/1.0/foods', { 
             params: {  
                 id: store
         },}).catch( e => {

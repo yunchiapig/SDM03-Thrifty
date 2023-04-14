@@ -1,0 +1,57 @@
+name: Thrifty
+
+on:
+ push:
+   branches:
+     - develop
+
+jobs:
+  build:
+   runs-on: ubuntu-latest
+
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v2
+
+     - name: Docker Login
+       uses: docker/login-action@v2.1.0
+       with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        
+     - name: 'Create env file'
+       run: |
+        touch .env
+        echo MONGODB_USER=${{ secrets.MONGODB_USER }} >> .env
+        echo MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD }} >> .env
+        cat .env
+
+     - name: Build and push Docker images
+       run: |
+         cd backend
+         docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/thrifty-backend .
+         docker push ${{ secrets.DOCKERHUB_USERNAME }}/thrifty-backend
+         cd ..
+         cd frontend
+         docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/thrifty-frontend-admin .
+         docker push  ${{ secrets.DOCKERHUB_USERNAME }}/thrifty-frontend
+         
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+     - name: SSH into EC2 instance and deploy Docker image
+       uses: appleboy/ssh-action@master
+       with:
+         host: ${{ secrets.EC2_HOST }}
+         username: ${{ secrets.EC2_USERNAME }}
+         key: ${{ secrets.EC2_PRIVATE_KEY }}
+         script: |
+           cd github/SDM03-Thrifty/
+           git pull
+           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/thrifty-backend
+           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/thrifty-frontend
+           docker-compose down
+           docker-compose up -d
+           docker image prune -af
