@@ -10,3 +10,7 @@ meta_collection.insert_one({'brand':"全家",
                             'familyKeys':[],
                             'familyPIDs':{}
                             })
+meta_collection.insert_one({'brand':"7-11",
+                            'sevenKeys':[],
+                            'sevenPIDs':{}
+                            })
