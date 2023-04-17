@@ -21,10 +21,12 @@ jobs:
         
      - name: 'Create env file'
        run: |
+        cd backend
         touch .env
         echo MONGODB_USER=${{ secrets.MONGODB_USER }} >> .env
         echo MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD }} >> .env
         cat .env
+        cd ..
 
      - name: Build and push Docker images
        run: |
