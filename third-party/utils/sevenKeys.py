@@ -3,6 +3,7 @@ import requests
 import os
 from dotenv import load_dotenv
 from threading import Thread
+from runThreading import runThreading
 from queue import Queue
 from urllib import parse
 import xml.etree.ElementTree as ET
@@ -42,7 +43,7 @@ meta_collection = db['meta']
 store_collection = db['store']
 
 
-# API settings
+# request settings
 towns_api = "https://emap.pcsc.com.tw/EMapSDK.aspx"
 stores_api = "https://emap.pcsc.com.tw/EMapSDK.aspx"
 headers = {
@@ -88,7 +89,8 @@ if __name__ == "__main__":
         print('7-11 has already been filed.')
         exit()
 
-    # fill queue
+    # multi-threading
+    # (fill queue)
     my_queue = Queue()
     for city, code in cityCodes.items():
         towns = requests.post(towns_api, headers=headers, data=f"commandid=GetTown&cityid={code}&leftMenuChecked=").text
@@ -96,28 +98,15 @@ if __name__ == "__main__":
         for child in ET.fromstring(towns).findall('GeoPosition'):
             town = child.find('TownName').text.strip()
             my_queue.put((city, town))
-
-    # setup workers
-    class Worker(Thread):
-        def __init__(self, queue):
-            Thread.__init__(self)
-            self.queue = queue
-
-        def run(self):
-            while self.queue.qsize() > 0:
-                city, town = self.queue.get()
-                _city = parse.quote(city) # url encoding
-                _town = parse.quote(town) # url encoding
-                data = f"commandid=SearchStore&city={_city}&town={_town}&roadname=&ID=&StoreName=&SpecialStore_Kind=&leftMenuChecked=&address="
-                store_infos = requests.post(stores_api, headers=headers, data=data).text
-                initializeSeven(store_infos)
-
-    # workers start working
-    workers = [Worker(my_queue) for _ in range(4)]
-    for worker in workers:
-        worker.start()
-    for worker in workers:
-        worker.join()
+    # (define question)
+    def func(city, town):
+        _city = parse.quote(city) # url encoding
+        _town = parse.quote(town) # url encoding
+        data = f"commandid=SearchStore&city={_city}&town={_town}&roadname=&ID=&StoreName=&SpecialStore_Kind=&leftMenuChecked=&address="
+        store_infos = requests.post(stores_api, headers=headers, data=data).text
+        initializeSeven(store_infos)
+    # (run)
+    runThreading(my_queue, func, 10)
 
     # update
     meta_collection.update_one({'brand':'7-11'},
