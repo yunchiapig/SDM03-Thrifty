@@ -21,7 +21,7 @@ router.get('/', checkUserLocation, async function (req, res) {
           }
         })
       
-        if(!store_exist) {
+        if (store_exist.length == 0) {
           res.status(400).send({ message: "使用者周圍地區無商家" });
         } else {
           res.status(200).send({ message: store_exist })

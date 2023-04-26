@@ -279,11 +279,114 @@ function checkUserLocation(req, res, next){
   next();
 }
 
+// 檢查使用者名稱格式是否為中英數字
+function checkUserName(name, res){
+  if (/[^\u4E00-\u9FA5A-Za-z0-9]/.test(name)){
+    res.status(400).send(
+      {message: "使用者名稱格式錯誤，僅接受中英數字。"}
+    );
+    return true; // 代表有錯誤
+  }
+}
+
+// 檢查使用者密碼格式是否正確
+function checkUserPassword(password, res){
+  if (!(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/.test(password))){
+    res.status(400).send(
+      {message: "使用者密碼格式錯誤，僅接受 8~20 個字元，並且至少含有一個數字、一個大寫英文字母、一個小寫英文字母。"}
+    );
+    return true; // 代表有錯誤
+  }
+}
+
+// 檢查使用者信箱格式是否正確
+function checkUserEmail(email, res){
+  if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))){
+    res.status(400).send(
+      {message: "使用信箱格式錯誤。"}
+    );
+    return true; // 代表有錯誤
+  }
+}
+
+// 檢查使用者資訊格式
+function checkUserInfo(req, res, next){
+  const type = req.body.type;
+  const name = req.body.name;
+  const password = req.body.password;
+  const email = req.body.email;
+
+  // 如果是用 google 註冊，則不用檢查
+  if (type=="google"){
+    next();
+  }
+  
+  // 檢查 req.body 是否有缺漏
+  const bodyKeys = Object.keys(req.body);
+  if (bodyKeys.length !== 4){
+    res.status(400).send(
+      {message: "使用者資訊格式錯誤，請檢查是否有缺漏。"}
+    );
+    return;
+  }
+
+  // 檢查使用者名稱格式是否為中英數字
+  if (checkUserName(name, res)){
+    return;
+  };
+
+  // 檢查使用者密碼格式是否正確
+  if (checkUserPassword(password, res)){
+    return;
+  }
+
+  // 檢查使用者信箱格式是否正確
+  if (checkUserEmail(email, res)){
+    return;
+  }
+
+  next();
+}
+
+function checkUserLogin(req, res, next){
+  const type = req.query.type;
+  const password = req.query.password;
+  const email = req.query.email;
+
+  // 如果是用 google 註冊，則不用檢查
+  if (type=="google"){
+    next();
+  }
+  
+  // 檢查 req.query 是否有缺漏
+  const queryKeys = Object.keys(req.query);
+  if (queryKeys.length !== 3){
+    res.status(400).send(
+      {message: "使用者資訊格式錯誤，請檢查是否有缺漏。"}
+    );
+    return;
+  }
+
+  // 檢查使用者密碼格式是否正確
+  if (checkUserPassword(password, res)){
+    return;
+  }
+
+  // 檢查使用者信箱格式是否正確
+  if (checkUserEmail(email, res)){
+    return;
+  }
+
+  next();
+}
+
 module.exports = {
   checkStoreInfo,
   checkID,
   checkStoreUpdateInfo,
   checkFoodPrice,
   checkStockUpdateInfo,
-  checkUserLocation
+  checkUserLocation,
+  checkUserInfo,
+  checkUserLogin
 }

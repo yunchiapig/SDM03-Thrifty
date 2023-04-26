@@ -13,7 +13,9 @@ const swaggerDocument =  YAML.load(fs.readFileSync('./swagger.yaml', 'utf8'));
 
 
 const healthcheckRouter = require('./routes/healthcheck');
-const usersRouter = require('./routes/users');
+
+// user routers
+const userRouter = require('./routes/user_info_api');
 
 // admin routers
 const storeAdminRouter = require('./routes/store_info_api');
@@ -40,7 +42,9 @@ app.use(cors());
 
 // routers
 app.use('/healthcheck', healthcheckRouter);
-app.use('/users', usersRouter);
+
+// user routers
+app.use('/api/1.0/user', userRouter);
 
 // admin routers
 app.use('/api/1.0/admin/store', storeAdminRouter);
