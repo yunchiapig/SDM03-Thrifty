@@ -3,6 +3,7 @@ import requests
 import os
 from dotenv import load_dotenv
 from queue import Queue
+import datetime as dt
 from datetime import datetime, timedelta
 from utils.runThreading import runThreading
 from flask_restful import Resource, reqparse
@@ -158,11 +159,26 @@ def reformatSeven(response):
     updateDate = datetime.strptime(response['StoreItemStockUpdateTime'], "%Y-%m-%dT%H:%M:%S")
     stocks = []
     for categoryBlock in response['StoreStockItem']['CategoryStockItems']:
+        cat_name = categoryBlock['Name']
         for item in categoryBlock['ItemList']:
-            food_name = item['ItemName']
+            name = item['ItemName'].replace('(區)', '')
             quantity = item['RemainingQty']
+            if name not in sevenCats:
+                msg = {
+                    'tags': [cat_name]
+                }
+                if name in sevenPIDs:
+                    food_collection.update_one({'name':name, 'brand':'7-11'}, {'$set':msg}, upsert=True)
+                else:
+                    msg['name'] = name
+                    msg['brand'] = '7-11'
+                    _id = food_collection.insert_one(msg).inserted_id
+                    sevenPIDs[name] = _id
+                sevenCats.add(name)
+
+            _id = sevenPIDs[name]
             stocks.append({
-                    '_id': food_name,
+                    '_id': _id,
                     'quantity': quantity,
                     'updateDate': updateDate
                 })
@@ -172,6 +188,15 @@ def reformatSeven(response):
 
 ## Main: Update Seven
 def _updateSeven(Longitude, Latitude):
+    global sevenPIDs
+    global sevenCats
+
+    meta_seven = meta_collection.find_one({'brand': "7-11"})
+    sevenPIDs = meta_seven['sevenPIDs']
+    sevenCats = set(meta_seven['sevenCats'])
+    x = len(sevenPIDs)
+    y = len(sevenCats)
+
     # get and check token
     token = getToken()
     if token == None:
@@ -199,6 +224,22 @@ def _updateSeven(Longitude, Latitude):
         
     runThreading(storeIDs, func, 10)
 
+    # update sevenPIDs
+    if len(sevenPIDs) > x:
+        meta_collection.update_one({'brand': "7-11"},{'$set':{'sevenPIDs':sevenPIDs}})
+
+    # update sevenCats
+    if len(sevenCats) > y:
+        meta_collection.update_one({'brand': "7-11"},{'$set':{'sevenCats':list(sevenCats)}})
+
+
+# check available time
+def isNowInTimePeriod(): 
+    nowTime = datetime.now().time()
+    if dt.time(10,0) <= nowTime <= dt.time(17,0) or \
+        dt.time(20,0) >= nowTime or dt.time(3,0) <= nowTime:
+        return True
+    return False
 
 # API
 class updateSeven (Resource):
@@ -208,11 +249,15 @@ class updateSeven (Resource):
         self.parser.add_argument('Latitude', type=float, required=True, help='Latitude is required', location='json')
         
     def post(self):
-        arg = self.parser.parse_args()
-        t = Thread(target=_updateSeven, args=(arg['Longitude'], arg['Latitude']))
-        t.start()
+        if isNowInTimePeriod():
+            arg = self.parser.parse_args()
+            t = Thread(target=_updateSeven, args=(arg['Longitude'], arg['Latitude']))
+            t.start()
+            return {
+                'message': f"Updating 7-11 stores nearby {arg['Longitude']}, {arg['Latitude']}..."
+            }
         return {
-            'message': f"Updating 7-11 stores nearby {arg['Longitude']}, {arg['Latitude']}..."
+            'message': "Currently not in promoting time."
         }
 
 def clearSeven():
