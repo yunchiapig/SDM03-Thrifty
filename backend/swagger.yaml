@@ -243,66 +243,128 @@ paths:
         '500':
           description: Internal Server Error
 
+  /api/1.0/user:
+    get:
+      summary: Returns user's information.
+      tags:
+        - User API
+      parameters:
+        - name: type
+          in: query
+          description: |-
+            The login type. 
+
+            *Example*: website
+          required: false
+          schema:
+            type: string
+            example: 'website'
+        - name: email
+          in: query
+          description: |-
+            The User's email that you want to login. 
+
+            *Example*: abc@gmail.com
+          required: false
+          schema:
+            type: string
+            example: 'abc@gmail.com'
+        - name: password
+          in: query
+          description: |-
+            The User's password that you want to login.
+            Password format: between 8 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter 
+
+            *Example*: Test1234
+          required: false
+          schema:
+            type: string
+            example: 'Test1234'
+      responses:
+        '200':
+          description: 回傳 JWT
+        '400':
+          description: email 或 password 輸入錯誤
+        '500':
+          description: Internal Server Error
+          
+    post:
+      summary: Create a user's information.
+      tags:
+        - User API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInfo'
+      responses:
+        '200':
+          description: 回傳 JWT
+        '400':
+          description: 此 email 已經註冊過
+        '500':
+          description: Internal Server Error
+
   /api/1.0/stores:
-      summary: 測試
-      get:
-        summary: Return stores' information around the user.
-        tags:
-          - Get Store API
-        parameters:
-          - name: longitude
-            in: query
-            description: |-
-              The user's longitude. 
+    summary: 測試
+    get:
+      summary: Return stores' information around the user.
+      tags:
+        - Get Store API
+      parameters:
+        - name: longitude
+          in: query
+          description: |-
+            The user's longitude. 
 
-              *Example*: 121.55
-            required: false
-            schema:
-              type: float
-              example: 121.55
-          - name: latitude
-            in: query
-            description: |-
-              The user's latitude. 
+            *Example*: 121.55
+          required: false
+          schema:
+            type: float
+            example: 121.55
+        - name: latitude
+          in: query
+          description: |-
+            The user's latitude. 
 
-              *Example*: 25.03
-            required: false
-            schema:
-              type: float
-              example: 25.03
-        responses:
-          '200':
-            description: 回傳裝有 stores 資訊的 data Object。
-          '400':
-            description: 使用者周圍地區無商家。
-                        <br>回傳 message Object
-          '500':
-            description: Internal Server Error
+            *Example*: 25.03
+          required: false
+          schema:
+            type: float
+            example: 25.03
+      responses:
+        '200':
+          description: 回傳裝有 stores 資訊的 data Object。
+        '400':
+          description: 使用者周圍地區無商家。
+                      <br>回傳 message Object
+        '500':
+          description: Internal Server Error
   
   /api/1.0/foods:
-      summary: 測試
-      get:
-        summary: Return foods' information of the store.
-        tags:
-          - Get Food API
-        parameters:
-          - name: id
-            in: query
-            description: |-
-              The Store's ID that you want to access.
+    summary: 測試
+    get:
+      summary: Return foods' information of the store.
+      tags:
+        - Get Food API
+      parameters:
+        - name: id
+          in: query
+          description: |-
+            The Store's ID that you want to access.
 
-              *Example*: "642c41da6ec75b2d9485c67b"
-            required: false
-            schema:
-              type: string
-              example: "642c41da6ec75b2d9485c67b"
-        responses:
-          '200':
-            description: 回傳裝有 foods 資訊的 data Object。
-          '400':
-            description: 無對應店家的ID、店家目前無食物，或是無對應食物的ID
-          '500':
-            description: Internal Server Error
+            *Example*: 642c41da6ec75b2d9485c67b
+          required: false
+          schema:
+            type: string
+            example: "642c41da6ec75b2d9485c67b"
+      responses:
+        '200':
+          description: 回傳裝有 foods 資訊的 data Object。
+        '400':
+          description: 無對應店家的ID、店家目前無食物，或是無對應食物的ID
+        '500':
+          description: Internal Server Error
 
 components:
   securitySchemes:
@@ -431,3 +493,21 @@ components:
         updateQty:
           type: integer
           example: 10
+  
+    UserInfo:
+      type: object
+      properties:
+        type:
+          type: string
+          example: website  
+        name:
+          type: string
+          example: Steven886
+        email:
+          type: string
+          example: abc@gmail.com
+        password:
+          type: string
+          example: Test1234
+        
+
