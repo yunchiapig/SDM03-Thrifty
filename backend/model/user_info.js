@@ -45,7 +45,7 @@ userInfoSchema.methods.generateAuthToken = async function (type) {
   }
   const token = jwt.sign(payload, process.env.SECRET_KEY)
   
-  if (type=="sign_up") {
+  if (type=="signup") {
     await user.save()
   }
 
@@ -55,11 +55,11 @@ userInfoSchema.methods.generateAuthToken = async function (type) {
 userInfoSchema.statics.findByCredentials = async function (email, password) {
   const user = await this.findOne({ email: email })
   if (!user) {
-    return "email_not_found"
+    return "email_incorrect"
   } else {
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
-      return "password_not_found"
+      return "password_incorrect"
     } else {
       return user
     }

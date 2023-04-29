@@ -31,7 +31,7 @@ router.post('/', checkUserInfo, async function (req, res) {
         password: password,
         email: email
       });
-      const token = await userInfo.generateAuthToken("sign_up")
+      const token = await userInfo.generateAuthToken("signup")
 
       res.status(200).send({ message: token })
     } else {
@@ -61,7 +61,7 @@ router.get('/', checkUserLogin, async function (req, res) {
     }
 
     const user = await UserInfo.findByCredentials(req.query.email, req.query.password)
-    if (user == "email_not_found" || user == "password_not_found") {
+    if (user == "email_incorrect" || user == "password_incorrect") {
       res.status(400).send({ message: user })
     } else {
       const token = await user.generateAuthToken("login")

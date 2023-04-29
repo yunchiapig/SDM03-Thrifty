@@ -279,11 +279,11 @@ function checkUserLocation(req, res, next){
   next();
 }
 
-// 檢查使用者名稱格式是否為中英數字
+// 檢查使用者名稱格式是否為英數字
 function checkUserName(name, res){
-  if (/[^\u4E00-\u9FA5A-Za-z0-9]/.test(name)){
+  if (!(/^[A-Za-z][A-Za-z0-9]*$/.test(name))){
     res.status(400).send(
-      {message: "使用者名稱格式錯誤，僅接受中英數字。"}
+      {message: "使用者名稱格式錯誤，僅接受英數字。"}
     );
     return true; // 代表有錯誤
   }
