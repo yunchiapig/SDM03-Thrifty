@@ -80,6 +80,16 @@ function checkLatitude(latitude, res){
   }
 }
 
+// 檢查是否有 mainImage
+function checkMainImage(mainImage, res){
+  if (mainImage === undefined){
+    res.status(400).send(
+      {message: "沒有 mainImage，請提供照片。"}
+    );
+    return true; // 代表有錯誤
+  }
+}
+
 
 // 檢查店家資訊格式
 function checkStoreInfo(req, res, next){
@@ -87,18 +97,10 @@ function checkStoreInfo(req, res, next){
   const category = req.body.category;
   const tel = req.body.tel;
   const address = req.body.address;
-  const longitude = req.body.location.coordinates[0];
-  const latitude = req.body.location.coordinates[1];
+  const longitude = JSON.parse(req.body.location).coordinates[0];
+  const latitude = JSON.parse(req.body.location).coordinates[1];
+  const mainImage = req.files.mainImage;
   
-  // 檢查 req.body 是否有缺漏
-  const bodyKeys = Object.keys(req.body);
-  if (bodyKeys.length !== 5){
-    res.status(400).send(
-      {message: "店家資訊格式錯誤，請檢查是否有缺漏。"}
-    );
-    return;
-  }
-
   // 檢查店家名稱格式是否為中英數字
   if(checkStoreName(name, res)){
     return;
@@ -129,12 +131,19 @@ function checkStoreInfo(req, res, next){
     return;
   }
 
+  // 檢查是否有 mainImage
+  if (checkMainImage(mainImage, res)){
+    return;
+  }
+
   next();
 }
 
 
 // 檢查店家更新資訊格式
 function checkStoreUpdateInfo(req, res, next){
+  req.body.updateInfo = JSON.parse(req.body.updateInfo);
+
   // 取得要更新的欄位
   const updateKeys = Object.keys(req.body.updateInfo);
 
@@ -199,9 +208,70 @@ function checkStoreUpdateInfo(req, res, next){
 }
 
 
-// 檢查食物價格格式
-function checkFoodPrice(req, res, next){
+// 檢查 email 格式
+function checkStoreEmail(email, res){
+  // 檢查是否有 email
+  if (email === undefined){
+    res.status(400).send(
+      {message: "請提供 email"}
+    );
+    return true; // 代表有錯誤
+  }
+
+  if (/^[^\s@~`!#$%^&*()\-+={}[\]]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    // console.log('Email is valid!');
+  } else {
+      res .status(400).send(
+        {message: "email 格式錯誤"}
+      );
+      return true; // 代表有錯誤
+  };
+
+  return false
+}
+
+
+// 檢查 password 格式
+function checkStorePassword(password, res){
+  // 檢查是否有 password
+  if (password === ''){
+    res.status(400).send(
+      {message: "請提供 password"}
+    );
+
+    return true; // 代表有錯誤
+  }
+
+  return false; 
+}
+
+
+// 檢查店家 email 和 password
+function checkStoreEmailAndPassword(req, res, next){
+
+  const email = req.body.email;
+  const password = req.body.password;
+
+  // 檢查 email 格式
+  if (checkStoreEmail(email, res)){
+    return;  // 有錯誤就 return
+  }
+
+  // 檢查 password 格式 
+  if (checkStorePassword(password, res)){
+    return;  // 有錯誤就 return
+  }
+
+  next();
+}
+  
+
+
+function checkFoodInfo(req, res, next){
+  req.body.updateInfo = JSON.parse(req.body.updateInfo);
   const updateInfo = req.body.updateInfo;
+
+  // 檢查食物價格格式
   const original_price = updateInfo.original_price;
   const discount_price = updateInfo.discount_price;
   let price = [];
@@ -222,6 +292,12 @@ function checkFoodPrice(req, res, next){
       );
       return;
     }
+  }
+
+  // 檢查是否有 mainImage
+  const mainImage = req.files.mainImage;
+  if (checkMainImage(mainImage, res)){
+    return;
   }
 
   next();
@@ -283,7 +359,8 @@ module.exports = {
   checkStoreInfo,
   checkID,
   checkStoreUpdateInfo,
-  checkFoodPrice,
+  checkStoreEmailAndPassword,
+  checkFoodInfo,
   checkStockUpdateInfo,
   checkUserLocation
 }
