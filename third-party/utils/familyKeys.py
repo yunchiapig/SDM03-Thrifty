@@ -487,7 +487,7 @@ from pymongo import MongoClient
 import requests
 import os
 from dotenv import load_dotenv
-import threading
+from runThreading import runThreading
 from queue import Queue
 
 # Global Settings
@@ -498,6 +498,12 @@ db = MongoClient(CONNECTION_STRING).Thrifty
 meta_collection = db['meta']
 store_collection = db['store']
 
+# request settings
+family_api = "https://stamp.family.com.tw/api/maps/MapProductInfo"
+headers = {
+    'content-type': 'application/json', 
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
+    }
 
 def initializeFamily(store_infos):
     msgs = []
@@ -529,41 +535,29 @@ def initializeFamily(store_infos):
 
 if __name__ == "__main__":
     
+    # get familyKeys
     familyKeys = set(meta_collection.find_one({'brand':'全家'})['familyKeys'])
     n = len(familyKeys)
 
-    family_api = "https://stamp.family.com.tw/api/maps/MapProductInfo"
-    headers = {
-        'content-type': 'application/json', 
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
-        }
-
+    # multi-threading
+    # (queue)
     my_queue = Queue()
     for city in CityList:
         for district in city['districts']:
             my_queue.put(district['code'])
+    # (function)
+    def func(code):
+        p = {"OldPKeys":[],"PostInfo": code, "Latitude":0,"Longitude":0,"ProjectCode":"202106302"}
+        store_infos = requests.post(family_api, headers = headers, json = p).json()['data']
+        initializeFamily(store_infos)
+    # (run)
+    runThreading(my_queue, func, 10)
 
-    class Worker(threading.Thread):
-        def __init__(self, queue):
-            threading.Thread.__init__(self)
-            self.queue = queue
-
-        def run(self):
-            while self.queue.qsize() > 0:
-                code = self.queue.get()
-                p = {"OldPKeys":[],"PostInfo": code, "Latitude":0,"Longitude":0,"ProjectCode":"202106302"}
-                store_infos = requests.post(family_api, headers = headers, json = p).json()['data']
-                initializeFamily(store_infos)
-
-    workers = [Worker(my_queue) for _ in range(4)]
-    for worker in workers:
-        worker.start()
-    for worker in workers:
-        worker.join()
-
+    # update familyKeys
     if len(familyKeys) > n:
         meta_collection.update_one({'brand':'全家'},
                                    {'$set': {'familyKeys': list(familyKeys)}})
         print(f'{len(familyKeys)-n} new stores inserted.')
-        
+    
+    # finished
     print('Test success!')
