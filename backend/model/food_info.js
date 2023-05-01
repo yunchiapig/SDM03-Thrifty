@@ -31,9 +31,13 @@ let foodInfoSchema = new mongoose.Schema({
   description: {
     type: String
   },
-  image: {
-    type: String
+  mainImage: {
+    type: String,
   }
+  // images: {
+  //   type: Array,
+  //   default: []
+  // }
 });
 
 //create food info model
