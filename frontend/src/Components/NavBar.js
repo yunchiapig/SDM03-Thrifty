@@ -71,8 +71,8 @@ export default function NavBar() {
             fontSize={'sm'}
             fontWeight={400}
             variant={'link'}
-            href={'#'}>
-            Sign In
+            href={'/login'}>
+            Log In
           </Button>
           <Button
             as={'a'}
@@ -81,7 +81,7 @@ export default function NavBar() {
             fontWeight={600}
             color={'white'}
             bg={'pink.400'}
-            href={'#'}
+            href={'/signup'}
             _hover={{
               bg: 'pink.300',
             }}>

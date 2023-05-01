@@ -6,6 +6,8 @@ import React from "react";
 import HomePage from './Containers/HomePage';
 import SimpleSidebar from './Components/SideBar';
 import StorePage from './Containers/StorePage';
+import LoginPage from './Containers/LoginPage';
+import SignupPage from './Containers/SignupPage';
 import { Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage/>} />
           <Route path="/store/:id" element={ <StorePage/>} />
+          <Route path="/login" element={ <LoginPage/>} />
+          <Route path="/signup" element={ <SignupPage/>} />
         </Routes>
         
         {/* <HomePage/> */}
