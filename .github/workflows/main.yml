@@ -21,10 +21,7 @@ jobs:
         
      - name: 'Create env file'
        run: |
-        touch .env
-        echo MONGODB_USER=${{ secrets.MONGODB_USER }} >> .env
-        echo MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD }} >> .env
-        cat .env
+        echo "${{ secrets.ENV_FILE }}" > .env
 
      - name: Build and push Docker images
        run: |
