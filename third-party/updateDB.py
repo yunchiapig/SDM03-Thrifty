@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from utils.runThreading import runThreading
 from flask_restful import Resource, reqparse
 from threading import Thread
+import logging
 
 ##### Global DB Settings #####
 load_dotenv()
@@ -38,6 +39,7 @@ def threadingFamily():
         store_collection.bulk_write(msgs, ordered=False)
     
     runThreading(my_queue, func, 10)
+    logging.INFO("Family-mart updated.")
 
 
 def reformatFamily(store_infos):
@@ -106,6 +108,7 @@ def updateFamily():
 def clearFamily():
     store_collection.update_many({"category": '全家'}, 
                                  {'$set': {'updateDate': datetime.utcnow()+timedelta(hours = 8), 'stocks': []}})
+    logging.INFO("Family-mart cleared.")
 
 
 
@@ -200,7 +203,7 @@ def _updateSeven(Longitude, Latitude):
     # get and check token
     token = getToken()
     if token == None:
-        print('Token expired, please update token.')
+        logging.ERROR("7-11 token expired, please update token.")
         exit()
     
     # get nearby stores
@@ -227,10 +230,12 @@ def _updateSeven(Longitude, Latitude):
     # update sevenPIDs
     if len(sevenPIDs) > x:
         meta_collection.update_one({'brand': "7-11"},{'$set':{'sevenPIDs':sevenPIDs}})
+        logging.INFO("Update sevenPIDs")
 
     # update sevenCats
     if len(sevenCats) > y:
         meta_collection.update_one({'brand': "7-11"},{'$set':{'sevenCats':list(sevenCats)}})
+        logging.INFO("Update sevenCats")
 
 
 # check available time
@@ -247,7 +252,11 @@ class updateSeven (Resource):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('Longitude', type=float, required=True, help='Longitude is required', location='json')
         self.parser.add_argument('Latitude', type=float, required=True, help='Latitude is required', location='json')
-        
+    
+    def get(self):
+        return {
+            'message': "Welcome to Thrifty third-party!"
+        }
     def post(self):
         if isNowInTimePeriod():
             arg = self.parser.parse_args()
@@ -263,7 +272,7 @@ class updateSeven (Resource):
 def clearSeven():
     store_collection.update_many({"category": '7-11'}, 
                                  {'$set': {'updateDate': datetime.utcnow()+timedelta(hours = 8), 'stocks': []}})
-
+    logging.INFO("7-11 cleared.")
 
 
 if __name__ == "__main__":
