@@ -1,16 +1,24 @@
 version: '3'
 
 services:
+  third-party:
+    image: lee920024/thrifty-third-party
+    restart: always
+    networks:
+      - thrifty_network
+
   backend:
     image: lee920024/thrifty-backend
     restart: always
     networks:
       - thrifty_network
+
   frontend-admin:
     image: lee920024/thrifty-frontend-admin
     restart: always
     networks:
       - thrifty_network
+      
   nginx:
     image: nginx
     restart: always
