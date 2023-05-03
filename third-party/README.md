@@ -1,7 +1,3 @@
----
-layout: default
----
-
 # Third-party
 
 ## Information
@@ -55,7 +51,7 @@ deactivate
 * To start
 ```shell
 cd third-party
-docker build -t third-party --no-cache
+docker build -t third-party . --no-cache
 docker run -it --name third-party -p 5000:5000 third-party
 ```
 * To stop
