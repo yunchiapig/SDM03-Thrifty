@@ -4,5 +4,5 @@ monkey.patch_all()
 
 bind='0.0.0.0:5000'
 workers=4
-daemon=True
+daemon=False
 worker_class="gevent"
