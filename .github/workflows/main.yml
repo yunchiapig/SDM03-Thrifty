@@ -21,7 +21,15 @@ jobs:
         
      - name: 'Create env file'
        run: |
+        cd backend
         echo "${{ secrets.ENV_FILE }}" > .env
+        cd ..
+
+     - name: 'Create third-party env file'
+       run: |
+        cd third-party
+        echo "${{ secrets.THIRD_ENV_FILE }}" > .env
+        cd ..
 
      - name: Build and push Docker images
        run: |
@@ -32,6 +40,12 @@ jobs:
          cd frontend
          docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin .
          docker push  ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin
+         cd ..
+         cd third-party
+         docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/thrifty-third-party .
+         docker push  ${{ secrets.DOCKER_USERNAME }}/thrifty-third-party
+         cd ..
+
          
   deploy:
     needs: build
