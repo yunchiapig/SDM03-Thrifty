@@ -6,6 +6,48 @@ info:
   version: '1.0'
 
 paths:
+  /api/1.0/admin/signup:
+    post:
+      summary: Create a store's admin account.
+      description: |-
+        成功時所回傳的 JWT 可以透過 thriftyAdminJWT 這個 key 從回傳的 object 中讀取。
+      tags:
+        - Store Admin Account API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreSignUp'
+
+      responses: 
+        '200':
+          description: 回傳成功 message 和 JWT，JWT 中包含 email 和 storeID。
+        '400':
+          description: 信箱已經被註冊過了。
+        '500':
+          description: Internal Server Error
+
+  /api/1.0/admin/signin:
+    post:
+      summary: Let store's admin sign in.
+      description: |-
+        成功時所回傳的 JWT 可以透過 thriftyAdminJWT 這個 key 從回傳的 object 中讀取。
+      tags:
+        - Store Admin Account API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreSignIn'
+
+      responses: 
+        '200':
+          description:  回傳成功 message 和 JWT，JWT 中包含 email 和 storeID。
+        '400':
+          description: 信箱尚未註冊或密碼錯誤。
+        '500':
+          description: Internal Server Error
+  
   /api/1.0/admin/store:
     get:
       summary: Returns store's information.
@@ -38,7 +80,7 @@ paths:
         - Store Admin API
       requestBody:
         content:
-          application/json:
+           multipart/form-data:
             schema:
               $ref: '#/components/schemas/StoreInfo'
 
@@ -51,6 +93,8 @@ paths:
           description: Internal Server Error
 
     put:
+      security:
+        - bearerAuth: []
       summary: Update store's information.
       description: |-
         Example 的 Store ID 可能會因為資料庫的變動而改變，請以 POST method 實際回傳的 Store ID 作為測試 ID。
@@ -58,7 +102,7 @@ paths:
         - Store Admin API
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/StoreUpdate'
 
@@ -67,6 +111,8 @@ paths:
           description: 回傳含有 storeInfo 的 data Object
         '400':
           description: Bad request，回傳 message Object
+        '401':
+          description: Unauthorized，回傳 message Object
         '500':
           description: Internal Server Error
 
@@ -123,12 +169,14 @@ paths:
           description: Internal Server Error
 
     post:
+      security:
+        - bearerAuth: []
       summary: Create a food's information.
       tags:
         - Food Admin API
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/FoodInfo'
 
@@ -137,16 +185,20 @@ paths:
           description: 回傳含有 foodInfo 的 data Object
         '400':
           description: Bad request，回傳 message Object
+        '401':
+          description: Unauthorized，回傳 message Object
         '500':
           description: Internal Server Error
 
     put:
+      security:
+        - bearerAuth: []
       summary: Update a food's information.
       tags:
         - Food Admin API
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/FoodUpdate'
 
@@ -155,10 +207,14 @@ paths:
           description: 回傳含有 foodInfo 的 data Object
         '400':
           description: Bad request，回傳 message Object
+        '401':
+          description: Unauthorized，回傳 message Object
         '500':
           description: Internal Server Error
 
     delete:
+      security:
+        - bearerAuth: []
       summary: Delete a food's information.
       tags:
         - Food Admin API
@@ -191,6 +247,8 @@ paths:
         '400':
           description: 無對應食物品項的ID，或是該食物品項已被刪除。
                         <br>回傳 message Object
+        '401':
+          description: Unauthorized，回傳 message Object
         '500':
           description: Internal Server Error
 
@@ -224,6 +282,8 @@ paths:
 
 
     put:
+      security:
+        - bearerAuth: []
       summary: Update stock's quantity.
       description: |-
         Example 的多個 ID 可能會因為資料庫的變動而改變，請確認各個 ID 都存在後再作為測試 ID 使用。
@@ -240,6 +300,8 @@ paths:
           description: 回傳含有 stocks 資訊的 data Object
         '400':
           description: Bad request，回傳 message Object
+        '401':
+          description: Unauthorized，回傳 message Object
         '500':
           description: Internal Server Error
 
@@ -400,6 +462,8 @@ components:
               items:
                 type: number
               example: [121.513, 25.032]
+        mainImage:
+          type: file
     
     StoreUpdate:
       type: object
@@ -427,6 +491,52 @@ components:
                   items:
                     type: number
                   example: [81.513, 46.032]
+        mainImage:
+          type: file
+
+    StoreSignUp:
+      type: object
+      properties:
+        email:
+          type: string
+          example: test3@gmail.com
+        password:
+          type: string
+          example: test_123
+        name:
+          type: string
+          example: 好食咖哩
+        category:
+          type: string
+          example: 其他
+        tel:
+          type: string
+          example: 02-58758758
+        address:
+          type: string
+          example: 台北市中正區重慶南路一段122號
+        location:
+          type: object
+          properties:
+            type:
+              type: string
+              example: Point
+            coordinates:
+              type: array
+              items:
+                type: number
+              example: [121.513, 25.032]
+
+
+    StoreSignIn:
+      type: object
+      properties:
+        email:
+          type: string
+          example: test3@gmail.com
+        password:
+          type: string
+          example: test_123
     
     FoodInfo:
       type: object
@@ -455,6 +565,8 @@ components:
             description:
               type: string
               example: 濃郁的咖哩配上嫩雞，完美絕配！
+        mainImage:
+          type: file
 
     FoodUpdate:
       type: object
@@ -480,6 +592,8 @@ components:
             discount_price:
               type: integer
               example: 125
+        mainImage:
+          type: file
 
     StocksUpdate:
       type: object
