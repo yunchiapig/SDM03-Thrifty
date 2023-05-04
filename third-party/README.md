@@ -37,13 +37,11 @@ pip install virtualenv
 python3 -m venv .
 source bin/activate
 pip install -r requirements.txt
-python main.py &
-gunicorn -c config.py app:app
+supervisord -c supervisord.conf
 ```
 * To stop
 ```shell
-pkill -f main.py
-pkill -f gunicorn
+pkill -f supervisord
 deactivate
 ```
 
