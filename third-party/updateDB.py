@@ -18,6 +18,7 @@ db = MongoClient(CONNECTION_STRING).Thrifty
 store_collection = db['store']
 food_collection = db["food"]
 meta_collection = db["meta"]
+logging.basicConfig(format='[%(asctime)s +0000] [%(filename)s] [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=logging.INFO)
 
 
 ##### Family Mart #####
@@ -39,7 +40,7 @@ def threadingFamily():
         store_collection.bulk_write(msgs, ordered=False)
     
     runThreading(my_queue, func, 10)
-    logging.INFO("Family-mart updated.")
+    logging.info("Family-mart updated.")
 
 
 def reformatFamily(store_infos):
@@ -47,8 +48,8 @@ def reformatFamily(store_infos):
 
     for data in store_infos:
         stocks = []
-        if familyDate[0] == '':
-            familyDate[0] = datetime.strptime(data['updateDate'], "%Y-%m-%dT%H:%M:%S%z")
+        # if familyDate == '':
+        #     familyDate = datetime.strptime(data['updateDate'], "%Y-%m-%dT%H:%M:%S%z")
         category = data['info'][0]['name']
 
         for foods in data['info'][0]['categories']:
@@ -75,11 +76,11 @@ def reformatFamily(store_infos):
                 stocks.append({
                     '_id': _id,
                     'quantity': prod['qty'],
-                    'updateDate': familyDate[0]
+                    'updateDate': familyDate
                 })
             
         msgs.append(UpdateOne({"original_id": data['oldPKey'], 'category': '全家'}, 
-                        {'$set': {'updateDate': familyDate[0], 'stocks': stocks}}, upsert=True))
+                        {'$set': {'updateDate': familyDate, 'stocks': stocks}}, upsert=True))
     
     return msgs
 
@@ -93,12 +94,12 @@ def updateFamily():
     familyKeys = meta_family['familyKeys']
     familyPIDs = meta_family['familyPIDs']
     n = len(familyPIDs)
-    familyDate = ['']
+    familyDate = datetime.utcnow()+timedelta(hours = 8)
 
     # update
     threadingFamily()
-    store_collection.update_many({"category": '全家', "updateDate": {"$ne": familyDate[0]}}, 
-                                 {'$set': {'updateDate': familyDate[0], 'stocks': []}})
+    store_collection.update_many({"category": '全家', "updateDate": {"$ne": familyDate}}, 
+                                 {'$set': {'updateDate': familyDate, 'stocks': []}})
 
     # update familyPIDs
     if len(familyPIDs) > n:
@@ -108,7 +109,7 @@ def updateFamily():
 def clearFamily():
     store_collection.update_many({"category": '全家'}, 
                                  {'$set': {'updateDate': datetime.utcnow()+timedelta(hours = 8), 'stocks': []}})
-    logging.INFO("Family-mart cleared.")
+    logging.info("Family-mart cleared.")
 
 
 
@@ -159,7 +160,8 @@ def getStoreNum(token, Longitude, Latitude):
 
 ## reformat response
 def reformatSeven(response):
-    updateDate = datetime.strptime(response['StoreItemStockUpdateTime'], "%Y-%m-%dT%H:%M:%S")
+    # sevenDate = datetime.strptime(response['StoreItemStockUpdateTime'], "%Y-%m-%dT%H:%M:%S")
+    
     stocks = []
     for categoryBlock in response['StoreStockItem']['CategoryStockItems']:
         cat_name = categoryBlock['Name']
@@ -183,9 +185,9 @@ def reformatSeven(response):
             stocks.append({
                     '_id': _id,
                     'quantity': quantity,
-                    'updateDate': updateDate
+                    'updateDate': sevenDate
                 })
-    msg = {'updateDate':updateDate, 'stocks':stocks}
+    msg = {'updateDate':sevenDate, 'stocks':stocks}
     return msg
     
 
@@ -193,18 +195,20 @@ def reformatSeven(response):
 def _updateSeven(Longitude, Latitude):
     global sevenPIDs
     global sevenCats
+    global sevenDate
 
     meta_seven = meta_collection.find_one({'brand': "7-11"})
     sevenPIDs = meta_seven['sevenPIDs']
     sevenCats = set(meta_seven['sevenCats'])
     x = len(sevenPIDs)
     y = len(sevenCats)
+    sevenDate = datetime.utcnow()+timedelta(hours = 8)
 
     # get and check token
     token = getToken()
     if token == None:
-        logging.ERROR("7-11 token expired, please update token.")
-        exit()
+        logging.error("7-11 token expired, please update token.")
+        return
     
     # get nearby stores
     storeIDs = getStoreNum(token, Longitude, Latitude)
@@ -230,17 +234,19 @@ def _updateSeven(Longitude, Latitude):
     # update sevenPIDs
     if len(sevenPIDs) > x:
         meta_collection.update_one({'brand': "7-11"},{'$set':{'sevenPIDs':sevenPIDs}})
-        logging.INFO("Update sevenPIDs")
+        logging.info("Update sevenPIDs")
 
     # update sevenCats
     if len(sevenCats) > y:
         meta_collection.update_one({'brand': "7-11"},{'$set':{'sevenCats':list(sevenCats)}})
-        logging.INFO("Update sevenCats")
+        logging.info("Update sevenCats")
+
+    logging.info("7-11 updated.")
 
 
 # check available time
 def isNowInTimePeriod(): 
-    nowTime = datetime.now().time()
+    nowTime = (datetime.utcnow()+timedelta(hours = 8)).time()
     if dt.time(10,0) <= nowTime <= dt.time(17,0) or \
         dt.time(20,0) >= nowTime or dt.time(3,0) <= nowTime:
         return True
@@ -272,7 +278,7 @@ class updateSeven (Resource):
 def clearSeven():
     store_collection.update_many({"category": '7-11'}, 
                                  {'$set': {'updateDate': datetime.utcnow()+timedelta(hours = 8), 'stocks': []}})
-    logging.INFO("7-11 cleared.")
+    logging.info("7-11 cleared.")
 
 
 if __name__ == "__main__":
