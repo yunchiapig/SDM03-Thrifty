@@ -4,6 +4,7 @@ import {HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon} from '@chak
 import Logo from '../images/logo.png';
 import { Input } from "antd";
 import { useNavigate } from 'react-router-dom';
+import Filter from './Filter';
 
 export default function NavBar() {
   const navigate = useNavigate();
@@ -41,22 +42,7 @@ export default function NavBar() {
           <Flex display={{ base: 'none', md: 'flex' }} ml={10} w="100%">
             <Square w="10vw"/>
             <Square>
-              <Input.Search style={{ width: '45vw' }}
-                size="large"
-                placeholder="嗨！ 想吃什麼呢？"
-                className="search-bar"
-                // ref={inputField}
-                // onSearch={(term) => {
-                // if(term.length===0){
-                //     Message({status: "warning", msg: "請輸入搜尋內容！"});
-                //     return;
-                // }
-                // setOptions([]);
-                // const path = "/define/" + term;
-                // history.push(path);
-                // setSearchWord(term);
-                // }}
-              />
+              <Filter/>
             </Square>
           </Flex>
         </Flex>
