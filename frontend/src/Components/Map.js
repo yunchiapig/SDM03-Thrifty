@@ -7,17 +7,38 @@ const containerStyle = {
   height: '40vh',
 };
 
-function Map(userLocation) {
+function Map({userLocation, restaurantsData, mapCenter, changeNewCenter}) {
 
     const [searchQuery, setSearchQuery] = useState('');
-    const [storesData, setStoresData] = useState(userLocation.restaurantsData);
+    const [storesData, setStoresData] = useState(restaurantsData);
     const [map, setMap] = useState(null);
     const navigate = useNavigate();    
     const [selectedMarker, setSelectedMarker] = useState(null);
-    const [center, setCenter] = useState({
-        lat: userLocation.userLocation.lat,
-        lng: userLocation.userLocation.lng,
-    });
+    const [currentUserLocation, setCurrentUserLocation] = useState(userLocation);
+    const [currentCenter, setCurrentCenter] = useState(mapCenter);
+    // const init_center = userLocation;
+
+    useEffect(() => {
+        setStoresData(restaurantsData);
+    }, [restaurantsData]);
+
+    // useEffect(() => {
+    //     setCenter(mapCenter);
+    // }, [mapCenter]);
+
+    // const handleCenterChanged = () => {
+    //     if (map) {
+    //         const newCenter = map.getCenter();
+    //         setCenter(newCenter);
+    //     }
+    // };
+
+    // const handleZoomChanged = () => {
+    //   if (map) {
+    //       const newZoom = map.getZoom();
+    //       setZoom(newZoom);
+    //   }
+    // };
 
     const handleMarkerClick = (marker) => {
         setSelectedMarker(marker);
@@ -25,6 +46,13 @@ function Map(userLocation) {
 
     const handleMarkerClose = () => {
         setSelectedMarker(null);
+    };
+
+    const handleCenterChanged = (newCenter) => {
+        changeNewCenter(newCenter);
+        if (map != null) {
+            setCurrentCenter({ lat: map.getCenter().lat(), lng: map.getCenter().lng() });
+        }
     };
 
     const { isLoaded } = useJsApiLoader({
@@ -37,17 +65,18 @@ function Map(userLocation) {
         setMap(map);
     };
 
+    console.log(storesData);
+
     return (
         <>
         {isLoaded && (
-            <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12} onLoad={onLoad} onClick={() => handleMarkerClose()}>
+            <GoogleMap mapContainerStyle={containerStyle} center={currentUserLocation} zoom={13} onLoad={onLoad} onCenterChanged={event => handleCenterChanged(currentCenter)} onClick={() => handleMarkerClose()}>
                 {storesData.map((storeData) => (
                     <MarkerF key={storeData._id} position={{lat: storeData.location.coordinates[1], lng: storeData.location.coordinates[0]}} onClick={() => handleMarkerClick(storeData)} >
                         {selectedMarker === storeData && (
                             <InfoWindowF onCloseClick={() => handleMarkerClose(storeData)}>
                                 <div>
                                     <h2>{storeData.name}</h2>
-                                    <p>{storeData.category}</p>
                                     <p>{storeData.address}</p>
                                     <p>{storeData.tel}</p>
                                     <a href={`/store/${storeData._id}`} onClick={()=>{
