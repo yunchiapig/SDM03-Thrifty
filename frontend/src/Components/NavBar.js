@@ -1,5 +1,5 @@
 import { Box, Flex, Text, IconButton, Button, Stack, Collapse, Icon, Link,
-    Popover, PopoverTrigger, PopoverContent, useColorModeValue, useDisclosure, Square} from '@chakra-ui/react';
+    Popover, PopoverTrigger, PopoverContent, useColorModeValue, useDisclosure, Square, background} from '@chakra-ui/react';
 import {HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon} from '@chakra-ui/icons';
 import Logo from '../images/logo.png';
 import { Input } from "antd";
@@ -10,7 +10,7 @@ export default function NavBar() {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
-    <Box w="100%" bg={useColorModeValue('gray.100', 'gray.900')} px={4} position="fixed" id="navbar">
+    <Box w="100%" zIndex={100} bg={useColorModeValue('gray.100', 'gray.900')} px={4} position="fixed" id="navbar">
       <Flex
         bg={useColorModeValue('white', 'gray.800')}
         color={useColorModeValue('gray.600', 'white')}
@@ -36,7 +36,7 @@ export default function NavBar() {
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
           <Box maxW='20vh' onClick={()=>{ navigate(`/`);}} >
-            <img id="logo" src={Logo} alt="Thrifty"/>
+            <img className="logo" src={Logo} alt="Thrifty" style={{cursor:'pointer'}} />
           </Box>
           <Flex display={{ base: 'none', md: 'flex' }} ml={10} w="100%">
             <Square w="10vw"/>

@@ -8,9 +8,15 @@
   resize: 'contain';
 } */
 
+/* .logo {
+  cursor: pointer;
+} */
+
 .sticky {
   position: fixed;
-  width: 100%;
+  width: 100%-20rem;
+  left: 10rem;
+  right: 10rem;
 }
 
 .card{

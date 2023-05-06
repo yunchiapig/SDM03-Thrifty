@@ -13,6 +13,7 @@ export default function HomePage(){
     useEffect(()=>{
         axios.get(`http://52.193.252.15/api/1.0/stores?longitude=${121.55}&latitude=${25.03}`,  { crossdomain: true })
             .then(response => {
+                console.log('response: ', response.data.message)
                 const data = response.data.message.reduce(function (rows, key, index) { 
                     return (index % 2 === 0 ? rows.push([key]) 
                       : rows[rows.length-1].push(key)) && rows;

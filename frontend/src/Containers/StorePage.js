@@ -5,6 +5,7 @@ import ItemCard from "../Components/ItemCard";
 import { withRouter } from "../Hooks/withRouter";
 import axios from "axios";
 import { useParams, useLocation } from 'react-router-dom';
+import '../App.css';
 
 // const data = {
 //     shopName: "披薩有張臉 Pizza Has a Face",
@@ -81,7 +82,7 @@ const StorePage = () => {
                 direction={{ base: 'column', md: 'row' }}
                 bg={useColorModeValue('white', 'gray.900')}
                 boxShadow={'md'}>
-                <Flex flex={1}  minH={{ sm: '476px', md: '10rem' }}
+                <Flex flex={1}  minH={{ sm: '476px', md: '10rem' }} zIndex={10}
                     bg="white" position="relative" overflowX={"hidden"} borderBottomColor="gray"
                     w="100%" boxSizing='border-box' flexDirection="column">
                     <Image
@@ -111,11 +112,21 @@ const StorePage = () => {
                         </VStack>
                     </Box>
                     
-                    <Square outline={"solid lightgray"} boxShadow={'md'} id="store-classes-bar" bg={useColorModeValue('white')}
+                    {/* <Square outline={"solid lightgray"} boxShadow={'md'} id="store-classes-bar" bg={useColorModeValue('white')}
                         top={`${navbarHeight}`} w={`${width * foodCategories.length}px`} >
                         <HStack align={'center'} p={3} w="100%">
                             {foodCategories.map((theClass) =>
                                 <Box w={`${width}px`} h="100%" key={theClass} >
+                                    <Text  size="sm" key={theClass} w="full" textAlign="center" > {theClass} </Text>
+                                </Box>
+                            )}
+                        </HStack>
+                    </Square> */}
+                    <Square outline={"solid lightgray"} boxShadow={'md'} id="store-classes-bar" bg={useColorModeValue('white')}
+                        top={`${navbarHeight}`}  boxSizing="border-box">
+                        <HStack align={'center'} p={3} w="100%" justifyContent={'space-around'}>
+                            {foodCategories.map((theClass) =>
+                                <Box h="100%" key={theClass} >
                                     <Text  size="sm" key={theClass} w="full" textAlign="center" > {theClass} </Text>
                                 </Box>
                             )}
