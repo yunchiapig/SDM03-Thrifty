@@ -36,7 +36,7 @@ export default function NavBar() {
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
           <Box maxW='20vh' onClick={()=>{ navigate(`/`);}} >
-            <img id="logo" src={Logo} alt="Thrifty"/>
+            <img id="logo" src={Logo} alt="Thrifty" style={{cursor:'pointer'}}/>
           </Box>
           <Flex display={{ base: 'none', md: 'flex' }} ml={10} w="100%">
             <Square w="10vw"/>
