@@ -10,19 +10,11 @@ const { checkUserInfo, checkUserLogin } = require('./utilities/format_check');
 // 建立使用者資訊
 router.post('/', checkUserInfo, async function (req, res) {
   // console.log(req.body)
-  const type = req.body.type;
 
   try {
-    let name = "", password = "", email = ""
-
-    if (type == "google") {
-      const token = req.body.token;
-      // get name, email from Google TODO
-    } else {
-      name = req.body.name
-      password = req.body.password
-      email = req.body.email
-    }
+    const name = req.body.name
+    const password = req.body.password
+    const email = req.body.email
 
     const exist = await UserInfo.findOne({ email: email })
     if (!exist) {
@@ -47,20 +39,12 @@ router.post('/', checkUserInfo, async function (req, res) {
 // 讀取使用者資訊
 router.get('/', checkUserLogin, async function (req, res) {
   // console.log(req.query)
-  const type = req.query.type;
 
   try {
-    let password = "", email = ""
+    const password = req.query.password
+    const email = req.query.email
 
-    if (type == "google") {
-      const token = req.query.token;
-      // get email from Google TODO
-    } else {
-      password = req.query.password
-      email = req.query.email
-    }
-
-    const user = await UserInfo.findByCredentials(req.query.email, req.query.password)
+    const user = await UserInfo.findByCredentials(email, password)
     if (user == "email_incorrect" || user == "password_incorrect") {
       res.status(400).send({ message: user })
     } else {

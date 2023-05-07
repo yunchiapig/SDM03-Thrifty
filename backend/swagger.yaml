@@ -311,16 +311,6 @@ paths:
       tags:
         - User API
       parameters:
-        - name: type
-          in: query
-          description: |-
-            The login type. 
-
-            *Example*: website
-          required: false
-          schema:
-            type: string
-            example: 'website'
         - name: email
           in: query
           description: |-
@@ -610,10 +600,7 @@ components:
   
     UserInfo:
       type: object
-      properties:
-        type:
-          type: string
-          example: website  
+      properties: 
         name:
           type: string
           example: Steven886

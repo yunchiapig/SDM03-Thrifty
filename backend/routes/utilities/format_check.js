@@ -387,19 +387,13 @@ function checkUserEmail(email, res){
 
 // 檢查使用者資訊格式
 function checkUserInfo(req, res, next){
-  const type = req.body.type;
   const name = req.body.name;
   const password = req.body.password;
   const email = req.body.email;
-
-  // 如果是用 google 註冊，則不用檢查
-  if (type=="google"){
-    next();
-  }
   
   // 檢查 req.body 是否有缺漏
   const bodyKeys = Object.keys(req.body);
-  if (bodyKeys.length !== 4){
+  if (bodyKeys.length !== 3){
     res.status(400).send(
       {message: "使用者資訊格式錯誤，請檢查是否有缺漏。"}
     );
@@ -425,18 +419,12 @@ function checkUserInfo(req, res, next){
 }
 
 function checkUserLogin(req, res, next){
-  const type = req.query.type;
   const password = req.query.password;
   const email = req.query.email;
-
-  // 如果是用 google 註冊，則不用檢查
-  if (type=="google"){
-    next();
-  }
   
   // 檢查 req.query 是否有缺漏
   const queryKeys = Object.keys(req.query);
-  if (queryKeys.length !== 3){
+  if (queryKeys.length !== 2){
     res.status(400).send(
       {message: "使用者資訊格式錯誤，請檢查是否有缺漏。"}
     );
