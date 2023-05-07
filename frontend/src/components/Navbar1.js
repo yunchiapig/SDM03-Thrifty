@@ -1,70 +1,74 @@
-import React, { ReactNode } from 'react';
+// The component is referenced from https://chakra-templates.dev/navigation/sidebar
+
+//import React, { ReactNode, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'
+import logo from '../Images/logo.png';
 import {
   IconButton,
-  Avatar,
   Box,
   CloseButton,
   Flex,
-  HStack,
-  VStack,
-  Icon,
   useColorModeValue,
-  Link,
   Drawer,
   DrawerContent,
-  Text,
   useDisclosure,
   BoxProps,
   FlexProps,
+  Image,
+  Img,
+  Avatar,
+  HStack,
+  VStack,
+  Icon,
+  Link,
+  Text,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
-  calc,
-  Img
 } from '@chakra-ui/react';
 import {
   FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiServer,
   FiSettings,
   FiMenu,
+  FiServer,
   FiBell,
   FiChevronDown,
 } from 'react-icons/fi';
-import logo from '../Images/logo.png';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
-import {useStoreAdmin} from "../hooks/useStoreAdmin";
 import NavItem from './NavItem';
+import {useStoreAdmin} from "../hooks/useStoreAdmin";
 
 interface LinkItemProps {
   name: string;
   icon: IconType;
 }
+
+
 const LinkItems: Array<LinkItemProps> = [
-    { name: '基本資料', icon: FiHome, ref: "/Profile" },
-    { name: '商品管理', icon: FiServer, ref: "/ProductManagement"},
-    /*{ name: 'Trending', icon: FiTrendingUp },
-    { name: 'Explore', icon: FiCompass },
-    { name: 'Favourites', icon: FiStar },*/
-    { name: '設定', icon: FiSettings, ref: "/Settings" },
-  ];
+  { name: 'Home', icon: FiHome },
+  { name: '商品管理', icon: FiServer},
+  /*{ name: 'Trending', icon: FiTrendingUp },
+  { name: 'Explore', icon: FiCompass },
+  { name: 'Favourites', icon: FiStar },*/
+  { name: '設定', icon: FiSettings },
+];
+
 
 export default function SidebarWithHeader({
-  children,
+  children
 }: {
   children: ReactNode;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  
   return (
-    <Box minH = '100vh' bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box>
       <SidebarContent
         onClose={() => onClose}
+        w = '15%'
         display={{ base: 'none', md: 'block' }}
       />
       <Drawer
@@ -74,14 +78,16 @@ export default function SidebarWithHeader({
         onClose={onClose}
         returnFocusOnClose={false}
         onOverlayClick={onClose}
-        size="full">
+        h="full"
+        w={{base: '100%', md: 'none'}}>
         <DrawerContent>
-          <SidebarContent onClose={onClose} />
+          <SidebarContent onClose={onClose}/>
         </DrawerContent>
       </Drawer>
-      <MobileNav onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} minH = '100vh' p="4"> 
-        {children}
+      {/* mobilenav */}
+      <MobileNav onOpen={onOpen}/>
+      <Box ml={{ base: 0, md: 60 }} p="4">
+        
       </Box>
     </Box>
   );
@@ -92,29 +98,32 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-    const {setTitle} = useStoreAdmin();
-    const navigate = useNavigate();
-    const HandleNav = (t) => {
-        navigate('/mainpage' + t.ref);
-        setTitle(t)
-        onClose();
-    }
+  const {setTitle} = useStoreAdmin();
+  const navigate = useNavigate();
+  const HandleNav = (t) => {
+    if (t.name === "商品管理"){
+      navigate("/ItemManagement");
+    } 
+    setTitle(t)
+    onClose();
+  }
   return (
     <Box
       transition="3s ease"
       bg={useColorModeValue('white', 'gray.900')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-      w={{ base: 'full', md: 60 }}
+      w={{base: '100%', md: '15%'}}
       pos="fixed"
       h="full"
-      {...rest}>
+      {...rest}
+      >
       <CloseButton position = 'absolute' top = {5} right = {5} display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       <Flex alignItems="center" mt = {4} mb={8} ml="6" mr="10" justifyContent="center" >
         <Img w={{base: '55%', md: '75%'}} pt={10} src= {logo} alt = "Logo"/>
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon} name = {link.name} onClick = {() => HandleNav(link)}>
+        <NavItem key={link.name} name = {link.name} icon={link.icon} onClick = {() => HandleNav(link)}>
           {link.name}
         </NavItem>
       ))}
@@ -122,11 +131,11 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   );
 };
 
-interface NavItemProps extends FlexProps {
+/*interface NavItemProps extends FlexProps {
   icon: IconType;
   children: ReactText;
 }
-/*const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
   return (
     <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
@@ -160,16 +169,19 @@ interface NavItemProps extends FlexProps {
 interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
+
+
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   return (
     <Flex
-      ml={{ base: 0, md: 60 }}
+      ml={{ base: 0, md: '15%' }}
       px={{ base: 4, md: 4 }}
       height="20"
-      width = {{ base: 'full', md: 'calc(100% - 240px)'}}
-      alignItems="center"
-      pos='fixed'
+      w = {{ base: 'full', md: '85%' }}
+      h = '10%'
+      position='fixed'
       zIndex = '1'
+      alignItems="center"
       bg={useColorModeValue('white', 'gray.900')}
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue('gray.200', 'gray.700')}

@@ -1,5 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import instance from '../api.js';
+
+
 const StoreAdminContext = createContext({
   title: ""
 });
@@ -17,7 +19,7 @@ const StoreAdminProvider = (props) => {
     const getItems = async() => {
         setLoading(true);
         const res
-         = await instance.get('/api/1.0/get/foods', { 
+         = await instance.get('/api/1.0/foods', { 
             params: {  
                 id: store
         },}).catch( e => {
@@ -26,7 +28,6 @@ const StoreAdminProvider = (props) => {
             //}
         }
         )
-        // console.log(res);
         // from stock to items
         setLoading(false);
         let tempStocks = res?.data.message;
@@ -48,11 +49,7 @@ const StoreAdminProvider = (props) => {
             setStocks(stockList);
           });
           
-          //console.log(stockList);
         }
-        /*else if (status === 400) {
-            setStocks([]);
-        }*/
     }
 
   return (

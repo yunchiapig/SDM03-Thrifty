@@ -30,63 +30,62 @@ export default () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   
   useEffect(() => {
-    if(location.pathname === "/ItemManagement") {
+    if(location.pathname === "mainpage/ProductManagement") {
       getItems(store)
   }}, [location])
 
   return (  
-    <div className="App">
-      <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
-        <Navbar/>
-        <Card ml={{ base: 4, md: 265 }} mr={{ base: 4, md: 10 }} mt ={{ base: -2, md: -2 }} display = 'flex' direction= 'flex-start' h='94vh'>
-          <Stack divider={<StackDivider />} h = '100%' w = '100%'>
-            <Box h = '9%' display="flex" alignItems="center" pt = {2}>
-              <Flex
-                  align="center"
-                  p="4"
-                  mx="4"
-                  borderRadius="lg"
-                  role="group"
-                  w='80%'
-                >
-                  {title.icon && (
-                  <Icon
-                      mr="4"
-                      fontSize="22"
-                      as={title.icon}
-                  />
-                  )}
-                  <Text fontSize={22}>
-                    {title.name}
-                  </Text>
-              </Flex>
-              {title.name === "商品管理" ? 
-              <>
-                <Button leftIcon={<FiPlus />} color='cadetblue' variant='solid' onClick={() => {setDrawerMount(true); onOpen()}}>
-                  新增類別
-                </Button>
-                {drawerMount? <EditFoodDrawer isOpen = {isOpen} onOpen = {onOpen} onClose = {() => {onClose(); setDrawerMount(false)}}/> : null}
-              </> :
-              null}
-            </ Box>
-            { title.name === "商品管理" ? 
-              <ProductManagementPage/> : 
-              null}
-          </Stack>
-        </Card>
-        {loading ? <Spinner
-        thickness='4px'
-        speed='0.65s'
-        emptyColor='gray.200'
-        color='blue.500'
-        size='xl'
-        top='50%'
-        left='55%'
-        position = 'absolute'
-        zIndex={1}
-      />: null}
+      
+    <Box w = 'full' h = '90vh' mt = '80px' display = 'flex' px = '4%' py = '2%'>
+      <Card  display = 'flex' w = '100%' h = '100%'>
+        <Stack divider={<StackDivider />} h = '100%' w = '100%'>
+          <Box h = '8%' display="flex" alignItems="center" pt = {2}>
+            <Flex
+                align="center"
+                p="4"
+                mx="4"
+                borderRadius="lg"
+                role="group"
+                w='80%'
+              >
+                {title.icon && (
+                <Icon
+                    mr="4"
+                    fontSize="22"
+                    as={title.icon}
+                />
+                )}
+                <Text fontSize={22}>
+                  {title.name}
+                </Text>
+            </Flex>
+            {title.name === "商品管理" ? 
+            <>
+              <Button leftIcon={<FiPlus />} color='cadetblue' variant='solid' onClick={() => {setDrawerMount(true); onOpen()}}>
+                新增類別
+              </Button>
+              {drawerMount? <EditFoodDrawer isOpen = {isOpen} onOpen = {onOpen} onClose = {() => {onClose(); setDrawerMount(false)}}/> : null}
+            </> :
+            null}
+          </ Box>
+          { title.name === "商品管理" ? 
+            <ProductManagementPage/> : 
+            null}
+        </Stack>
+      </Card>
+      {loading ? <Spinner
+      thickness='4px'
+      speed='0.65s'
+      emptyColor='gray.200'
+      color='blue.500'
+      size='xl'
+      top='50%'
+      left='55%'
+      position = 'absolute'
+      zIndex={1}
+    />: null}
       </Box>
-    </div>
+      
   );
 }
 

@@ -9,11 +9,6 @@ import {
     Flex,
     HStack,
     VStack,
-    Icon,
-    useColorModeValue,
-    Link,
-    Drawer,
-    DrawerContent,
     Text,
     useDisclosure,
     BoxProps,
@@ -104,8 +99,6 @@ export default () => {
                     </VStack>
                 </Box>
             </Stack> }
-    </>
-    
-        
+    </> 
     )
 }
