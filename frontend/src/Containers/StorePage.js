@@ -111,17 +111,6 @@ const StorePage = () => {
                             <Text  color={'gray.500'} size="sm" mb={4}> {storeData.tel} </Text>
                         </VStack>
                     </Box>
-                    
-                    {/* <Square outline={"solid lightgray"} boxShadow={'md'} id="store-classes-bar" bg={useColorModeValue('white')}
-                        top={`${navbarHeight}`} w={`${width * foodCategories.length}px`} >
-                        <HStack align={'center'} p={3} w="100%">
-                            {foodCategories.map((theClass) =>
-                                <Box w={`${width}px`} h="100%" key={theClass} >
-                                    <Text  size="sm" key={theClass} w="full" textAlign="center" > {theClass} </Text>
-                                </Box>
-                            )}
-                        </HStack>
-                    </Square> */}
                     <Square outline={"solid lightgray"} boxShadow={'md'} id="store-classes-bar" bg={useColorModeValue('white')}
                         top={`${navbarHeight}`}  boxSizing="border-box">
                         <HStack align={'center'} p={3} w="100%" justifyContent={'space-around'}>
