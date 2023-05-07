@@ -10,8 +10,8 @@ export default function HomePage(){
     const [ifMapMode, setIfMapMode] = useState(true);
     const [storesData, setStoresData] = useState([]);
     const [storesDataforList, setStoresDataforList] = useState([]);
-    const [userLocation, setUserLocation] = useState({ lat: 25.03, lng: 121.55});
-    const [mapCenter, setMapCenter] = useState(userLocation);
+    const [userLocation, setUserLocation] = useState(null);
+    const [mapCenter, setMapCenter] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,21 +27,25 @@ export default function HomePage(){
 
     useEffect(() => {
         // console.log(userLocation);
-        axios.get(`http://52.193.252.15/api/1.0/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
-            .then(response => {
-                setStoresData(response.data.message);
-                const data = response.data.message.reduce(function (rows, key, index) { 
-                    return (index % 2 === 0 ? rows.push([key]) 
-                    : rows[rows.length-1].push(key)) && rows;
-                }, []);
-                setStoresDataforList(data);
-            });
+        if (userLocation != null) {
+            axios.get(`http://52.193.252.15/api/1.0/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
+                .then(response => {
+                    setStoresData(response.data.message);
+                    const data = response.data.message.reduce(function (rows, key, index) { 
+                        return (index % 2 === 0 ? rows.push([key]) 
+                        : rows[rows.length-1].push(key)) && rows;
+                    }, []);
+                    setStoresDataforList(data);
+                });
+            }
         // console.log(storesData);
     }, [mapCenter])
 
     const changeNewCenter = (newCenter) => {
         setMapCenter(newCenter);
     };
+
+    console.log('mapCenter:', mapCenter)
 
     return(
         <Box ml={5}>
@@ -56,7 +60,7 @@ export default function HomePage(){
                     {ifMapMode?
                     <Flex>
                         <Box w='50%'>
-                            <Map userLocation={userLocation} restaurantsData={storesData} mapCenter={mapCenter} changeNewCenter={changeNewCenter}/>
+                            {userLocation && (<Map userLocation={userLocation} restaurantsData={storesData} mapCenter={mapCenter} changeNewCenter={changeNewCenter}/>) }
                         </Box>
                         <Box w='50%'>
                             {storesData.map((storeData, i)=>{ return(

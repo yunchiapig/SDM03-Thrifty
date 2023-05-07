@@ -2,11 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { GoogleMap, useJsApiLoader, MarkerF, Autocomplete, InfoWindowF } from '@react-google-maps/api';
 import { useNavigate } from 'react-router-dom';
 
-const containerStyle = {
-  width: '40vw',
-  height: '40vh',
-};
-
 function Map({userLocation, restaurantsData, mapCenter, changeNewCenter}) {
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -17,6 +12,13 @@ function Map({userLocation, restaurantsData, mapCenter, changeNewCenter}) {
     const [currentUserLocation, setCurrentUserLocation] = useState(userLocation);
     const [currentCenter, setCurrentCenter] = useState(mapCenter);
     // const init_center = userLocation;
+
+    const containerStyle = {
+      width: '45vw',
+      height: '70vh',
+      top: '20px',
+      left: '10px',
+    };
 
     useEffect(() => {
         setStoresData(restaurantsData);
@@ -65,12 +67,12 @@ function Map({userLocation, restaurantsData, mapCenter, changeNewCenter}) {
         setMap(map);
     };
 
-    console.log(storesData);
+    console.log('currentCenter:', currentCenter);
 
     return (
         <>
         {isLoaded && (
-            <GoogleMap mapContainerStyle={containerStyle} center={currentUserLocation} zoom={13} onLoad={onLoad} onCenterChanged={event => handleCenterChanged(currentCenter)} onClick={() => handleMarkerClose()}>
+            <GoogleMap mapContainerStyle={containerStyle} center={currentUserLocation} zoom={15} onLoad={onLoad} onCenterChanged={event => handleCenterChanged(currentCenter)} onClick={() => handleMarkerClose()}>
                 {storesData.map((storeData) => (
                     <MarkerF key={storeData._id} position={{lat: storeData.location.coordinates[1], lng: storeData.location.coordinates[0]}} onClick={() => handleMarkerClick(storeData)} >
                         {selectedMarker === storeData && (

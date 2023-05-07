@@ -23,7 +23,7 @@ const LoginPage = () => (
     maxW="lg"
     py={{
       base: '12',
-      md: '24',
+      md: '4',
     }}
     px={{
       base: '0',
