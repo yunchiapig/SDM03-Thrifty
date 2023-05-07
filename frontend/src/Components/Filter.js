@@ -1,13 +1,14 @@
 import {ControlOutlined, AlignLeftOutlined, DownOutlined} from '@ant-design/icons';
 import { Box, HStack, StackDivider, VStack } from '@chakra-ui/react';
 import { Input,Select, Checkbox } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import type { SelectProps } from 'antd';
 
 // const options: SelectProps['options'] = [];
 
 export default function Filter(){
     const [isOpen, setIsOpen] = useState(false);
+    const [filterBottom, setFilterBottom] = useState(0); 
 
     // var options = [];
     // for (let i = 10; i < 36; i++) {
@@ -22,10 +23,21 @@ export default function Filter(){
         { label: 'Orange', value: 'Orange' },
     ];
 
-    const onChange = (checkedValues) => {
-        console.log('checked = ', checkedValues);
-    };
+    // const onChange = (checkedValues) => {
+    //     console.log('checked = ', checkedValues);
+    // };
       
+    useEffect(()=>{
+        window.onresize = () => resetFilterCheckListTop();
+        var filter = document.getElementById('filter');
+        var bottom = filter.getBoundingClientRect().bottom;
+        
+        resetFilterCheckListTop();
+        function resetFilterCheckListTop(){
+            setFilterBottom(bottom);
+        }
+    }, [])
+
       
     // const handleChange = (value) => {
     //     console.log(`selected ${value}`);
@@ -36,8 +48,6 @@ export default function Filter(){
     
 
     return(
-        
-
         <VStack 
             spacing={5}
             align='stretch'>
@@ -52,17 +62,17 @@ export default function Filter(){
                     <Checkbox.Group options={options} defaultValue={['Apple']} onChange={onChange} />}
                 />
             </Box> */}
-            <Box w='45vw' h='50%' rounded='md' p="2" boxShadow='base'
+            <Box w='45vw' rounded='md' p="2" boxShadow='base' id="filter"
                 style={{'outlineStyle':'solid', 'outlineColor':'#d9d9d9'}}>
-                <HStack justifyContent={'space-between'} onClick={handleClick}>
+                <HStack justifyContent={'space-between'} onClick={handleClick} >
                     <AlignLeftOutlined/>
                     <p style={{'left':0}}>篩選食物類別</p>
                     <DownOutlined style={{right: 0}}/>
                 </HStack>
             </Box>
             {isOpen? 
-                <Box backgroundColor={'white'} width="45vw" minH="10rem" 
-                    position={'fixed'}>
+                <Box backgroundColor={'white'} width="45vw" minH="10rem" top={`${filterBottom}`}
+                position={'absolute'} style={{'outlineStyle':'solid', 'outlineColor':'#d9d9d9'}}>
                     
                 </Box>
                 :<></>
