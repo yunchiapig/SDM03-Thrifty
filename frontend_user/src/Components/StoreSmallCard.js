@@ -20,8 +20,7 @@ import { useEffect, useState } from 'react';
 // };
 const imageURL = "https://images.1111.com.tw/discussPic/63/51562263_97023180.2701459.jpg" 
 
-export default function StoreSmallCard(storeData) {
-    const [data, setData] = useState(storeData.storeData);
+export default function StoreSmallCard({storeData}) {
 
     return (
         <Box py={4} px={5} w={{ sm: '100%', md: '45%vw' }}>
@@ -48,10 +47,10 @@ export default function StoreSmallCard(storeData) {
                     alignItems="left"
                     p={1}
                     pt={2}>
-                    <Heading fontSize={'2xl'} fontFamily={'body'} pb={3}> {data.name} </Heading>
+                    <Heading fontSize={'2xl'} fontFamily={'body'} pb={3}> {storeData.name} </Heading>
                     {/* <Rating rating={4} numReviews={32}></Rating> */}
-                    <Text  color={'gray.500'} size="sm" mb={4}> {data.address} </Text>
-                    <Text  color={'gray.500'} size="sm" mb={4}> {data.tel} </Text>
+                    <Text  color={'gray.500'} size="sm" mb={4}> {storeData.address} </Text>
+                    <Text  color={'gray.500'} size="sm" mb={4}> {storeData.tel} </Text>
                 </Stack>
             </Stack>
         </Box>
