@@ -307,9 +307,9 @@ paths:
 
   /api/1.0/user:
     get:
-      summary: Returns user's information.
+      summary: Return an user's information.
       tags:
-        - User API
+        - User Account API
       parameters:
         - name: email
           in: query
@@ -341,9 +341,9 @@ paths:
           description: Internal Server Error
           
     post:
-      summary: Create a user's information.
+      summary: Create an user's information.
       tags:
-        - User API
+        - User Account API
       requestBody:
         content:
           application/json:
@@ -354,6 +354,26 @@ paths:
           description: 回傳 JWT
         '400':
           description: 此 email 已經註冊過
+        '500':
+          description: Internal Server Error
+  
+  /api/1.0/user/google:
+    post:
+      summary: Create and return an user's information with Google.
+      description: |-
+        由於 Google token 經過一段時間後就會過期，請以當下請求資料作為測試資料。
+      tags:
+        - User Account API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserGoogleInfo'
+      responses:
+        '200':
+          description: 回傳 JWT
+        '400':
+          description: Google email 錯誤
         '500':
           description: Internal Server Error
 
@@ -610,5 +630,13 @@ components:
         password:
           type: string
           example: Test1234
+    
+    UserGoogleInfo:
+      type: object
+      properties: 
+        clientId:
+          type: string
+        credential:
+          type: string
         
 
