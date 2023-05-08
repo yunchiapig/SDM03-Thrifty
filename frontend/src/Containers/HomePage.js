@@ -27,7 +27,7 @@ export default function HomePage(){
 
     useEffect(() => {
         // console.log(userLocation);
-        if (userLocation != null) {
+        if (mapCenter) {
             axios.get(`http://52.193.252.15/api/1.0/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
                 .then(response => {
                     setStoresData(response.data.message);
@@ -60,7 +60,7 @@ export default function HomePage(){
                     {ifMapMode?
                     <Flex>
                         <Box w='50%'>
-                            {userLocation && (<Map userLocation={userLocation} restaurantsData={storesData} mapCenter={mapCenter} changeNewCenter={changeNewCenter}/>) }
+                            {userLocation && (<Map userLocation={userLocation} storesData={storesData} mapCenter={mapCenter} setMapCenter={setMapCenter}/>) }
                         </Box>
                         <Box w='50%'>
                             {storesData.map((storeData, i)=>{ return(

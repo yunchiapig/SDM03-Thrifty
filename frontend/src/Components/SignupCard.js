@@ -37,8 +37,6 @@ function SignupCard() {
   const handlePasswordChange = (event) => setPassword(event.target.value)
   const isPasswordError = (password.length < 8 || password.length > 20 || password === password.toLowerCase() || password === password.toUpperCase() || !(/\d/.test(password)))
 
-  const [currentUser, setCurrentCenter] = useState(null);
-
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {

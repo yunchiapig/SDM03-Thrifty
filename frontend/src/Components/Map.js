@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { GoogleMap, useJsApiLoader, MarkerF, Autocomplete, InfoWindowF } from '@react-google-maps/api';
 import { useNavigate } from 'react-router-dom';
 
-function Map({userLocation, restaurantsData, mapCenter, changeNewCenter}) {
+function Map({userLocation, storesData, mapCenter, setMapCenter}) {
 
-    const [storesData, setStoresData] = useState(restaurantsData);
+    // const [storesData, setStoresData] = useState(restaurantsData);
     const [map, setMap] = useState(null);
     const navigate = useNavigate();    
     const [selectedMarker, setSelectedMarker] = useState(null);
-    const [currentUserLocation, setCurrentUserLocation] = useState(userLocation);
+    // const [currentUserLocation, setCurrentUserLocation] = useState(userLocation);
     const [currentCenter, setCurrentCenter] = useState(mapCenter);
     // const init_center = userLocation;
 
@@ -20,8 +20,8 @@ function Map({userLocation, restaurantsData, mapCenter, changeNewCenter}) {
     };
 
     useEffect(() => {
-        setStoresData(restaurantsData);
-    }, [restaurantsData]);
+        console.log('Load Google Map.');
+    }, []);
 
     // useEffect(() => {
     //     setCenter(mapCenter);
@@ -42,17 +42,20 @@ function Map({userLocation, restaurantsData, mapCenter, changeNewCenter}) {
     // };
 
     const handleMarkerClick = (marker) => {
+        console.log('markerChanged');
         setSelectedMarker(marker);
     };
 
     const handleMarkerClose = () => {
+        console.log('markerClosed');
         setSelectedMarker(null);
     };
 
-    const handleCenterChanged = (newCenter) => {
-        changeNewCenter(newCenter);
+    const handleCenterChanged = () => {
+        // setMapCenter(currentCenter);
+        console.log('centerChanged');
         if (map != null) {
-            setCurrentCenter({ lat: map.getCenter().lat(), lng: map.getCenter().lng() });
+            setMapCenter({ lat: map.getCenter().lat(), lng: map.getCenter().lng() });
         }
     };
 
@@ -67,12 +70,12 @@ function Map({userLocation, restaurantsData, mapCenter, changeNewCenter}) {
         setMap(map);
     };
 
-    console.log('currentCenter:', currentCenter);
+    // console.log('currentUserLocation:', currentUserLocation);
 
     return (
         <>
         {isLoaded && (
-            <GoogleMap mapContainerStyle={containerStyle} center={currentUserLocation} zoom={15} onLoad={onLoad} onCenterChanged={event => handleCenterChanged(currentCenter)} onClick={() => handleMarkerClose()}>
+            <GoogleMap mapContainerStyle={containerStyle} center={userLocation} zoom={15} onLoad={onLoad} onDrag={() => handleCenterChanged()} onClick={() => handleMarkerClose()}>
                 {storesData.map((storeData) => (
                     <MarkerF key={storeData._id} position={{lat: storeData.location.coordinates[1], lng: storeData.location.coordinates[0]}} onClick={() => handleMarkerClick(storeData)} >
                         {selectedMarker === storeData && (

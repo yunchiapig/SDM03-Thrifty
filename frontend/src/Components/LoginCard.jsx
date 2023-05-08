@@ -21,9 +21,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
 
-function LoginCard() {
+function LoginCard({currentUserInfo, setCurrentUserInfo}) {
 
   const passwordRef = useRef(null);
+  // console.log(currentUserInfo); // { current: null }
 
   // useEffect(() => {
   //   console.log(passwordRef); // <input type="text">...</input>
@@ -40,11 +41,14 @@ function LoginCard() {
 
   // console.log(password);
   const navigate = useNavigate();
-  const handleSubmit = (event) => {
+  const handleSubmit = async e => {
+    e.preventDefault();
     if (true) { // Error handling
       axios.get(`http://52.193.252.15/api/1.0/user?email=${email}&password=${password}`, { crossdomain: true })
           .then(response => {
               console.log(jwt_decode(response.data.message));
+              setCurrentUserInfo(jwt_decode(response.data.message));
+              localStorage.setItem('user', jwt_decode(response.data.message).name);
               window.alert('Login successfully!');
               navigate('/');
            })
@@ -132,7 +136,7 @@ function LoginCard() {
               _hover={{
                 bg: 'blue.500',
               }}
-              onClick={handleSubmit}>Sign in</Button>
+              onClick={handleSubmit}>Login</Button>
               <HStack>
                 <Divider />
                 <Text fontSize="sm" whiteSpace="nowrap" color="muted">

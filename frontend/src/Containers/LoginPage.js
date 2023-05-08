@@ -1,9 +1,14 @@
 import LoginCard from '../Components/LoginCard.jsx'
 import { withRouter } from "../Hooks/withRouter.js";
 
-const LoginPage = () => {
+const LoginPage = ({currentUserInfo, setCurrentUserInfo}) => {
+
+    const handleLogin = (user) => {
+        setCurrentUserInfo(user);
+    }
+
     return (
-        <LoginCard/>
+        <LoginCard currentUserInfo={currentUserInfo} setCurrentUserInfo={handleLogin}/>
     )
 }
 
