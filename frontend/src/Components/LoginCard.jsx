@@ -20,6 +20,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
+import GoogleSSO from './GoogleSSO.js';
 
 function LoginCard({currentUserInfo, setCurrentUserInfo}) {
 
@@ -126,7 +127,7 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
                 Forgot password?
               </Button>
             </HStack>
-            <Stack spacing="6">
+            <Stack spacing="6" justifyContent={'center'}>
               <Button 
               variant="primary"
               loadingText="Submitting"
@@ -144,7 +145,9 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
                 </Text>
                 <Divider />
               </HStack>
-              <OAuthButtonGroup />
+              <Box alignItems="flex-end" width={"100%"} justifyContent="center">
+                <OAuthButtonGroup />
+              </Box>
             </Stack>
           </Stack>
         </Box>
