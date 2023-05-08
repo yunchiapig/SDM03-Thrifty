@@ -45,7 +45,9 @@ function SignupCard() {
     if (!(isAccountNameError || isEmailError || isPasswordError)) {
       const userData = { 'name': accountName, 'email': email, 'password': password }
       axios.post('http://52.193.252.15/api/1.0/user', userData, { crossdomain: true })
-          .then(response => { console.log(jwt_decode(response.data.message)); })
+          .then(response => {
+              console.log(jwt_decode(response.data.message)); })
+      window.alert('Sign up successfully! Please log in.');
       navigate('/login');
     }
   }

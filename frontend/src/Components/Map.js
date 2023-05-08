@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 function Map({userLocation, restaurantsData, mapCenter, changeNewCenter}) {
 
-    const [searchQuery, setSearchQuery] = useState('');
     const [storesData, setStoresData] = useState(restaurantsData);
     const [map, setMap] = useState(null);
     const navigate = useNavigate();    
@@ -57,10 +56,11 @@ function Map({userLocation, restaurantsData, mapCenter, changeNewCenter}) {
         }
     };
 
+    const [ libraries ] = useState(['places']);
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-        libraries: ['places'],
+        libraries,
     });
 
     const onLoad = (map) => {
