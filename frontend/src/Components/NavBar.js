@@ -3,12 +3,17 @@ import { Box, Flex, Text, IconButton, Button, Stack, Collapse, Icon, Link,
 import {HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon} from '@chakra-ui/icons';
 import Logo from '../images/logo.png';
 import { Input } from "antd";
+import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Filter from './Filter';
 
-export default function NavBar({filterOptions, filteredValues, setFilteredValues}) {
+export default function NavBar({isLoggedIn, currentUserInfo, filterOptions, filteredValues, setFilteredValues}) {
   const navigate = useNavigate();
   const { isOpen, onToggle } = useDisclosure();
+  
+  useEffect(() => {
+    console.log(isLoggedIn);
+  }, []);
 
   return (
     <Box w="100%" zIndex={100} bg={useColorModeValue('gray.100', 'gray.900')} px={4} position="fixed" id="navbar">
@@ -48,6 +53,28 @@ export default function NavBar({filterOptions, filteredValues, setFilteredValues
           </Flex>
         </Flex>
 
+        {isLoggedIn ? 
+        (<Stack
+          flex={{ base: 1, md: 0 }}
+          justify={'flex-end'}
+          direction={'row'}
+          spacing={6}>
+          <span style={{ whiteSpace: 'nowrap' }}>Hi, {localStorage.getItem('user')}!</span>
+          <Button
+            as={'a'}
+            display={{ base: 'none', md: 'inline-flex' }}
+            fontSize={'sm'}
+            fontWeight={600}
+            color={'white'}
+            bg={'pink.400'}
+            href={'/'}
+            _hover={{
+              bg: 'pink.300',
+            }}>
+            Log out
+          </Button>
+          </Stack>
+          ) : (
         <Stack
           flex={{ base: 1, md: 0 }}
           justify={'flex-end'}
@@ -74,7 +101,8 @@ export default function NavBar({filterOptions, filteredValues, setFilteredValues
             }}>
             Sign Up
           </Button>
-        </Stack>
+        </Stack>)
+        }
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>

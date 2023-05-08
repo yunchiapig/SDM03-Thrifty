@@ -11,7 +11,7 @@ import {
 import { forwardRef, useRef } from 'react'
 import { HiEye, HiEyeOff } from 'react-icons/hi'
 
-export const PasswordField = forwardRef((props, ref) => {
+export const PasswordField = forwardRef(({value, onChange}, ref) => {
   const { isOpen, onToggle } = useDisclosure()
   const inputRef = useRef(null)
   const mergeRef = useMergeRefs(inputRef, ref)
@@ -40,9 +40,10 @@ export const PasswordField = forwardRef((props, ref) => {
           ref={mergeRef}
           name="password"
           type={isOpen ? 'text' : 'password'}
+          value={value}
+          onChange={onChange}
           autoComplete="current-password"
           required
-          {...props}
         />
       </InputGroup>
     </FormControl>

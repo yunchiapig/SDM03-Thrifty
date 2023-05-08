@@ -2,17 +2,26 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { GoogleMap, useJsApiLoader, MarkerF, Autocomplete, InfoWindowF } from '@react-google-maps/api';
 import { useNavigate } from 'react-router-dom';
 
-const containerStyle = {
-  width: '40vw',
-  height: '40vh',
-};
-
 function Map({userLocation, storesData, mapCenter, setMapCenter}) {
-    const [searchQuery, setSearchQuery] = useState('');
     const [map, setMap] = useState(null);
     const [selectedMarker, setSelectedMarker] = useState(null);
     const navigate = useNavigate();    
     // const init_center = userLocation;
+
+    const containerStyle = {
+      width: '45vw',
+      height: '70vh',
+      top: '20px',
+      left: '10px',
+    };
+
+    useEffect(() => {
+        console.log('Load Google Map.');
+    }, []);
+
+    // useEffect(() => {
+    //     setCenter(mapCenter);
+    // }, [mapCenter]);
 
     // const handleCenterChanged = () => {
     //     if (map) {
