@@ -2,46 +2,13 @@ import { Box, Flex } from "@chakra-ui/react"
 import StoreSmallCard from "../Components/StoreSmallCard"
 import Map from '../Components/Map';
 import Toggle from 'react-styled-toggle';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
+// import axios from "axios";
 
-export default function HomePage(){
+export default function HomePage({filteredValues, userLocation, mapCenter, setMapCenter, storesData, storesDataforList}){
     const [ifMapMode, setIfMapMode] = useState(true);
-    const [storesData, setStoresData] = useState([]);
-    const [storesDataforList, setStoresDataforList] = useState([]);
-    const [userLocation, setUserLocation] = useState({ lat: 25.03, lng: 121.55});
-    const [mapCenter, setMapCenter] = useState(userLocation);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setUserLocation({ lat: latitude, lng: longitude });
-            setMapCenter({ lat: latitude, lng: longitude });
-          },
-          () => console.log('User location not available.')
-        );
-      }, []);
-
-    useEffect(() => {
-        // console.log(userLocation);
-        axios.get(`http://52.193.252.15/api/1.0/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
-            .then(response => {
-                setStoresData(response.data.message);
-                const data = response.data.message.reduce(function (rows, key, index) { 
-                    return (index % 2 === 0 ? rows.push([key]) 
-                    : rows[rows.length-1].push(key)) && rows;
-                }, []);
-                setStoresDataforList(data);
-            });
-        // console.log(storesData);
-    }, [mapCenter])
-
-    const changeNewCenter = (newCenter) => {
-        setMapCenter(newCenter);
-    };
 
     return(
         <Box ml={5}>
@@ -56,7 +23,7 @@ export default function HomePage(){
                     {ifMapMode?
                     <Flex>
                         <Box w='50%'>
-                            <Map userLocation={userLocation} restaurantsData={storesData} mapCenter={mapCenter} changeNewCenter={changeNewCenter}/>
+                            <Map userLocation={userLocation} storesData={storesData} mapCenter={mapCenter} setMapCenter={setMapCenter}/>
                         </Box>
                         <Box w='50%'>
                             {storesData.map((storeData, i)=>{ return(

@@ -1,67 +1,53 @@
-import {ControlOutlined, AlignLeftOutlined, DownOutlined} from '@ant-design/icons';
-import { Box, HStack, StackDivider, VStack } from '@chakra-ui/react';
-import { Input,Select, Checkbox } from 'antd';
+import {AlignLeftOutlined, DownOutlined} from '@ant-design/icons';
+import { Box, HStack, VStack } from '@chakra-ui/react';
+import { Input,Select, Checkbox, Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
 // import type { SelectProps } from 'antd';
 
-// const options: SelectProps['options'] = [];
-
-export default function Filter(){
+export default function Filter({filterOptions, filteredValues, setFilteredValues}){
     const [isOpen, setIsOpen] = useState(false);
     const [filterBottom, setFilterBottom] = useState(0); 
 
-    // var options = [];
-    // for (let i = 10; i < 36; i++) {
-    //     options.push({
-    //       value: i.toString(36) + i,
-    //       label: i.toString(36) + i,
-    //     });
-    // }
-    const options = [
-        { label: 'Apple', value: 'Apple' },
-        { label: 'Pear', value: 'Pear' },
-        { label: 'Orange', value: 'Orange' },
-    ];
+    const itemOptions = filterOptions.item.map((option)=>{
+        return({label: option, value: option})
+    })
+    const storeOptions = filterOptions.store.map((option)=>{
+        return({label: option, value: option})
+    })
+    // [
+    //     { label: 'Apple', value: 'Apple' },
+    //     { label: 'Pear', value: 'Pear' },
+    //     { label: 'Orange', value: 'Orange' },
+    // ];
 
-    // const onChange = (checkedValues) => {
-    //     console.log('checked = ', checkedValues);
-    // };
+    const itemOnChange = (checkedValues) => {
+        var originValues = filteredValues;
+        setFilteredValues({'store':originValues.store, 'item':checkedValues});
+    };
+    const storeOnChange = (checkedValues) => {
+        var originValues = filteredValues;
+        setFilteredValues({'store':checkedValues, 'item':originValues.item});
+    };
       
     useEffect(()=>{
         window.onresize = () => resetFilterCheckListTop();
         var filter = document.getElementById('filter');
         var bottom = filter.getBoundingClientRect().bottom;
-        
+
         resetFilterCheckListTop();
         function resetFilterCheckListTop(){
             setFilterBottom(bottom);
         }
     }, [])
 
-      
-    // const handleChange = (value) => {
-    //     console.log(`selected ${value}`);
-    // };
     const handleClick = () =>{
         setIsOpen(!isOpen);
     }
-    
 
     return(
         <VStack 
             spacing={5}
             align='stretch'>
-            {/* <Box >
-                <Select
-                    style={{ width: '45vw'}}
-                    addonBefore={<AlignLeftOutlined />}
-                    addonAfter={<DownOutlined onClick={handleClick}/>}
-                    defaultValue="篩選食物類別"
-                    onClick={handleClick}
-                    options={
-                    <Checkbox.Group options={options} defaultValue={['Apple']} onChange={onChange} />}
-                />
-            </Box> */}
             <Box w='45vw' rounded='md' p="2" boxShadow='base' id="filter"
                 style={{'outlineStyle':'solid', 'outlineColor':'#d9d9d9'}}>
                 <HStack justifyContent={'space-between'} onClick={handleClick} >
@@ -71,25 +57,39 @@ export default function Filter(){
                 </HStack>
             </Box>
             {isOpen? 
-                <Box backgroundColor={'white'} width="45vw" minH="10rem" top={`${filterBottom}`}
-                position={'absolute'} style={{'outlineStyle':'solid', 'outlineColor':'#d9d9d9'}}>
-                    
+                <Box backgroundColor={'white'} width="45vw" minH="10rem" top={`${filterBottom}`} p={5}
+                    position={'absolute'} style={{'outlineStyle':'solid', 'outlineColor':'#d9d9d9'}}>
+                    <VStack spacing={2} align="baseline">
+                        {itemOptions?
+                            <>
+                                <p style={{fontWeight:"bold"}}>品項分類：</p>
+                                <Checkbox.Group style={{width:"100%"}} 
+                                    defaultValue={filteredValues.item} onChange={itemOnChange}>
+                                        <Row >
+                                            {filterOptions.item.map((option)=>{
+                                                console.log(option);
+                                                return(
+                                                <Col span={6}>
+                                                    <Checkbox value={option}>{option}</Checkbox>
+                                                </Col>)
+                                            })}
+                                        </Row>
+                                </Checkbox.Group>
+                                <p/>
+                            </>:<></>
+                        }
+                        {storeOptions?
+                            <>
+                                <p style={{fontWeight:"bold"}}>店家分類：</p>
+                                <Checkbox.Group options={storeOptions} 
+                                    defaultValue={filteredValues.store} onChange={storeOnChange} />
+                                <p/>
+                            </>:<></>
+                        }
+                    </VStack>
                 </Box>
                 :<></>
             }
-            
-        
-        {/* <Select
-            mode="tags"
-            style={{ width: '45vw' }}
-            placeholder="篩選食物類別"
-            onChange={handleChange}
-            options={options}>
-                
-        </Select> */}
         </VStack>
-        
     )
-
-    
 };

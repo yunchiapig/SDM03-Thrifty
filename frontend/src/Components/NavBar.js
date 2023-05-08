@@ -6,7 +6,7 @@ import { Input } from "antd";
 import { useNavigate } from 'react-router-dom';
 import Filter from './Filter';
 
-export default function NavBar() {
+export default function NavBar({filterOptions, filteredValues, setFilteredValues}) {
   const navigate = useNavigate();
   const { isOpen, onToggle } = useDisclosure();
 
@@ -42,7 +42,8 @@ export default function NavBar() {
           <Flex display={{ base: 'none', md: 'flex' }} ml={10} w="100%">
             <Square w="10vw"/>
             <Square>
-              <Filter/>
+              <Filter filterOptions={filterOptions} 
+                filteredValues={filteredValues} setFilteredValues={setFilteredValues}/>
             </Square>
           </Flex>
         </Flex>

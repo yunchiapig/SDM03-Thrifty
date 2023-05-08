@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { GoogleMap, useJsApiLoader, MarkerF, Autocomplete, InfoWindowF } from '@react-google-maps/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,24 +7,12 @@ const containerStyle = {
   height: '40vh',
 };
 
-function Map({userLocation, restaurantsData, mapCenter, changeNewCenter}) {
-
+function Map({userLocation, storesData, mapCenter, setMapCenter}) {
     const [searchQuery, setSearchQuery] = useState('');
-    const [storesData, setStoresData] = useState(restaurantsData);
     const [map, setMap] = useState(null);
-    const navigate = useNavigate();    
     const [selectedMarker, setSelectedMarker] = useState(null);
-    const [currentUserLocation, setCurrentUserLocation] = useState(userLocation);
-    const [currentCenter, setCurrentCenter] = useState(mapCenter);
+    const navigate = useNavigate();    
     // const init_center = userLocation;
-
-    useEffect(() => {
-        setStoresData(restaurantsData);
-    }, [restaurantsData]);
-
-    // useEffect(() => {
-    //     setCenter(mapCenter);
-    // }, [mapCenter]);
 
     // const handleCenterChanged = () => {
     //     if (map) {
@@ -39,40 +27,55 @@ function Map({userLocation, restaurantsData, mapCenter, changeNewCenter}) {
     //       setZoom(newZoom);
     //   }
     // };
+    useEffect(()=>{
+        console.log("Load GoogleMap.")
+    },[])
 
     const handleMarkerClick = (marker) => {
+        console.log('Marker clicked.')
         setSelectedMarker(marker);
     };
 
     const handleMarkerClose = () => {
+        console.log('Marker closed.')
         setSelectedMarker(null);
     };
 
-    const handleCenterChanged = (newCenter) => {
-        changeNewCenter(newCenter);
-        if (map != null) {
-            setCurrentCenter({ lat: map.getCenter().lat(), lng: map.getCenter().lng() });
+    const handleCenterChanged = () => {
+        console.log('Center changed');
+        if (map !== null) {
+            console.log("center", map.getCenter().lat(), " ", map.getCenter().lng());
+            setMapCenter({ lat: map.getCenter().lat(), lng: map.getCenter().lng() });
         }
     };
 
+    const [ libraries ] = useState(['places']);
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-        libraries: ['places'],
+        libraries,
     });
 
     const onLoad = (map) => {
         setMap(map);
     };
 
-    console.log(storesData);
-
+    // useEffect(()=>{
+    //     console.log(storesData);
+    // }, [storesData])
+    // useEffect(()=>{
+    //     console.log("userLocation", userLocation)
+    // }, [userLocation])
+    
     return (
         <>
         {isLoaded && (
-            <GoogleMap mapContainerStyle={containerStyle} center={currentUserLocation} zoom={13} onLoad={onLoad} onCenterChanged={event => handleCenterChanged(currentCenter)} onClick={() => handleMarkerClose()}>
-                {storesData.map((storeData) => (
-                    <MarkerF key={storeData._id} position={{lat: storeData.location.coordinates[1], lng: storeData.location.coordinates[0]}} onClick={() => handleMarkerClick(storeData)} >
+            <GoogleMap mapContainerStyle={containerStyle} center={userLocation} zoom={15} 
+                onLoad={onLoad} onDragEnd={() => handleCenterChanged()} onClick={() => handleMarkerClose()}>
+                {storesData.map((storeData) => 
+                    {return(
+                        <MarkerF key={storeData._id} position={{lat: storeData.location.coordinates[1], lng: storeData.location.coordinates[0]}}
+                        onClick={() => handleMarkerClick(storeData)} >
                         {selectedMarker === storeData && (
                             <InfoWindowF onCloseClick={() => handleMarkerClose(storeData)}>
                                 <div>
@@ -80,13 +83,14 @@ function Map({userLocation, restaurantsData, mapCenter, changeNewCenter}) {
                                     <p>{storeData.address}</p>
                                     <p>{storeData.tel}</p>
                                     <a href={`/store/${storeData._id}`} onClick={()=>{
-                                navigate(`/store/${storeData._id}`, 
+                                        navigate(`/store/${storeData._id}`, 
                                     { state: { storeData: storeData } });}}>{"店家資訊"}</a>
                                 </div>
                             </InfoWindowF>
                         )}
                     </MarkerF>
-                ))}
+                    )}
+                )}
             </GoogleMap>
         )}
         </>
