@@ -97,9 +97,20 @@ function checkStoreInfo(req, res, next){
   const category = req.body.category;
   const tel = req.body.tel;
   const address = req.body.address;
-  const longitude = JSON.parse(req.body.location).coordinates[0];
-  const latitude = JSON.parse(req.body.location).coordinates[1];
-  const mainImage = req.files.mainImage;
+  let longitude;
+  let latitude;
+  
+  // for multipart request
+  if (typeof req.body.location === "string"){
+    longitude = JSON.parse(req.body.location).coordinates[0];
+    latitude = JSON.parse(req.body.location).coordinates[1];
+  }
+
+  // for application/json request
+  if (typeof req.body.location === "object"){
+    longitude = req.body.location.coordinates[0];
+    latitude = req.body.location.coordinates[1];
+  }
   
   // 檢查店家名稱格式是否為中英數字
   if(checkStoreName(name, res)){
@@ -128,11 +139,6 @@ function checkStoreInfo(req, res, next){
 
   // 檢查緯度格式是否正確
   if (checkLatitude(latitude, res)){
-    return;
-  }
-
-  // 檢查是否有 mainImage
-  if (checkMainImage(mainImage, res)){
     return;
   }
 
