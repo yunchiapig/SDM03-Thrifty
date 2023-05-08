@@ -63,6 +63,7 @@ jobs:
            git pull
            docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-backend
            docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin
+           docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-third-party
            docker-compose down
            docker-compose up -d
            docker image prune -af
