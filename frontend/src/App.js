@@ -8,7 +8,6 @@ import StorePage from './Containers/StorePage';
 import LoginPage from './Containers/LoginPage';
 import SignupPage from './Containers/SignupPage';
 import { Routes, Route } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import axios from "axios";
 
 
@@ -92,7 +91,7 @@ function App() {
       <Box w="100%" bg={useColorModeValue('gray.100', 'gray.900')}minH="100vh">
         <NavBar zIndex={100} filterOptions={filterOptions} 
           filteredValues={filteredValues} setFilteredValues={setFilteredValues} 
-          isLoggedIn={isLoggedIn} currentUserInfo={currentUserInfo}/>
+          isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} currentUserInfo={currentUserInfo}/>
         {/* <SimpleSidebar/> */}
         <Box w="100%" h="19vh"/>
         

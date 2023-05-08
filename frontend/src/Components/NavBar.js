@@ -7,13 +7,19 @@ import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Filter from './Filter';
 
-export default function NavBar({isLoggedIn, currentUserInfo, filterOptions, filteredValues, setFilteredValues}) {
+export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filterOptions, filteredValues, setFilteredValues}) {
   const navigate = useNavigate();
   const { isOpen, onToggle } = useDisclosure();
   
-  useEffect(() => {
-    console.log(isLoggedIn);
-  }, []);
+  // useEffect(() => {
+  //   console.log(isLoggedIn);
+  // }, []);
+
+  const handleLogOut = () => {
+    localStorage.clear();
+    setIsLoggedIn(false);
+    navigate(`/`);
+  }
 
   return (
     <Box w="100%" zIndex={100} bg={useColorModeValue('gray.100', 'gray.900')} px={4} position="fixed" id="navbar">
@@ -70,7 +76,8 @@ export default function NavBar({isLoggedIn, currentUserInfo, filterOptions, filt
             href={'/'}
             _hover={{
               bg: 'pink.300',
-            }}>
+            }}
+            onClick={handleLogOut}>
             Log out
           </Button>
           </Stack>
