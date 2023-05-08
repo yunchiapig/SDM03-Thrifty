@@ -18,6 +18,12 @@ services:
     restart: always
     networks:
       - thrifty_network
+
+  frontend-user:
+    image: lee920024/thrifty-frontend-user
+    restart: always
+    networks:
+      - thrifty_network
       
   nginx:
     image: nginx
