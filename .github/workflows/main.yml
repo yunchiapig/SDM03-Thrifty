@@ -34,15 +34,15 @@ jobs:
      - name: Build and push Docker images
        run: |
          cd backend
-         docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/thrifty-backend .
+         docker build --platform linux/amd64 --no-cache -t ${{ secrets.DOCKER_USERNAME }}/thrifty-backend .
          docker push ${{ secrets.DOCKER_USERNAME }}/thrifty-backend
          cd ..
          cd frontend
-         docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin .
+         docker build --platform linux/amd64 --no-cache -t ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin .
          docker push  ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin
          cd ..
          cd third-party
-         docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/thrifty-third-party .
+         docker build --platform linux/amd64 --no-cache -t ${{ secrets.DOCKER_USERNAME }}/thrifty-third-party .
          docker push  ${{ secrets.DOCKER_USERNAME }}/thrifty-third-party
          cd ..
 
