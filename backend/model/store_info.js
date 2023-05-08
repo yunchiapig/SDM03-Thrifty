@@ -38,6 +38,13 @@ let storeInfoSchema = new mongoose.Schema({
     type: Array,
     default: []
   },
+  mainImage: {
+    type: String,
+  },
+  // images: {
+  //   type: Array,
+  //   default: []
+  // }
 });
 
 storeInfoSchema.index({ location: '2dsphere' });
