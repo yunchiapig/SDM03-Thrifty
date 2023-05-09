@@ -50,6 +50,7 @@ jobs:
         cd ..
 
         cd frontend_user
+        cat .env
         docker build --platform linux/amd64 --no-cache -t ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-user .
         docker push  ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-user
         cd ..
