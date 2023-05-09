@@ -16,8 +16,8 @@ services:
   frontend-admin:
     image: lee920024/thrifty-frontend-admin
     restart: always
-    ports:
-      - "3000:3000"
+    # ports:
+    #   - "3000:3000"
     networks:
       - thrifty_network
 
