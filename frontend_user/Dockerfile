@@ -6,10 +6,10 @@ FROM node:18-bullseye-slim as build
 WORKDIR /frontend
 
 # Copy the package.json and yarn.lock files to the container
-COPY ["package.json", "yarn.lock", "./"]
+COPY ["package.json", "./"]
 
 # Install the dependencies
-RUN yarn --production --silent
+RUN npm install -p
 
 # Bundle app source
 COPY . .
