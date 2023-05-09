@@ -19,23 +19,7 @@ function Map({userLocation, storesData, mapCenter, setMapCenter}) {
         console.log('Load Google Map.');
     }, []);
 
-    // useEffect(() => {
-    //     setCenter(mapCenter);
-    // }, [mapCenter]);
 
-    // const handleCenterChanged = () => {
-    //     if (map) {
-    //         const newCenter = map.getCenter();
-    //         setCenter(newCenter);
-    //     }
-    // };
-
-    // const handleZoomChanged = () => {
-    //   if (map) {
-    //       const newZoom = map.getZoom();
-    //       setZoom(newZoom);
-    //   }
-    // };
 
     const handleMarkerClick = (marker) => {
         setSelectedMarker(marker);
