@@ -20,6 +20,7 @@ export default function SimpleCard() {
       rounded={'lg'}
       w = '65%'
       bg={useColorModeValue('white', 'gray.700')}
+      mt = '30vh'
       boxShadow={'lg'}
       p={8}>
       <Stack spacing={6}>
@@ -43,15 +44,15 @@ export default function SimpleCard() {
             bg= '#4FA060'
             color={'white'}
             _hover={{
-              bg: '#64CCC9',
+              bg: '#61C777',
             }}>
             Sign in
           </Button>
           <Button
-            bg= '#C4848F'
+            bg= '#72A8DB'
             color={'white'}
             _hover={{
-              bg: '#E5BCD7',
+              bg: '#85C4FF',
             }}>
             New account
           </Button>

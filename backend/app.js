@@ -13,12 +13,16 @@ const swaggerDocument =  YAML.load(fs.readFileSync('./swagger.yaml', 'utf8'));
 
 
 const healthcheckRouter = require('./routes/healthcheck');
-const usersRouter = require('./routes/users');
+
+// user routers
+const userRouter = require('./routes/user_info_api');
 
 // admin routers
 const storeAdminRouter = require('./routes/store_info_api');
 const foodAdminRouter = require('./routes/food_info_api');
 const stockAdminRouter = require('./routes/stock_info_api');
+const signUpAdminRouter = require('./routes/admin_signup_api');
+const signInAdminRouter = require('./routes/admin_signin_api');
 
 // get routers
 const getStoresRouter = require('./routes/get_stores_api');
@@ -40,12 +44,16 @@ app.use(cors());
 
 // routers
 app.use('/healthcheck', healthcheckRouter);
-app.use('/users', usersRouter);
+
+// user routers
+app.use('/api/1.0/user', userRouter);
 
 // admin routers
 app.use('/api/1.0/admin/store', storeAdminRouter);
 app.use('/api/1.0/admin/food', foodAdminRouter);
 app.use('/api/1.0/admin/stock', stockAdminRouter);
+app.use('/api/1.0/admin/signup', signUpAdminRouter);
+app.use('/api/1.0/admin/signin', signInAdminRouter);
 
 // get routers
 app.use('/api/1.0/stores', getStoresRouter);

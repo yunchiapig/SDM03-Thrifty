@@ -10,6 +10,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element = {<LogInContainer />}/>
+        <Route path="/signup" element = {<LogInContainer />}/>
         <Route path="/mainpage">
           <Route index element={<Navbar />}/>
           <Route path="Profile" element={<Navbar children = {<SubPage />} />}/>

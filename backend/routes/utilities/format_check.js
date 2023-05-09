@@ -80,6 +80,16 @@ function checkLatitude(latitude, res){
   }
 }
 
+// 檢查是否有 mainImage
+function checkMainImage(mainImage, res){
+  if (mainImage === undefined){
+    res.status(400).send(
+      {message: "沒有 mainImage，請提供照片。"}
+    );
+    return true; // 代表有錯誤
+  }
+}
+
 
 // 檢查店家資訊格式
 function checkStoreInfo(req, res, next){
@@ -87,18 +97,10 @@ function checkStoreInfo(req, res, next){
   const category = req.body.category;
   const tel = req.body.tel;
   const address = req.body.address;
-  const longitude = req.body.location.coordinates[0];
-  const latitude = req.body.location.coordinates[1];
+  const longitude = JSON.parse(req.body.location).coordinates[0];
+  const latitude = JSON.parse(req.body.location).coordinates[1];
+  const mainImage = req.files.mainImage;
   
-  // 檢查 req.body 是否有缺漏
-  const bodyKeys = Object.keys(req.body);
-  if (bodyKeys.length !== 5){
-    res.status(400).send(
-      {message: "店家資訊格式錯誤，請檢查是否有缺漏。"}
-    );
-    return;
-  }
-
   // 檢查店家名稱格式是否為中英數字
   if(checkStoreName(name, res)){
     return;
@@ -129,12 +131,19 @@ function checkStoreInfo(req, res, next){
     return;
   }
 
+  // 檢查是否有 mainImage
+  if (checkMainImage(mainImage, res)){
+    return;
+  }
+
   next();
 }
 
 
 // 檢查店家更新資訊格式
 function checkStoreUpdateInfo(req, res, next){
+  req.body.updateInfo = JSON.parse(req.body.updateInfo);
+
   // 取得要更新的欄位
   const updateKeys = Object.keys(req.body.updateInfo);
 
@@ -199,9 +208,70 @@ function checkStoreUpdateInfo(req, res, next){
 }
 
 
-// 檢查食物價格格式
-function checkFoodPrice(req, res, next){
+// 檢查 email 格式
+function checkStoreEmail(email, res){
+  // 檢查是否有 email
+  if (email === undefined){
+    res.status(400).send(
+      {message: "請提供 email"}
+    );
+    return true; // 代表有錯誤
+  }
+
+  if (/^[^\s@~`!#$%^&*()\-+={}[\]]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    // console.log('Email is valid!');
+  } else {
+      res .status(400).send(
+        {message: "email 格式錯誤"}
+      );
+      return true; // 代表有錯誤
+  };
+
+  return false
+}
+
+
+// 檢查 password 格式
+function checkStorePassword(password, res){
+  // 檢查是否有 password
+  if (password === ''){
+    res.status(400).send(
+      {message: "請提供 password"}
+    );
+
+    return true; // 代表有錯誤
+  }
+
+  return false; 
+}
+
+
+// 檢查店家 email 和 password
+function checkStoreEmailAndPassword(req, res, next){
+
+  const email = req.body.email;
+  const password = req.body.password;
+
+  // 檢查 email 格式
+  if (checkStoreEmail(email, res)){
+    return;  // 有錯誤就 return
+  }
+
+  // 檢查 password 格式 
+  if (checkStorePassword(password, res)){
+    return;  // 有錯誤就 return
+  }
+
+  next();
+}
+  
+
+
+function checkFoodInfo(req, res, next){
+  req.body.updateInfo = JSON.parse(req.body.updateInfo);
   const updateInfo = req.body.updateInfo;
+
+  // 檢查食物價格格式
   const original_price = updateInfo.original_price;
   const discount_price = updateInfo.discount_price;
   let price = [];
@@ -222,6 +292,12 @@ function checkFoodPrice(req, res, next){
       );
       return;
     }
+  }
+
+  // 檢查是否有 mainImage
+  const mainImage = req.files.mainImage;
+  if (checkMainImage(mainImage, res)){
+    return;
   }
 
   next();
@@ -279,11 +355,115 @@ function checkUserLocation(req, res, next){
   next();
 }
 
+// 檢查使用者名稱格式是否為英數字
+function checkUserName(name, res){
+  if (!(/^[A-Za-z][A-Za-z0-9]*$/.test(name))){
+    res.status(400).send(
+      {message: "使用者名稱格式錯誤，僅接受英數字。"}
+    );
+    return true; // 代表有錯誤
+  }
+}
+
+// 檢查使用者密碼格式是否正確
+function checkUserPassword(password, res){
+  if (!(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/.test(password))){
+    res.status(400).send(
+      {message: "使用者密碼格式錯誤，僅接受 8~20 個字元，並且至少含有一個數字、一個大寫英文字母、一個小寫英文字母。"}
+    );
+    return true; // 代表有錯誤
+  }
+}
+
+// 檢查使用者信箱格式是否正確
+function checkUserEmail(email, res){
+  if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))){
+    res.status(400).send(
+      {message: "使用信箱格式錯誤。"}
+    );
+    return true; // 代表有錯誤
+  }
+}
+
+// 檢查使用者資訊格式
+function checkUserInfo(req, res, next){
+  const type = req.body.type;
+  const name = req.body.name;
+  const password = req.body.password;
+  const email = req.body.email;
+
+  // 如果是用 google 註冊，則不用檢查
+  if (type=="google"){
+    next();
+  }
+  
+  // 檢查 req.body 是否有缺漏
+  const bodyKeys = Object.keys(req.body);
+  if (bodyKeys.length !== 4){
+    res.status(400).send(
+      {message: "使用者資訊格式錯誤，請檢查是否有缺漏。"}
+    );
+    return;
+  }
+
+  // 檢查使用者名稱格式是否為中英數字
+  if (checkUserName(name, res)){
+    return;
+  };
+
+  // 檢查使用者密碼格式是否正確
+  if (checkUserPassword(password, res)){
+    return;
+  }
+
+  // 檢查使用者信箱格式是否正確
+  if (checkUserEmail(email, res)){
+    return;
+  }
+
+  next();
+}
+
+function checkUserLogin(req, res, next){
+  const type = req.query.type;
+  const password = req.query.password;
+  const email = req.query.email;
+
+  // 如果是用 google 註冊，則不用檢查
+  if (type=="google"){
+    next();
+  }
+  
+  // 檢查 req.query 是否有缺漏
+  const queryKeys = Object.keys(req.query);
+  if (queryKeys.length !== 3){
+    res.status(400).send(
+      {message: "使用者資訊格式錯誤，請檢查是否有缺漏。"}
+    );
+    return;
+  }
+
+  // 檢查使用者密碼格式是否正確
+  if (checkUserPassword(password, res)){
+    return;
+  }
+
+  // 檢查使用者信箱格式是否正確
+  if (checkUserEmail(email, res)){
+    return;
+  }
+
+  next();
+}
+
 module.exports = {
   checkStoreInfo,
   checkID,
   checkStoreUpdateInfo,
-  checkFoodPrice,
+  checkStoreEmailAndPassword,
+  checkFoodInfo,
   checkStockUpdateInfo,
-  checkUserLocation
+  checkUserLocation,
+  checkUserInfo,
+  checkUserLogin
 }

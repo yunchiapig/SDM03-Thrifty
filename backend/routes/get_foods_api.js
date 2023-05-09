@@ -14,7 +14,7 @@ router.get('/', checkID, async function (req, res) {
     try {
       const store_exist = await StoreInfo.findById(store_id)
 
-      if(!store_exist) {
+      if (!store_exist) {
           res.status(400).send({ message: "查無店家資訊" });
       } else {
           if (store_exist.stocks.length == 0) {
@@ -27,7 +27,7 @@ router.get('/', checkID, async function (req, res) {
                   const quantity = stock.quantity
   
                   const food_exist = await FoodInfo.findById(food_id)
-                  if(!food_exist) {
+                  if (!food_exist) {
                       res.status(400).send({ message: "查無食物資訊" });
                   } else {
                       foods.push({ food: food_exist, quantity: quantity });
