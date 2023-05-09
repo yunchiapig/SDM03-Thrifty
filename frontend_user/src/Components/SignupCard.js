@@ -31,7 +31,7 @@ function SignupCard() {
 
   const [email, setEmail] = useState('');
   const handleEmailChange = (event) => setEmail(event.target.value)
-  const isEmailError = email === ''
+  const isEmailError = (email === '' || !(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)));
 
   const [password, setPassword] = useState('');
   const handlePasswordChange = (event) => setPassword(event.target.value)
@@ -62,7 +62,7 @@ function SignupCard() {
             Sign up
           </Heading>
           <Text fontSize={'lg'} color={'gray.600'}>
-            to enjoy all of our cool features ✌️
+            to enjoy all of our features ✌️
           </Text>
         </Stack>
         <Box
@@ -104,7 +104,7 @@ function SignupCard() {
                   Valid password.
                 </FormHelperText>
               ) : (
-                <FormErrorMessage>Password should contain 8 to 20 characters, with at least one numeric digit, one uppercase and one lowercase letter.</FormErrorMessage>
+                <FormErrorMessage width={'400px'}>Password should contain 8 to 20 characters, with at least one numeric digit, one uppercase and one lowercase letter.</FormErrorMessage>
               )}
             </FormControl>
             <Stack spacing={10} pt={2}>
