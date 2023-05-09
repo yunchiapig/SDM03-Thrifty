@@ -9,7 +9,7 @@ function Map({userLocation, storesData, mapCenter, setMapCenter}) {
     // const init_center = userLocation;
 
     const containerStyle = {
-      width: '45vw',
+      width: '95%',
       height: '70vh',
       top: '20px',
       left: '10px',

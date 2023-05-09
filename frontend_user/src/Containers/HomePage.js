@@ -56,7 +56,7 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
                 <Flex>
                     {/* <SimpleSidebar/> */}
                     {ifMapMode?
-                    <Flex>
+                    <Flex w="100%">
                         <Box w='50%'>
                             <Map userLocation={userLocation} storesData={filteredData} mapCenter={mapCenter} setMapCenter={setMapCenter}/>
                         </Box>
@@ -65,7 +65,7 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
                             <Flex onClick={()=>{
                                 navigate(`/store/${storeData._id}`, 
                                     { state: { storeData: storeData } });}} 
-                                w={{ sm: '100%', md: '100%' }} key={i}>
+                                w={{ sm: '100%', md: '100%' }} key={i} >
                                 <StoreSmallCard storeData={storeData}/>
                             </Flex>)
                             })}
