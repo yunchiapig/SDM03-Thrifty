@@ -22,9 +22,29 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUserInfo, setCurrentUserInfo] = useState(null);
 
-  // useEffect(()=>{
-  //   console.log('userLocation', userLocation)
-  // }, [userLocation])
+  useEffect(()=>{
+    console.log('storesData', storesData)
+  }, [storesData])
+
+  useEffect(()=>{
+    console.log('options', filterOptions.item)
+    console.log('values', filteredValues.item)
+    let values = filteredValues
+    let storeFV = values.store.filter((v) => { 
+      for (const opt of filterOptions.store){
+        if (opt === v) {return true}
+      }
+      return false;
+    });
+    let itemFV = values.item.filter((v) => { 
+      for (const opt of filterOptions.item){
+        if (opt === v) {return true}
+      }
+      return false;
+    });
+    console.log('item selected', itemFV)
+    setFilteredValues({'store': storeFV, 'item': itemFV});
+  }, [filterOptions])
 
   useEffect(() => { 
     console.log("RELOAD APP.") 
