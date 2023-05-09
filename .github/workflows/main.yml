@@ -33,18 +33,25 @@ jobs:
 
      - name: Build and push Docker images
        run: |
-         cd backend
-         docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/thrifty-backend .
-         docker push ${{ secrets.DOCKER_USERNAME }}/thrifty-backend
-         cd ..
-         cd frontend
-         docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin .
-         docker push  ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin
-         cd ..
-         cd third-party
-         docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/thrifty-third-party .
-         docker push  ${{ secrets.DOCKER_USERNAME }}/thrifty-third-party
-         cd ..
+        cd backend
+        docker build --platform linux/amd64 --no-cache -t ${{ secrets.DOCKER_USERNAME }}/thrifty-backend .
+        docker push ${{ secrets.DOCKER_USERNAME }}/thrifty-backend
+        cd ..
+
+        cd frontend
+        docker build --platform linux/amd64 --no-cache -t ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin .
+        docker push  ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin
+        cd ..
+
+        cd frontend_user
+        docker build --platform linux/amd64 --no-cache -t ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-user .
+        docker push  ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-user
+        cd ..
+
+        cd third-party
+        docker build --platform linux/amd64 --no-cache -t ${{ secrets.DOCKER_USERNAME }}/thrifty-third-party .
+        docker push  ${{ secrets.DOCKER_USERNAME }}/thrifty-third-party
+        cd ..
 
          
   deploy:
@@ -59,10 +66,11 @@ jobs:
          username: ${{ secrets.EC2_USERNAME }}
          key: ${{ secrets.EC2_PRIVATE_KEY }}
          script: |
-           cd github/SDM03-Thrifty/
-           git pull
-           docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-backend
-           docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin
-           docker-compose down
-           docker-compose up -d
-           docker image prune -af
+          cd github/SDM03-Thrifty/
+          git pull
+          docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-backend
+          docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin
+          docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-third-party
+          docker-compose down
+          docker-compose up -d
+          docker image prune -af

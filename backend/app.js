@@ -16,6 +16,7 @@ const healthcheckRouter = require('./routes/healthcheck');
 
 // user routers
 const userRouter = require('./routes/user_info_api');
+const userGoogleRouter = require('./routes/user_google_api');
 
 // admin routers
 const storeAdminRouter = require('./routes/store_info_api');
@@ -47,6 +48,7 @@ app.use('/healthcheck', healthcheckRouter);
 
 // user routers
 app.use('/api/1.0/user', userRouter);
+app.use('/api/1.0/user/google', userGoogleRouter);
 
 // admin routers
 app.use('/api/1.0/admin/store', storeAdminRouter);
