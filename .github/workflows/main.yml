@@ -31,6 +31,12 @@ jobs:
         echo "${{ secrets.THIRD_ENV_FILE }}" > .env
         cd ..
 
+     - name: 'Create frontend-user env file'
+       run: |
+        cd frontend_user
+        echo "${{ secrets.FRONTEND_USER_ENV }}" > .env
+        cd ..
+
      - name: Build and push Docker images
        run: |
         cd backend
