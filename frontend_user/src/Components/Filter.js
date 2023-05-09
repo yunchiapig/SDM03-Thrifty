@@ -1,12 +1,13 @@
 import {AlignLeftOutlined, DownOutlined} from '@ant-design/icons';
-import { Box, HStack, VStack } from '@chakra-ui/react';
-import { Input,Select, Checkbox, Col, Row } from 'antd';
+import { Box, Circle, HStack, VStack } from '@chakra-ui/react';
+import { Input,Select, Checkbox, Col, Row, Badge } from 'antd';
 import { useEffect, useState } from 'react';
 // import type { SelectProps } from 'antd';
 
 export default function Filter({filterOptions, filteredValues, setFilteredValues}){
     const [isOpen, setIsOpen] = useState(false);
     const [filterBottom, setFilterBottom] = useState(0); 
+    const [filteredCnt, setFilteredCnt] = useState(0);
 
     const itemOptions = filterOptions.item.map((option)=>{
         return({label: option, value: option})
@@ -23,12 +24,16 @@ export default function Filter({filterOptions, filteredValues, setFilteredValues
         var originValues = filteredValues;
         setFilteredValues({'store':checkedValues, 'item':originValues.item});
     };
+
+    useEffect(()=>{
+        setFilteredCnt(filteredValues.store.length + filteredValues.item.length);
+    }, [filteredValues])
       
     useEffect(()=>{
         window.onresize = () => resetFilterCheckListTop();
         var filter = document.getElementById('filter');
-        var bottom = filter.getBoundingClientRect().bottom;
-
+        // var bottom = filter.getBoundingClientRect().height + (filter.getBoundingClientRect().y)/2;
+        var bottom = filter.offsetHeight + 12;
         resetFilterCheckListTop();
         function resetFilterCheckListTop(){
             setFilterBottom(bottom);
@@ -47,7 +52,9 @@ export default function Filter({filterOptions, filteredValues, setFilteredValues
                 style={{'outlineStyle':'solid', 'outlineColor':'#d9d9d9'}}>
                 <HStack justifyContent={'space-between'} onClick={handleClick} >
                     <AlignLeftOutlined/>
-                    <p style={{'left':0}}>篩選食物類別</p>
+                    <Badge count={filteredCnt? filteredCnt:0} offset={[-99, 0]} color={'#13c2c2'}>
+                        <p style={{'left':0}}>篩選食物類別</p>
+                    </Badge>
                     <DownOutlined style={{right: 0}}/>
                 </HStack>
             </Box>
@@ -55,12 +62,12 @@ export default function Filter({filterOptions, filteredValues, setFilteredValues
                 <Box backgroundColor={'white'} width="45vw" minH="10rem" top={`${filterBottom}`} p={5}
                     position={'absolute'} style={{'outlineStyle':'solid', 'outlineColor':'#d9d9d9'}}>
                     <VStack spacing={2} align="baseline">
-                        {itemOptions.length > 1?
+                        {itemOptions?
                             <>
                                 <p style={{fontWeight:"bold"}}>品項分類：</p>
                                 <Checkbox.Group style={{width:"100%"}} 
                                     defaultValue={filteredValues.item} onChange={itemOnChange}>
-                                        <Row >
+                                        <Row style={{width:"100%"}} >
                                             {filterOptions.item.map((option)=>{
                                                 return(
                                                 <Col span={6} key={option}>

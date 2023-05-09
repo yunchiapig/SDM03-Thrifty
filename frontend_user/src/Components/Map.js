@@ -36,22 +36,16 @@ function Map({userLocation, storesData, mapCenter, setMapCenter}) {
     //       setZoom(newZoom);
     //   }
     // };
-    useEffect(()=>{
-        console.log("Load GoogleMap.")
-    },[])
 
     const handleMarkerClick = (marker) => {
-        console.log('Marker clicked.')
         setSelectedMarker(marker);
     };
 
     const handleMarkerClose = () => {
-        console.log('Marker closed.')
         setSelectedMarker(null);
     };
 
     const handleCenterChanged = () => {
-        console.log('Center changed');
         if (map !== null) {
             console.log("center", map.getCenter().lat(), " ", map.getCenter().lng());
             setMapCenter({ lat: map.getCenter().lat(), lng: map.getCenter().lng() });
