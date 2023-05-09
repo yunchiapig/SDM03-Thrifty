@@ -22,9 +22,9 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUserInfo, setCurrentUserInfo] = useState(null);
 
-  // useEffect(()=>{
-  //   console.log('userLocation', userLocation)
-  // }, [userLocation])
+  useEffect(()=>{
+    console.log('storesData', storesData)
+  }, [storesData])
 
   useEffect(() => { 
     console.log("RELOAD APP.") 

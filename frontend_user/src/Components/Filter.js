@@ -14,11 +14,6 @@ export default function Filter({filterOptions, filteredValues, setFilteredValues
     const storeOptions = filterOptions.store.map((option)=>{
         return({label: option, value: option})
     })
-    // [
-    //     { label: 'Apple', value: 'Apple' },
-    //     { label: 'Pear', value: 'Pear' },
-    //     { label: 'Orange', value: 'Orange' },
-    // ];
 
     const itemOnChange = (checkedValues) => {
         var originValues = filteredValues;
@@ -60,16 +55,15 @@ export default function Filter({filterOptions, filteredValues, setFilteredValues
                 <Box backgroundColor={'white'} width="45vw" minH="10rem" top={`${filterBottom}`} p={5}
                     position={'absolute'} style={{'outlineStyle':'solid', 'outlineColor':'#d9d9d9'}}>
                     <VStack spacing={2} align="baseline">
-                        {itemOptions?
+                        {itemOptions.length > 1?
                             <>
                                 <p style={{fontWeight:"bold"}}>品項分類：</p>
                                 <Checkbox.Group style={{width:"100%"}} 
                                     defaultValue={filteredValues.item} onChange={itemOnChange}>
                                         <Row >
                                             {filterOptions.item.map((option)=>{
-                                                console.log(option);
                                                 return(
-                                                <Col span={6}>
+                                                <Col span={6} key={option}>
                                                     <Checkbox value={option}>{option}</Checkbox>
                                                 </Col>)
                                             })}
@@ -78,7 +72,7 @@ export default function Filter({filterOptions, filteredValues, setFilteredValues
                                 <p/>
                             </>:<></>
                         }
-                        {storeOptions?
+                        {storeOptions.length > 1?
                             <>
                                 <p style={{fontWeight:"bold"}}>店家分類：</p>
                                 <Checkbox.Group options={storeOptions} 
