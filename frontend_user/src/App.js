@@ -87,6 +87,11 @@ function App() {
           )
           setFilterOptions({'store':storeCategories, 'item':itemCategories});
       });
+      // trigger 711 cron job
+      axios.post(`http://52.193.252.15/api/1.0/third-party`, {Longitude: mapCenter.lng, Latitude: mapCenter.lat}, { crossdomain: true })
+        .then(response => {
+          console.log(response.data);
+      });
     }
   }, [mapCenter]);
 
