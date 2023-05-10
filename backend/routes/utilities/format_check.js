@@ -299,8 +299,13 @@ function checkFoodInfo(req, res, next){
       return;
     }
   }
-
+  
   // 檢查是否有 mainImage
+  // 如果是 PUT 就不檢查
+  if (req.method === "PUT"){
+    return;
+  }
+
   const mainImage = req.files.mainImage;
   if (checkMainImage(mainImage, res)){
     return;
