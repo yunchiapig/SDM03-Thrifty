@@ -18,6 +18,8 @@ const StoreAdminProvider = (props) => {
 
   const getItems = async() => {
       const storeInfo = JSON.parse(localStorage.getItem('store_info'))
+      const jwt = localStorage.getItem('jwt')
+      console.log(jwt)
       console.log(storeInfo)
       setLoading(true);
       const res
