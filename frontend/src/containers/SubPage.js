@@ -18,20 +18,51 @@ import {
   StackDivider,
   Spinner
 } from '@chakra-ui/react';
+import {
+  FiServer,
+} from 'react-icons/fi';
 import {useStoreAdmin} from "../hooks/useStoreAdmin";
 import { FiPlus } from "react-icons/fi";
 
+const storeInfo = JSON.parse(localStorage.getItem('store_info'));
 
 export default () => {
   //for test
   //const [title, setTitle] = useState("");
-  const {title, stocks, store, loading, drawerMount, setStocks, setDrawerMount, getItems} = useStoreAdmin();
+  const {title, stocks, loading, drawerMount, login, setStocks, setTitle, setDrawerMount, getItems, setLogin} = useStoreAdmin();
   const location = useLocation();
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const logIn = async() => {
+    const res
+    = await instance.get('/api/1.0/admin/store', { 
+      params: {  
+        id: storeInfo.storeID
+      },}).then( res => {
+        let info = storeInfo
+        let data = res.data.data
+        info = {
+          ...info,
+          "name": data.name,
+          "category": data.category,
+          "tel": data.tel,
+          "address": data.address,
+          "location": data.location,
+          "updateDate": data.updateDate,
+        }
+        localStorage.setItem('store_info', JSON.stringify(info))
+      })
+  }
   
   useEffect(() => {
-    if(location.pathname === "mainpage/ProductManagement") {
-      getItems(store)
+    if(localStorage.getItem('login') == null) {
+      console.log('get')
+      logIn()
+      localStorage.setItem('login', false)
+      setTitle({ name: '商品管理', icon: FiServer, ref: "/ProductManagement"})
+    }
+    if(location.pathname === "/mainpage/ProductManagement") {
+      getItems()
   }}, [location])
 
   return (  

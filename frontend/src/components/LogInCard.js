@@ -1,3 +1,6 @@
+import {Link} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import React, { ReactNode, useEffect, useState } from 'react';
 import {
   Flex,
   Box,
@@ -6,14 +9,33 @@ import {
   Input,
   Checkbox,
   Stack,
-  Link,
   Button,
   Heading,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import jwt_decode from "jwt-decode";
+import instance from '../api';
 
 export default function SimpleCard() {
+  const navigate = useNavigate();
+  const [account, setAccount] = useState('');
+  const [password, setPassword] = useState('');
+
+  const HandleSubmit = async (event) => {
+        
+    const data = 
+    { 'email': account, 
+    'password': password}
+    await instance.post('api/1.0/admin/signin', data)
+    .then(res => {
+       /*console.log(jwt_decode(res.data.thriftyAdminJWT))*/
+        localStorage.setItem('jwt', res.data.thriftyAdminJWT)
+        localStorage.setItem('store_info', JSON.stringify(jwt_decode(res.data.thriftyAdminJWT).data));
+        localStorage.removeItem("login");
+        navigate('/mainpage/ProductManagement');
+    })
+  }
   return (
     
     <Box
@@ -26,11 +48,11 @@ export default function SimpleCard() {
       <Stack spacing={6}>
         <FormControl id="email">
           <FormLabel>Account</FormLabel>
-          <Input type="email" />
+          <Input type="email" value={account} onChange={e => setAccount(e.target.value)}/>
         </FormControl>
         <FormControl id="password">
           <FormLabel>Password</FormLabel>
-          <Input type="password" />
+          <Input type="password" value={password} onChange={e => setPassword(e.target.value)}/>
         </FormControl>
         <Stack spacing={4}>
           {/*<Stack
@@ -45,7 +67,9 @@ export default function SimpleCard() {
             color={'white'}
             _hover={{
               bg: '#61C777',
-            }}>
+            }}
+            onClick={HandleSubmit}
+            >
             Sign in
           </Button>
           <Button
@@ -54,7 +78,9 @@ export default function SimpleCard() {
             _hover={{
               bg: '#85C4FF',
             }}>
-            New account
+            <Link to = '/signup'>
+              New account
+            </Link>
           </Button>
         </Stack>
       </Stack>

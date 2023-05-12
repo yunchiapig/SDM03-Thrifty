@@ -97,9 +97,20 @@ function checkStoreInfo(req, res, next){
   const category = req.body.category;
   const tel = req.body.tel;
   const address = req.body.address;
-  const longitude = JSON.parse(req.body.location).coordinates[0];
-  const latitude = JSON.parse(req.body.location).coordinates[1];
-  const mainImage = req.files.mainImage;
+  let longitude;
+  let latitude;
+  
+  // for multipart request
+  if (typeof req.body.location === "string"){
+    longitude = JSON.parse(req.body.location).coordinates[0];
+    latitude = JSON.parse(req.body.location).coordinates[1];
+  }
+
+  // for application/json request
+  if (typeof req.body.location === "object"){
+    longitude = req.body.location.coordinates[0];
+    latitude = req.body.location.coordinates[1];
+  }
   
   // 檢查店家名稱格式是否為中英數字
   if(checkStoreName(name, res)){
@@ -128,11 +139,6 @@ function checkStoreInfo(req, res, next){
 
   // 檢查緯度格式是否正確
   if (checkLatitude(latitude, res)){
-    return;
-  }
-
-  // 檢查是否有 mainImage
-  if (checkMainImage(mainImage, res)){
     return;
   }
 
@@ -387,19 +393,13 @@ function checkUserEmail(email, res){
 
 // 檢查使用者資訊格式
 function checkUserInfo(req, res, next){
-  const type = req.body.type;
   const name = req.body.name;
   const password = req.body.password;
   const email = req.body.email;
-
-  // 如果是用 google 註冊，則不用檢查
-  if (type=="google"){
-    next();
-  }
   
   // 檢查 req.body 是否有缺漏
   const bodyKeys = Object.keys(req.body);
-  if (bodyKeys.length !== 4){
+  if (bodyKeys.length !== 3){
     res.status(400).send(
       {message: "使用者資訊格式錯誤，請檢查是否有缺漏。"}
     );
@@ -425,18 +425,12 @@ function checkUserInfo(req, res, next){
 }
 
 function checkUserLogin(req, res, next){
-  const type = req.query.type;
   const password = req.query.password;
   const email = req.query.email;
-
-  // 如果是用 google 註冊，則不用檢查
-  if (type=="google"){
-    next();
-  }
   
   // 檢查 req.query 是否有缺漏
   const queryKeys = Object.keys(req.query);
-  if (queryKeys.length !== 3){
+  if (queryKeys.length !== 2){
     res.status(400).send(
       {message: "使用者資訊格式錯誤，請檢查是否有缺漏。"}
     );

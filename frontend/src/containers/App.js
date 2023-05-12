@@ -12,7 +12,6 @@ function App() {
         <Route path="/login" element = {<LogInContainer />}/>
         <Route path="/signup" element = {<LogInContainer />}/>
         <Route path="/mainpage">
-          <Route index element={<Navbar />}/>
           <Route path="Profile" element={<Navbar children = {<SubPage />} />}/>
           <Route path="ProductManagement" element={<Navbar children = {<SubPage />} />}/>
           <Route path="Settings" element={<Navbar children = {<SubPage />} />}/>

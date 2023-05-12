@@ -15,6 +15,7 @@ CardBody,
 CardFooter,
 Heading,
 Stack,
+Image
 } from '@chakra-ui/react';
 
 import { FiTrash } from "react-icons/fi";
@@ -64,18 +65,17 @@ export default ({item}) => {
                             </Box>
                             <DeletConfirm isOpen = {deleteIsOpen} onOpen = {deleteOnOpen} onClose = {deleteOnClose} item={item}/>
                         </Box>
-                        <Text w = '100%' h='45%'>
-                            {/*Caffè latte is a coffee beverage of Italian origin made with espresso
-                            and steamed milk.*/}
+                        <Text w = '90%' h='45%' color='gray.600'>
+                            {item.food?.description}
                         </Text>
                         <Box display='flex' flexDirection='row' h='20%'>
-                            <Box display='flex' flexDirection='row' w = '60%'>
+                            <Box display='flex' flexDirection='row' w = '70%'>
                                 <Text as = 'b' textDecoration='line-through' color='darkgray'>${item.food.original_price}</Text>
                                 <Text as = 'b' color='crimson' mx={2}>${item.food.discount_price}</Text>
                                 {/*<Tag backgroundColor='#b0e0e6' mx={3} borderRadius='full'>20% off</Tag>*/}
                             </Box>
                             <Box display='flex' w='40%'>
-                                <Text mx='2%' w='40%'>庫存</Text> 
+                                <Text mx = '3' as = 'b' color = '#084B8A'>庫存</Text> 
                                 <Box maxH={8} minW={14} borderRadius={1.5} px={1.5} boxShadow='outline' onClick={HandleFocus} cursor='pointer'>{item.quantity}</Box>
                                 {/*<Text as = 'b' m={1.5}>{20}</Text> */}
                                 {/*<NumberInput size='sm' maxW={14} value={item.quantity} bottom={1}h = '120%'>
@@ -89,8 +89,8 @@ export default ({item}) => {
                         </Box>
                     </CardBody>
                 </Stack>
-                <Box h = {170} w={{ base: '100%', sm: '25%' }}   >
-                    <Box
+                <Box h = {170} w={{ base: '100%', sm: '25%' }}>
+                    { /*<Box
                             h='100%'
                             w='100%'
                             objectFit='cover'
@@ -101,14 +101,14 @@ export default ({item}) => {
                             cursor='pointer'
                     >
                         <Icon as={FcAddImage} fontSize={24} fill='gray'zIndex='1'/>
-                    </Box>
-                    {/*<Image
+                            </Box> */} 
+                    <Image
                         h='100%'
                         w='100%'
                         objectFit='cover'
-                        src='https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
-                        alt='Caffe Latte'
-                    />*/}
+                        src= {'https://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + item.food.mainImage}
+                        alt= {item.food.name}
+                    />
                 </Box>
             </Card>
         </>

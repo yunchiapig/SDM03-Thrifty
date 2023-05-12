@@ -17,7 +17,7 @@ router.get('/', checkUserLocation, async function (req, res) {
               $near: {
                   $geometry: { type: "Point",  coordinates: [ longitude, latitude ] },
                   $minDistance: 0, // meters
-                  $maxDistance: 2000 // meters
+                  $maxDistance: 1000 // meters
               }
           },
           stocks: { $ne: [] }
