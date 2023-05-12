@@ -14,7 +14,6 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { Logo } from './Logo.jsx'
-import { OAuthButtonGroup } from './OAuthButtonGroup.jsx'
 import { PasswordField } from './PasswordField.jsx'
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -58,6 +57,10 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
     }
   }
 
+  const handleGoogleLogin = (user) => {
+    setCurrentUserInfo(user);
+  }
+
   return (
     <Container
       maxW="lg"
@@ -72,7 +75,7 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
     >
       <Stack spacing="8">
         <Stack spacing="6">
-          <Logo />
+          {/* <Logo /> */}
           <Stack
             spacing={{
               base: '2',
@@ -146,7 +149,7 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
                 <Divider />
               </HStack>
               <Box alignItems="flex-end" width={"100%"} justifyContent="center">
-                <OAuthButtonGroup />
+                <GoogleSSO setCurrentUserInfo={handleGoogleLogin}/>
               </Box>
             </Stack>
           </Stack>

@@ -9,7 +9,7 @@ function Map({userLocation, storesData, mapCenter, setMapCenter}) {
     // const init_center = userLocation;
 
     const containerStyle = {
-      width: '45vw',
+      width: '95%',
       height: '70vh',
       top: '20px',
       left: '10px',
@@ -19,39 +19,17 @@ function Map({userLocation, storesData, mapCenter, setMapCenter}) {
         console.log('Load Google Map.');
     }, []);
 
-    // useEffect(() => {
-    //     setCenter(mapCenter);
-    // }, [mapCenter]);
 
-    // const handleCenterChanged = () => {
-    //     if (map) {
-    //         const newCenter = map.getCenter();
-    //         setCenter(newCenter);
-    //     }
-    // };
-
-    // const handleZoomChanged = () => {
-    //   if (map) {
-    //       const newZoom = map.getZoom();
-    //       setZoom(newZoom);
-    //   }
-    // };
-    useEffect(()=>{
-        console.log("Load GoogleMap.")
-    },[])
 
     const handleMarkerClick = (marker) => {
-        console.log('Marker clicked.')
         setSelectedMarker(marker);
     };
 
     const handleMarkerClose = () => {
-        console.log('Marker closed.')
         setSelectedMarker(null);
     };
 
     const handleCenterChanged = () => {
-        console.log('Center changed');
         if (map !== null) {
             console.log("center", map.getCenter().lat(), " ", map.getCenter().lng());
             setMapCenter({ lat: map.getCenter().lat(), lng: map.getCenter().lng() });

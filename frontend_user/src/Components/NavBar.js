@@ -65,7 +65,13 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
-          <span style={{ whiteSpace: 'nowrap' }}>Hi, {localStorage.getItem('user')}!</span>
+          <Button
+            as={'a'}
+            fontSize={'sm'}
+            fontWeight={400}
+            variant={'link'}>
+            Hi, {localStorage.getItem('user')}!
+          </Button>
           <Button
             as={'a'}
             display={{ base: 'none', md: 'inline-flex' }}
