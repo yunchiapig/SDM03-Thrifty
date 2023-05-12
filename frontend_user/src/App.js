@@ -22,9 +22,29 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUserInfo, setCurrentUserInfo] = useState(null);
 
-  // useEffect(()=>{
-  //   console.log('userLocation', userLocation)
-  // }, [userLocation])
+  useEffect(()=>{
+    console.log('storesData', storesData)
+  }, [storesData])
+
+  useEffect(()=>{
+    console.log('options', filterOptions.item)
+    console.log('values', filteredValues.item)
+    let values = filteredValues
+    let storeFV = values.store.filter((v) => { 
+      for (const opt of filterOptions.store){
+        if (opt === v) {return true}
+      }
+      return false;
+    });
+    let itemFV = values.item.filter((v) => { 
+      for (const opt of filterOptions.item){
+        if (opt === v) {return true}
+      }
+      return false;
+    });
+    console.log('item selected', itemFV)
+    setFilteredValues({'store': storeFV, 'item': itemFV});
+  }, [filterOptions])
 
   useEffect(() => { 
     console.log("RELOAD APP.") 
@@ -42,7 +62,13 @@ function App() {
   }, []);
 
   useEffect(() => {
+    
     if (mapCenter){
+      // trigger 711 cron job
+      axios.post(`http://52.193.252.15/third-party`, {Longitude: mapCenter.lng, Latitude: mapCenter.lat}, { crossdomain: true })
+        .then(response => {
+          console.log(response.data);
+      });
       axios.get(`http://52.193.252.15/api/1.0/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
         .then(response => {
           var stores = response.data.message
@@ -67,6 +93,7 @@ function App() {
           )
           setFilterOptions({'store':storeCategories, 'item':itemCategories});
       });
+
     }
   }, [mapCenter]);
 

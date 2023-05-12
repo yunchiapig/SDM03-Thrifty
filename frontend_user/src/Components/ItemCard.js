@@ -10,15 +10,9 @@ import {
 import { useEffect, useState } from 'react';
 // import Rating from './Rating';
 
-// const data = {
-//     itemName: "夏威夷披薩",
-//     description: "新鮮現做，番茄、九層塔、馬札瑞拉起士",
-//     sellingPrice: 100,
-//     originalPrice: 250,
-//     image: "https://tokyo-kitchen.icook.network/uploads/recipe/cover/380644/d3dae1cadb3764f0.jpg",
-//     number: 3,
-// };
-const image = "https://www.7-11.com.tw/freshfoods/1_Ricerolls/images/ricerolls_266.png";
+
+const imageURL = "https://img.craiyon.com/2023-05-09/768ea19460d4429d8ffdafae96f47783.webp"
+// "https://www.7-11.com.tw/freshfoods/1_Ricerolls/images/ricerolls_266.png";
 
   
 export default function ItemCard(foodData) {
@@ -39,7 +33,7 @@ export default function ItemCard(foodData) {
                     <Image
                     objectFit="cover"
                     boxSize="100%"
-                    src={ image }
+                    src={ imageURL }
                     />
                 </Flex>
                 <Stack

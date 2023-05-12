@@ -145,6 +145,9 @@ router.post('/',
 // 更新食物品項資訊
 router.put('/',
   JWTValidate,
+  upload.fields([
+    {name: 'mainImage', maxCount: 1},
+  ]),
   checkFoodInfo,
   async function(req, res, next) {
     // 取得食物品項 ID

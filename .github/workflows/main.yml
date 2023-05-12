@@ -31,6 +31,13 @@ jobs:
         echo "${{ secrets.THIRD_ENV_FILE }}" > .env
         cd ..
 
+     - name: 'Create frontend-user env file'
+       run: |
+        cd frontend_user
+        echo "${{ secrets.FRONTEND_USER_ENV }}" > .env
+        ls -a
+        cd ..
+
      - name: Build and push Docker images
        run: |
         cd backend
@@ -70,6 +77,7 @@ jobs:
           git pull
           docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-backend
           docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-admin
+          docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-frontend-user
           docker pull ${{ secrets.DOCKER_USERNAME }}/thrifty-third-party
           docker-compose down
           docker-compose up -d

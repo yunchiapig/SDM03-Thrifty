@@ -7,23 +7,20 @@ import axios from "axios";
 import { useParams, useLocation } from 'react-router-dom';
 import '../App.css';
 
-// const data = {
-//     shopName: "披薩有張臉 Pizza Has a Face",
-//     address: "台北市大同區延平北路二段28號",
-//     phone: "(02)25557759",
-//     imageURL: "https://img.ltn.com.tw/Upload/health/page/800/2022/10/16/phpQxGSMt.jpg",
-//     rating: 4.2,
-//     numReviews: 34,
-//     classes:['炸物', '沙拉', '湯品', '鹹比薩', '甜比薩'],
-//     items: [1,2,3,4,5,6,7,8],
-// };
-const imageURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/FamilyMart_Logo_%282016-%29.svg/1280px-FamilyMart_Logo_%282016-%29.svg.png";
+const imageURL = {
+    "Family": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/FamilyMart_Logo_%282016-%29.svg/1280px-FamilyMart_Logo_%282016-%29.svg.png",
+    "711": "https://corp.7-eleven.com/images/media_assets/7_Eleven_Horizontal_2022_RGB_1639377127_8977.jpg",
+    "others": "https://pics.craiyon.com/2023-05-09/756e18f59e1d499a8eba020cb4106f00.webp"
+}
 
 const StorePage = () => {
     let { id } = useParams();
     const [storeID, setStoreID] = useState(id);
     let location = useLocation()
     const [storeData, setStoreData] = useState(location.state.storeData);
+    var url = imageURL['others']
+    if (storeData.category === "全家") {url = imageURL['Family']}
+    else if (storeData.category === "7-11") { url = imageURL['711']}
 
     const [foodData, setFoodData] = useState([]);
     const [foodCategories, setFoodCategories] = useState([]);
@@ -89,7 +86,7 @@ const StorePage = () => {
                         position="absolute"
                         objectFit="cover"
                         boxSize="100%"
-                        src={ imageURL }/>
+                        src={ url }/>
                 </Flex>
                 <hr
                     style={{

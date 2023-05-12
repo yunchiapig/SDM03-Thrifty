@@ -7,27 +7,27 @@ import {
     Text,
     useColorModeValue,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 // import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs';
 // import Rating from './Rating';
 
-// const data = {
-//     shopName: "披薩有張臉 Pizza Has a Face",
-//     address: "台北市大同區延平北路二段28號",
-//     imageURL: "https://img.ltn.com.tw/Upload/health/page/800/2022/10/16/phpQxGSMt.jpg",
-//     rating: 4.2,
-//     numReviews: 34,
-// };
-const imageURL = "https://images.1111.com.tw/discussPic/63/51562263_97023180.2701459.jpg" 
+
+const imageURL = {
+    'Family': "https://images.1111.com.tw/discussPic/63/51562263_97023180.2701459.jpg",
+    '711': "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/7-eleven_logo.svg/250px-7-eleven_logo.svg.png",
+    'others': "https://pics.craiyon.com/2023-05-09/756e18f59e1d499a8eba020cb4106f00.webp"
+}
 
 export default function StoreSmallCard({storeData}) {
+    var url = imageURL['others']
+    if (storeData.category === "全家") {url = imageURL['Family']}
+    else if (storeData.category === "7-11") { url = imageURL['711']}
 
     return (
-        <Box py={4} px={5} w={{ sm: '100%', md: '45%vw' }}>
+        <Box py={4} px={5} w={{ sm: '100%', md: '100%' }}>
             <Stack
                 borderWidth="1px"
                 borderRadius="lg"
-                w={{ sm: '100%', md: '45%vw' }}
+                minW={{ sm: '100%', md: '100%' }}
                 height={{ sm: '476px', md: '15rem' }}
                 direction={{ base: 'column', md: 'row' }}
                 bg={useColorModeValue('white', 'gray.900')}
@@ -37,7 +37,7 @@ export default function StoreSmallCard({storeData}) {
                     <Image
                         objectFit="cover"
                         boxSize="100%"
-                        src={ imageURL }
+                        src={ url }
                     />
                 </Flex>
                 <Stack
