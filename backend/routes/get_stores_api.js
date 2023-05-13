@@ -32,6 +32,7 @@ router.get('/', checkUserLocation, async function (req, res) {
           } else {
             stock.name = food_exist.name
             stock.category = food_exist.category
+            stock.original_price = food_exist.original_price
             stock.discount_price = food_exist.discount_price
             stock.img_url = food_exist.img_url
           }
