@@ -31,7 +31,7 @@ let foodInfoSchema = new mongoose.Schema({
   description: {
     type: String
   },
-  mainImage: {
+  img_url: {
     type: String,
   }
   // images: {
