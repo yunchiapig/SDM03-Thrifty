@@ -43,6 +43,18 @@
   color: white;
 }
 
+.info-window-text {
+  line-height: 200%;
+  font-weight: bold;
+}
+
+.info-window-link {
+  color: blue;
+  text-decoration: underline;
+  line-height: 200%;
+  font-weight: bold;
+}
+
 /* .App-link {
   color: #61dafb;
 }

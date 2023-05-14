@@ -60,16 +60,18 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
                         <Box w='50%'>
                             <Map userLocation={userLocation} storesData={filteredData} mapCenter={mapCenter} setMapCenter={setMapCenter}/>
                         </Box>
-                        <Box w='50%'>
-                            {filteredData.map((storeData, i)=>{ return(
-                            <Flex onClick={()=>{
-                                navigate(`/store/${storeData._id}`, 
-                                    { state: { storeData: storeData } });}} 
-                                w={{ sm: '100%', md: '100%' }} key={i} >
-                                <StoreSmallCard storeData={storeData}/>
-                            </Flex>)
-                            })}
-                        </Box>
+                        <div style={{width: '50%', height: '100vh', overflowY: 'scroll'}}>
+                            <Box>
+                                {filteredData.map((storeData, i)=>{ return(
+                                <Flex onClick={()=>{
+                                    navigate(`/store/${storeData._id}`, 
+                                        { state: { storeData: storeData } });}} 
+                                    w={{ sm: '100%', md: '100%' }} key={i} >
+                                    <StoreSmallCard storeData={storeData}/>
+                                </Flex>)
+                                })}
+                            </Box>
+                        </div>
                     </Flex>:
                     <Box w="100%">
                         {filteredDoubleColData.map((twoStoresData, i)=>{ return(

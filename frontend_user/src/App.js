@@ -15,7 +15,6 @@ function App() {
   const [filterOptions, setFilterOptions] = useState({'store':[], 'item':[]});
   const [filteredValues, setFilteredValues] = useState({'store':[], 'item':[]});
   const [storesData, setStoresData] = useState([]);
-  const [storesDataforList, setStoresDataforList] = useState([]);
   const DEFAULT_LOCATION = { lat: 25.03, lng: 121.55};
   const [userLocation, setUserLocation] = useState(DEFAULT_LOCATION);
   const [mapCenter, setMapCenter] = useState(null);
@@ -73,11 +72,6 @@ function App() {
         .then(response => {
           var stores = response.data.message
           setStoresData(stores);
-          const data = stores.reduce(function (rows, key, index) { 
-              return (index % 2 === 0 ? rows.push([key]) 
-              : rows[rows.length-1].push(key)) && rows;
-          }, []);
-          setStoresDataforList(data);
           
           var storeCategories = stores.map(store => store.category);
           storeCategories = storeCategories.filter(
@@ -125,7 +119,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage filteredValues={filteredValues}
               userLocation={userLocation} mapCenter={mapCenter} setMapCenter={setMapCenter}
-              storesData={storesData} storesDataforList={storesDataforList}/>}/>
+              storesData={storesData} />}/>
           <Route path="/store/:id" element={ <StorePage/>} />
           <Route path="/login" element={ <LoginPage currentUserInfo={currentUserInfo} setCurrentUserInfo={handleLogin}/>} />
           <Route path="/signup" element={ <SignupPage/>} />
