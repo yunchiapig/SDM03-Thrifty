@@ -1,5 +1,5 @@
 import { Box, Flex, Image, Heading, useColorModeValue, VStack, Text, Square, HStack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ItemCard from "../Components/ItemCard";
 // import Rating from "../Components/Rating";
 import { withRouter } from "../Hooks/withRouter";
@@ -13,7 +13,7 @@ const imageURL = {
     "others": "https://pics.craiyon.com/2023-05-09/756e18f59e1d499a8eba020cb4106f00.webp"
 }
 
-const StorePage = () => {
+const StorePage = ({setOnHomePage}) => {
     let { id } = useParams();
     const [storeID, setStoreID] = useState(id);
     let location = useLocation()
@@ -22,28 +22,42 @@ const StorePage = () => {
     if (storeData.category === "全家") {url = imageURL['Family']}
     else if (storeData.category === "7-11") { url = imageURL['711']}
 
-    const [foodData, setFoodData] = useState([]);
+    const [foodDataByCat, setFoodDataByCat] = useState({});
     const [foodCategories, setFoodCategories] = useState([]);
 
     const [width, setWidth] = useState(0)
     const [navbarHeight, setNavbarHeight] = useState(0);
 
     useEffect(()=>{
+        setOnHomePage(false);
+    }, [])
+
+    useEffect(()=>{
         axios.get(`http://52.193.252.15/api/1.0/foods?id=${storeID}`,  { crossdomain: true })
             .then(response => {
+                var msg = response.data.message;
+                console.log(msg)
                 var categories = []
-                response.data.message.forEach((foodItem)=>{
-                    if (categories.indexOf(foodItem.food.category) === -1) {
-                        categories.push(foodItem.food.category);
+                msg.forEach((foodItem)=>{
+                    var cat = foodItem.food.category;
+                    // if (cat === undefined){ cat = '其他';}
+                    if (categories.indexOf(cat) === -1) {
+                        categories.push(cat);
                     }
                 })
                 setFoodCategories(categories);
 
-                const data = response.data.message.reduce(function (rows, key, index) { 
-                    return (index % 2 === 0 ? rows.push([key]) 
-                      : rows[rows.length-1].push(key)) && rows;
-                }, []);
-                setFoodData(data);
+                var dataByCat = {};
+                for (const cat of categories){
+                    // refs[cat] = useRef(null);
+                    var dataCatDouble = msg.filter((d)=> d.food.category===cat)
+                        .reduce(function (rows, key, index) { 
+                        return (index % 2 === 0 ? rows.push([key]) 
+                          : rows[rows.length-1].push(key)) && rows;
+                    }, []);
+                    dataByCat[cat] = dataCatDouble
+                }
+                setFoodDataByCat(dataByCat);
             });
     }, [storeID])
 
@@ -68,6 +82,29 @@ const StorePage = () => {
             }
         }
     })
+
+    function foodCompoentnsByCategories(){
+        var com = [];
+        if(Object.keys(foodDataByCat).length !== 0){
+            for (const cat of foodCategories){
+                com.push(<Heading id={`food-category-${cat}`} key={cat} fontSize='3xl' px={10} paddingTop={6} >{cat}</Heading>);
+                foodDataByCat[cat].map((twoFoodData, i) =>{ 
+                    com.push(
+                        <>
+                            <Flex w="full" key={i}>
+                                {twoFoodData.map((aFood, ii)=>{return(
+                                    <Flex w={{ sm: '100%', md: '50%' }} key={ii}>
+                                        <ItemCard foodData={aFood}/>
+                                    </Flex>
+                                )})}
+                            </Flex>
+                        </>
+                    )
+                })
+            }
+        }
+        return com;
+    }
 
     return(
         <Box py={4} px={{ sm: '0', md: "10rem"}} >
@@ -103,7 +140,7 @@ const StorePage = () => {
                     alignItems="left">
                     <Box  pl={20} p={6}>
                         <VStack spacing={"12px"} >
-                            <Heading fontSize={'2xl'} fontFamily={'body'}> {storeData.name} </Heading>
+                            <Heading  fontFamily={'body'} mb={2}> {storeData.name} </Heading>
                             <Text  color={'gray.500'} size="sm" mb={4}> {storeData.address} </Text>
                             <Text  color={'gray.500'} size="sm" mb={4}> {storeData.tel} </Text>
                         </VStack>
@@ -113,24 +150,21 @@ const StorePage = () => {
                         <HStack align={'center'} p={3} w="100%" justifyContent={'space-around'}>
                             {foodCategories.map((theClass) =>
                                 <Box h="100%" key={theClass} >
-                                    <Text  size="sm" key={theClass} w="full" textAlign="center" > {theClass} </Text>
+                                    <a key={theClass} className='food-category-menu-option'
+                                        onClick = {(e)=>{
+                                            e.preventDefault();
+                                            window.scrollTo({
+                                            top: document.querySelector(`#food-category-${theClass}`).offsetTop - 180,
+                                            behavior: "smooth",})}}> 
+                                        {theClass}
+                                    </a>
                                 </Box>
                             )}
                         </HStack>
                     </Square>
 
                     <Box ml={5} w="full">
-                        {foodData?
-                            foodData.map((twoFoodData, i) =>{ return(
-                                <Flex w="full" key={i}>
-                                    {twoFoodData.map((aFood, ii)=>{return(
-                                        <Flex w={{ sm: '100%', md: '50%' }} key={ii}>
-                                            <ItemCard foodData={aFood}/>
-                                        </Flex>
-                                    )})}
-                                </Flex>
-                            )})
-                        : <></>}
+                        {foodCompoentnsByCategories()}
                     </Box>
                 </VStack>
             </VStack>

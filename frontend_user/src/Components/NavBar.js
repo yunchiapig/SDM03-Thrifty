@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Filter from './Filter';
 
-export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filterOptions, filteredValues, setFilteredValues}) {
+export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filterOptions, filteredValues, setFilteredValues, onHomePage}) {
   const navigate = useNavigate();
   const { isOpen, onToggle } = useDisclosure();
   
@@ -53,8 +53,11 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
           <Flex display={{ base: 'none', md: 'flex' }} ml={10} w="100%">
             <Square w="10vw"/>
             <Square>
-              <Filter filterOptions={filterOptions} 
-                filteredValues={filteredValues} setFilteredValues={setFilteredValues}/>
+              {onHomePage?
+                <Filter filterOptions={filterOptions}
+                  filteredValues={filteredValues} setFilteredValues={setFilteredValues}/>
+                :<></>
+              }
             </Square>
           </Flex>
         </Flex>
