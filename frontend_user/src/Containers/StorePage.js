@@ -13,7 +13,7 @@ const imageURL = {
     "others": "https://pics.craiyon.com/2023-05-09/756e18f59e1d499a8eba020cb4106f00.webp"
 }
 
-const StorePage = () => {
+const StorePage = ({setOnHomePage}) => {
     let { id } = useParams();
     const [storeID, setStoreID] = useState(id);
     let location = useLocation()
@@ -21,6 +21,7 @@ const StorePage = () => {
     var url = imageURL['others']
     if (storeData.category === "全家") {url = imageURL['Family']}
     else if (storeData.category === "7-11") { url = imageURL['711']}
+    setOnHomePage(false);
 
     const [foodData, setFoodData] = useState([]);
     const [foodCategories, setFoodCategories] = useState([]);

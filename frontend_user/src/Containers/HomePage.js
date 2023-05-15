@@ -6,11 +6,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 // import axios from "axios";
 
-export default function HomePage({filteredValues, userLocation, mapCenter, setMapCenter, storesData, storesDataforList}){
+export default function HomePage({filteredValues, userLocation, mapCenter, setMapCenter, storesData, setOnHomePage}){
     const [ifMapMode, setIfMapMode] = useState(true);
     const [filteredData, setFilteredData] = useState(storesData);
     const [filteredDoubleColData, setFilteredDoubleColData] = useState([]);
     const navigate = useNavigate();
+    setOnHomePage(true);
 
     useEffect(()=>{
         if(!filteredValues.item.length && !filteredValues.store.length){

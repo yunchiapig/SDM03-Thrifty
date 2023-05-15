@@ -20,6 +20,7 @@ function App() {
   const [mapCenter, setMapCenter] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUserInfo, setCurrentUserInfo] = useState(null);
+  const [onHomePage, setOnHomePage] = useState(false); 
 
   useEffect(()=>{
     console.log('storesData', storesData)
@@ -110,19 +111,19 @@ function App() {
   return (
     <VStack >
       <Box w="100%" bg={useColorModeValue('gray.100', 'gray.900')}minH="100vh">
-        <NavBar zIndex={100} filterOptions={filterOptions} 
+        <NavBar zIndex={100} filterOptions={filterOptions} onHomePage={onHomePage}
           filteredValues={filteredValues} setFilteredValues={setFilteredValues} 
           isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} currentUserInfo={currentUserInfo}/>
         {/* <SimpleSidebar/> */}
         <Box w="100%" h="19vh"/>
         
         <Routes>
-          <Route path="/" element={<HomePage filteredValues={filteredValues}
+          <Route path="/" element={<HomePage filteredValues={filteredValues} setOnHomePage={setOnHomePage}
               userLocation={userLocation} mapCenter={mapCenter} setMapCenter={setMapCenter}
               storesData={storesData} />}/>
-          <Route path="/store/:id" element={ <StorePage/>} />
-          <Route path="/login" element={ <LoginPage currentUserInfo={currentUserInfo} setCurrentUserInfo={handleLogin}/>} />
-          <Route path="/signup" element={ <SignupPage/>} />
+          <Route path="/store/:id" element={ <StorePage setOnHomePage={setOnHomePage}/>} />
+          <Route path="/login" element={ <LoginPage currentUserInfo={currentUserInfo} setCurrentUserInfo={handleLogin} setOnHomePage={setOnHomePage}/>} />
+          <Route path="/signup" element={ <SignupPage setOnHomePage={setOnHomePage}/>} />
         </Routes>
       </Box>
     </VStack>
