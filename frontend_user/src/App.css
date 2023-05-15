@@ -23,6 +23,11 @@
   text-decoration:overline ;
   font-weight: bold;
 }
+.food-category-selected{
+  color: green;
+  text-decoration:overline ;
+  font-weight: bold;
+}
 
 .App-header {
   background-color: #282c34;

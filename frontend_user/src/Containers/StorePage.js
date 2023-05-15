@@ -24,12 +24,13 @@ const StorePage = ({setOnHomePage}) => {
 
     const [foodDataByCat, setFoodDataByCat] = useState({});
     const [foodCategories, setFoodCategories] = useState([]);
+    const [categoryLocation, setCategoryLocation] = useState('');
 
-    const [width, setWidth] = useState(0)
     const [navbarHeight, setNavbarHeight] = useState(0);
 
     useEffect(()=>{
         setOnHomePage(false);
+        window.addEventListener('scroll', ()=>{setCategoryLocation('')});
     }, [])
 
     useEffect(()=>{
@@ -46,6 +47,7 @@ const StorePage = ({setOnHomePage}) => {
                     }
                 })
                 setFoodCategories(categories);
+                // setCategoryLocation(categories[0]);
 
                 var dataByCat = {};
                 for (const cat of categories){
@@ -62,9 +64,15 @@ const StorePage = ({setOnHomePage}) => {
     }, [storeID])
 
     useEffect(()=>{
-        var w = document.getElementById('store-large-card-components').offsetWidth
-        setWidth(w/foodCategories.length)
-    }, [foodCategories])
+        for (const cat of foodCategories){
+            if (cat === categoryLocation){
+                document.getElementById(`food-category-menu-${cat}`).classList.add('food-category-selected');
+            }
+            else{
+                document.getElementById(`food-category-menu-${cat}`).classList.remove('food-category-selected');
+            }
+        }
+    }, [categoryLocation])
 
     useEffect(()=>{
         window.onscroll = ()=>myFunction();
@@ -150,12 +158,13 @@ const StorePage = ({setOnHomePage}) => {
                         <HStack align={'center'} p={3} w="100%" justifyContent={'space-around'}>
                             {foodCategories.map((theClass) =>
                                 <Box h="100%" key={theClass} >
-                                    <a key={theClass} className='food-category-menu-option'
+                                    <a key={theClass} className='food-category-menu-option' id={`food-category-menu-${theClass}`}
                                         onClick = {(e)=>{
                                             e.preventDefault();
                                             window.scrollTo({
                                             top: document.querySelector(`#food-category-${theClass}`).offsetTop - 180,
-                                            behavior: "smooth",})}}> 
+                                            behavior: "smooth",});
+                                            setCategoryLocation(theClass);}}> 
                                         {theClass}
                                     </a>
                                 </Box>
