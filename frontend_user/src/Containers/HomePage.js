@@ -11,7 +11,10 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
     const [filteredData, setFilteredData] = useState(storesData);
     const [filteredDoubleColData, setFilteredDoubleColData] = useState([]);
     const navigate = useNavigate();
-    setOnHomePage(true);
+
+    useEffect(()=>{
+        setOnHomePage(true);
+    },[])
 
     useEffect(()=>{
         if(!filteredValues.item.length && !filteredValues.store.length){
