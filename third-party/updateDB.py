@@ -48,39 +48,41 @@ def threadingFamily():
 def reformatFamily(store_infos):
     msgs = []
 
-    for data in store_infos:
+    for data in store_infos:  # for each store
         stocks = []
-        category = data['info'][0]['name']
 
-        for foods in data['info'][0]['categories']:
-            tag = foods['name']
+        for cat in data['info']:  # for each category
+            category = cat['name']
 
-            for prod in foods['products']:
-                pid = prod['code']
-                if pid not in familyPIDs:
-                    #
-                    familyLock.acquire() # enhance thread safety
-                    #
+            for sub_cat in cat['categories']:  # for each sub-category (tag)
+                tag = sub_cat['name']
+
+                for prod in sub_cat['products']:  # for each food (prduct)
+                    pid = prod['code']
                     if pid not in familyPIDs:
-                        food = {
-                            'original_id': pid,
-                            'brand': '全家',
-                            'name': prod['name'],
-                            'category': category,
-                            'tag': [tag],
-                            'original_price' : 0,
-                            'discount_price' : 0
-                        }
-                        familyPIDs[pid] = food_collection.insert_one(food).inserted_id
-                    #
-                    familyLock.release() # enhance thread safety
-                    #
+                        #
+                        familyLock.acquire() # enhance thread safety
+                        #
+                        if pid not in familyPIDs:
+                            food = {
+                                'original_id': pid,
+                                'brand': '全家',
+                                'name': prod['name'],
+                                'category': category,
+                                'tag': [tag],
+                                'original_price' : 0,
+                                'discount_price' : 0
+                            }
+                            familyPIDs[pid] = food_collection.insert_one(food).inserted_id
+                        #
+                        familyLock.release() # enhance thread safety
+                        #
 
-                stocks.append({
-                    '_id': familyPIDs[pid],
-                    'quantity': prod['qty'],
-                    'updateDate': familyDate
-                })
+                    stocks.append({
+                        '_id': familyPIDs[pid],
+                        'quantity': prod['qty'],
+                        'updateDate': familyDate
+                    })
             
         msgs.append(UpdateOne({"original_id": data['oldPKey'], 'category': '全家'}, 
                         {'$set': {'updateDate': familyDate, 'stocks': stocks}}, upsert=True))
