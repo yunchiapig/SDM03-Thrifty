@@ -4,6 +4,8 @@ import Map from '../Components/Map';
 import Toggle from 'react-styled-toggle';
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import cloneDeep from 'lodash/cloneDeep';
 // import axios from "axios";
 
 export default function HomePage({filteredValues, userLocation, mapCenter, setMapCenter, storesData, setOnHomePage}){
@@ -11,6 +13,7 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
     const [filteredData, setFilteredData] = useState(storesData);
     const [filteredDoubleColData, setFilteredDoubleColData] = useState([]);
     const navigate = useNavigate();
+    const { t, i18n } = useTranslation();
 
     useEffect(()=>{
         setOnHomePage(true);
@@ -52,7 +55,7 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
     return(
         <Box ml={5}>
             <Flex>
-                <Toggle labelLeft='Map' labelRight='List' style={{zIndex:10}}
+                <Toggle labelLeft={t('toggle.map')} labelRight={t('toggle.list')} style={{zIndex:10}}
                 backgroundColorUnchecked='#82BFF3'backgroundColorChecked='#76CFCF'
                 onChange={()=>{setIfMapMode(!ifMapMode)}}/>
             </Flex>
@@ -64,7 +67,7 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
                         <Box w='50%'>
                             <Map userLocation={userLocation} storesData={filteredData} mapCenter={mapCenter} setMapCenter={setMapCenter}/>
                         </Box>
-                        <div style={{width: '50%', height: '100vh', overflowY: 'scroll'}}>
+                        <div style={{width: '50%', height: '75vh', overflowY: 'scroll'}}>
                             <Box>
                                 {filteredData.map((storeData, i)=>{ return(
                                 <Flex onClick={()=>{

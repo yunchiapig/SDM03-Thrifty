@@ -8,7 +8,9 @@ import StorePage from './Containers/StorePage';
 import LoginPage from './Containers/LoginPage';
 import SignupPage from './Containers/SignupPage';
 import { Routes, Route } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from "axios";
+import { use } from 'i18next';
 
 
 function App() {
@@ -20,7 +22,12 @@ function App() {
   const [mapCenter, setMapCenter] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUserInfo, setCurrentUserInfo] = useState(null);
+  const { i18n } = useTranslation();
   const [onHomePage, setOnHomePage] = useState(false); 
+
+  // useEffect(()=>{
+  //   setLanguageValue(i18n.language);
+  // }, [i18n.language])
 
   useEffect(()=>{
     console.log('storesData', storesData)
@@ -113,7 +120,7 @@ function App() {
       <Box w="100%" bg={useColorModeValue('gray.100', 'gray.900')}minH="100vh">
         <NavBar zIndex={100} filterOptions={filterOptions} onHomePage={onHomePage}
           filteredValues={filteredValues} setFilteredValues={setFilteredValues} 
-          isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} currentUserInfo={currentUserInfo}/>
+          isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} currentUserInfo={currentUserInfo} />
         {/* <SimpleSidebar/> */}
         <Box w="100%" h="19vh"/>
         

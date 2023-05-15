@@ -1,0 +1,33 @@
+{
+    "language": "zh-TW",
+    "toggle": {
+        "map": "地圖",
+        "list": "清單"
+    },
+    "categoryFilter": "篩選食物類別",
+    "login": "登入",
+    "signup": "註冊",
+    "loginCard": {
+        "title": "登入你的帳號",
+        "subtitle": "什麼，你還沒有帳號？",
+        "signupLink": "註冊",
+        "email": "電子信箱",
+        "password": "密碼",
+        "rememberMe": "記住我",
+        "forgotPassword": "你忘了密碼？",
+        "loginButton": "登入",
+        "orContinueWith": "或以其他方式繼續"
+    },
+    "signupCard": {
+        "title": "註冊你的帳號",
+        "subtitle": "以解鎖我們更多的服務 ✌️",
+        "accountName": "帳號名稱",
+        "emailAddress": "電子信箱",
+        "password": "密碼",
+        "passwordValid": "密碼格式正確。",
+        "passwordError": "密碼應介於 8 至 20 個字元之間，並至少包含一個數字、一個大寫字母和一個小寫字母。",
+        "signupButton": "註冊",
+        "alreadyaUser": "已經有帳號了？",
+        "loginLink": "登入"
+    }
+}

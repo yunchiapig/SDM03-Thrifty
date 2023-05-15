@@ -6,10 +6,13 @@ import { Input } from "antd";
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Filter from './Filter';
+import LanguageSelector from './LanguageSelector';
+import { useTranslation } from 'react-i18next';
 
 export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filterOptions, filteredValues, setFilteredValues, onHomePage}) {
   const navigate = useNavigate();
   const { isOpen, onToggle } = useDisclosure();
+  const { t, i18n } = useTranslation();
   
   // useEffect(() => {
   //   console.log(isLoggedIn);
@@ -68,6 +71,7 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
+          <LanguageSelector />
           <Button
             as={'a'}
             fontSize={'sm'}
@@ -96,13 +100,14 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
+          <LanguageSelector />
           <Button
             as={'a'}
             fontSize={'sm'}
             fontWeight={400}
             variant={'link'}
             href={'/login'}>
-            Log In
+            {t('login')}
           </Button>
           <Button
             as={'a'}
@@ -115,7 +120,7 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
             _hover={{
               bg: 'pink.300',
             }}>
-            Sign Up
+            {t('signup')}
           </Button>
         </Stack>)
         }

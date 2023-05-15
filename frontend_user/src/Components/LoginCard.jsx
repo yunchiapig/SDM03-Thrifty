@@ -17,6 +17,7 @@ import { Logo } from './Logo.jsx'
 import { PasswordField } from './PasswordField.jsx'
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
 import GoogleSSO from './GoogleSSO.js';
@@ -61,6 +62,8 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
     setCurrentUserInfo(user);
   }
 
+  const { t, i18n } = useTranslation();
+
   return (
     <Container
       maxW="lg"
@@ -86,11 +89,11 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
             <Heading
               fontSize={'4xl'} textAlign={'center'}
             >
-              Log in to your account
+              {t('loginCard.title')}
             </Heading>
             <HStack spacing="1" justify="center">
-              <Text fontSize={'lg'} color={'gray.600'}>Don't have an account?</Text>
-              <Link color={'blue.400'} href={'/signup'}>Sign up</Link>
+              <Text fontSize={'lg'} color={'gray.600'}>{t('loginCard.subtitle')}</Text>
+              <Link color={'blue.400'} href={'/signup'}>{t('loginCard.signupLink')}</Link>
             </HStack>
           </Stack>
         </Stack>
@@ -119,15 +122,15 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
           <Stack spacing="6">
             <Stack spacing="5">
               <FormControl>
-                <FormLabel htmlFor="email">Email</FormLabel>
+                <FormLabel htmlFor="email">{t('loginCard.email')}</FormLabel>
                 <Input id="email" type="email" value={email} onChange={handleEmailChange} backgroundColor={"white"} />
               </FormControl>
               <PasswordField value={password} onChange={handlePasswordChange} ref={passwordRef}/>
             </Stack>
             <HStack justify="space-between">
-              <Checkbox defaultChecked>Remember me</Checkbox>
+              <Checkbox defaultChecked>{t('loginCard.rememberMe')}</Checkbox>
               <Button variant="link" colorScheme="blue" size="sm">
-                Forgot password?
+                {t('loginCard.forgotPassword')}
               </Button>
             </HStack>
             <Stack spacing="6" justifyContent={'center'}>
@@ -140,11 +143,11 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
               _hover={{
                 bg: 'blue.500',
               }}
-              onClick={handleSubmit}>Login</Button>
+              onClick={handleSubmit}>{t('loginCard.loginButton')}</Button>
               <HStack>
                 <Divider />
                 <Text fontSize="sm" whiteSpace="nowrap" color="muted">
-                  or continue with
+                  {t('loginCard.orContinueWith')}
                 </Text>
                 <Divider />
               </HStack>

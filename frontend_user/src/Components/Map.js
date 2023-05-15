@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, useJsApiLoader, MarkerF, InfoWindowF } from '@react-google-maps/api';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function Map({userLocation, storesData, mapCenter, setMapCenter}) {
     const [map, setMap] = useState(null);
     const [icon, setIcon] = useState(null);
     const [selectedMarker, setSelectedMarker] = useState(null);
     const navigate = useNavigate();    
+    const { t, i18n } = useTranslation();
     // const init_center = userLocation;
 
     const containerStyle = {
@@ -38,9 +40,11 @@ function Map({userLocation, storesData, mapCenter, setMapCenter}) {
 
     const [ libraries ] = useState(['places']);
     const { isLoaded } = useJsApiLoader({
-        id: 'google-map-script',
+        // key: `map-${i18n.language}`,
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+        id: 'google-map-script',
         libraries,
+        // language: i18n.language
     });
 
     const onLoad = (map) => {
