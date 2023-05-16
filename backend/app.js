@@ -48,8 +48,8 @@ app.use('/healthcheck', healthcheckRouter);
 // user routers
 app.use('/api/1.0/user', userRouter);
 app.use('/api/1.0/user/google', userGoogleRouter);
-app.use('/api/1.0/stores', getStoresRouter);
-app.use('/api/1.0/foods', getFoodsRouter);
+app.use('/api/1.0/user/stores', getStoresRouter);
+app.use('/api/1.0/user/foods', getFoodsRouter);
 app.use('/api/1.0/user/fav', userFavStoresRouter);
 
 // admin routers

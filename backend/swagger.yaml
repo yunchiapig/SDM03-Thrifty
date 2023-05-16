@@ -377,11 +377,11 @@ paths:
         '500':
           description: Internal Server Error
 
-  /api/1.0/stores:
+  /api/1.0/user/stores:
     get:
       summary: Return stores' information around the user.
       tags:
-        - Get Store API
+        - User API
       parameters:
         - name: longitude
           in: query
@@ -412,11 +412,13 @@ paths:
         '500':
           description: Internal Server Error
   
-  /api/1.0/foods:
+  /api/1.0/user/foods:
     get:
       summary: Return foods' information of the store.
+      description: |-
+        Example 的 Store ID 可能會因為資料庫的變動而改變，請以當下請求資料作為測試資料。
       tags:
-        - Get Food API
+        - User API
       parameters:
         - name: id
           in: query
