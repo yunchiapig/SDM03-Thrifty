@@ -6,6 +6,7 @@ from queue import Queue
 import datetime as dt
 from datetime import datetime, timedelta
 from utils.runThreading import runThreading
+from utils.sevenCats import sevenCats
 from flask_restful import Resource, reqparse
 from threading import Thread
 import logging
@@ -20,6 +21,7 @@ db = MongoClient(CONNECTION_STRING).Thrifty
 store_collection = db['store']
 food_collection = db["food"]
 meta_collection = db["meta"]
+sevenPrices = meta_collection.find_one({'brand':'7-11'})['sevenPrices']
 logging.basicConfig(format='[%(asctime)s +0000] [%(filename)s] [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=logging.INFO)
 
 
@@ -41,7 +43,7 @@ def threadingFamily():
         msgs = reformatFamily(store_infos)
         store_collection.bulk_write(msgs, ordered=False)
     
-    runThreading(my_queue, func, 10)
+    runThreading(my_queue, func, os.cpu_count())
     logging.info("Family-mart updated.")
 
 
@@ -59,24 +61,24 @@ def reformatFamily(store_infos):
 
                 for prod in sub_cat['products']:  # for each food (prduct)
                     pid = prod['code']
+                    #
+                    familyLock.acquire() # enhance thread safety
+                    #
                     if pid not in familyPIDs:
-                        #
-                        familyLock.acquire() # enhance thread safety
-                        #
-                        if pid not in familyPIDs:
-                            food = {
-                                'original_id': pid,
-                                'brand': '全家',
-                                'name': prod['name'],
-                                'category': category,
-                                'tag': [tag],
-                                'original_price' : 0,
-                                'discount_price' : 0
-                            }
-                            familyPIDs[pid] = food_collection.insert_one(food).inserted_id
-                        #
-                        familyLock.release() # enhance thread safety
-                        #
+                        food = {
+                            'original_id': pid,
+                            'brand': '全家',
+                            'name': prod['name'],
+                            'category': category,
+                            'tag': [tag],
+                            'original_price' : 0,
+                            'discount_price' : '7折',
+                            'img_url': f'https://prod-aim.azurewebsites.net/AIM/C0000000{pid}.jpg'
+                        }
+                        familyPIDs[pid] = food_collection.insert_one(food).inserted_id
+                    #
+                    familyLock.release() # enhance thread safety
+                    #
 
                     stocks.append({
                         '_id': familyPIDs[pid],
@@ -133,7 +135,6 @@ headers = {
     'accept-encoding': 'gzip, deflate, br'
     }
 
-
 ## Get token
 def getToken():
     token_api = "https://lovefood.openpoint.com.tw/LoveFood/api/Auth/FrontendAuth/AccessToken?mid_v={}"\
@@ -171,29 +172,31 @@ def reformatSeven(response):
 
     stocks = []
     for categoryBlock in response['StoreStockItem']['CategoryStockItems']:
-        cat_name = categoryBlock['Name']
+        tag_name = categoryBlock['Name']
+        cat_name = sevenCats.get(tag_name, '其他')
         for item in categoryBlock['ItemList']:
             name = item['ItemName'].replace('(區)', '')
             quantity = item['RemainingQty']
-
-            if name not in sevenCats:
-                #
-                sevenLock.acquire() # enhance thread safety
-                #
-                if name not in sevenCats:
-                    msg = {
-                        'tags': [cat_name]
-                    }
-                    if name in sevenPIDs:
-                        food_collection.update_one({'name':name, 'brand':'7-11'}, {'$set':msg}, upsert=True)
-                    else:
-                        msg['name'] = name
-                        msg['brand'] = '7-11'
-                        sevenPIDs[name] = food_collection.insert_one(msg).inserted_id
-                    sevenCats.add(name)
-                #
-                sevenLock.release() # enhance thread safety
-                #
+            #
+            sevenLock.acquire() # enhance thread safety
+            #
+            if name not in sevenPIDs:
+                msg = {
+                    'name':name,
+                    'brand':'7-11',
+                    'category': cat_name,
+                    'tags': [tag_name],
+                    'original_price': '',
+                    'discount_price': '65折',
+                    'img_url' : 'https://corp.7-eleven.com/images/media_assets/7_Eleven_Vertical_2022_RBG_thumb_1639377127_5694.png'
+                }
+                if name in sevenPrices:
+                    msg =  {**msg, **sevenPrices[name]}
+                
+                sevenPIDs[name] = food_collection.insert_one(msg).inserted_id
+            #
+            sevenLock.release() # enhance thread safety
+            #
 
             stocks.append({
                     '_id': sevenPIDs[name],
@@ -207,15 +210,12 @@ def reformatSeven(response):
 ## Main: Update Seven
 def _updateSeven(Longitude, Latitude):
     global sevenPIDs
-    global sevenCats
     global sevenDate
     global sevenLock
 
     meta_seven = meta_collection.find_one({'brand': "7-11"})
     sevenPIDs = meta_seven['sevenPIDs']
-    sevenCats = set(meta_seven['sevenCats'])
     x = len(sevenPIDs)
-    y = len(sevenCats)
     sevenDate = datetime.utcnow()+timedelta(hours = 8)
     sevenLock = Lock()
 
@@ -244,17 +244,12 @@ def _updateSeven(Longitude, Latitude):
             msg = reformatSeven(response['element'])
             store_collection.update_one({'category': "7-11", 'original_id': id},{'$set': msg}, upsert=True)
         
-    runThreading(storeIDs, func, 10)
+    runThreading(storeIDs, func, os.cpu_count())
 
     # update sevenPIDs
     if len(sevenPIDs) > x:
         meta_collection.update_one({'brand': "7-11"},{'$set':{'sevenPIDs':sevenPIDs}})
         logging.info(f"Update {len(sevenPIDs)-x} sevenPIDs")
-
-    # update sevenCats
-    if len(sevenCats) > y:
-        meta_collection.update_one({'brand': "7-11"},{'$set':{'sevenCats':list(sevenCats)}})
-        logging.info(f"Update {len(sevenCats)-y} sevenCats")
 
     logging.info("7-11 updated.")
 
