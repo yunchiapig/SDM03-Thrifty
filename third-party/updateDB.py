@@ -11,6 +11,7 @@ from flask_restful import Resource, reqparse
 from threading import Thread
 import logging
 from threading import Lock
+import re
 
 
 ##### Global DB Settings #####
@@ -167,15 +168,17 @@ def getStoreNum(token, Longitude, Latitude):
     return my_queue
 
 
+def regex(s):
+    return re.sub('\(\w\)|\w\)\w\)| |★', '', s)
+
 ## reformat response
 def reformatSeven(response):
-
     stocks = []
     for categoryBlock in response['StoreStockItem']['CategoryStockItems']:
         tag_name = categoryBlock['Name']
         cat_name = sevenCats.get(tag_name, '其他')
         for item in categoryBlock['ItemList']:
-            name = item['ItemName'].replace('(區)', '')
+            name = regex(item['ItemName'])
             quantity = item['RemainingQty']
             #
             sevenLock.acquire() # enhance thread safety
@@ -292,6 +295,6 @@ def clearSeven():
 
 
 if __name__ == "__main__":
-    updateFamily()
+    # updateFamily()
     _updateSeven(121.532554, 25.017604)
     print('Test success!')
