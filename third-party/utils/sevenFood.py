@@ -26,6 +26,7 @@ from runThreading import runThreading
 from queue import Queue
 import xml.etree.ElementTree as ET
 from threading import Lock
+import re
 
 
 # Database Settings
@@ -49,6 +50,8 @@ my_queue = Queue()
 for i, cat_eng in food_category.items():
     my_queue.put((i, cat_eng))
 
+def regex(s):
+    return re.sub('\(\w\)|\w\)\w\)| |★', '', s)
 
 # main scrapping function
 def func(i, cat_eng):
@@ -58,7 +61,7 @@ def func(i, cat_eng):
         i-=1
 
     for child in ET.fromstring(r).findall('Item'):
-        name = child.find('name').text.strip()
+        name = regex(child.find('name').text)
         if name not in sevenPrices:
             try:
                 original_price = int(child.find('price').text.strip())
