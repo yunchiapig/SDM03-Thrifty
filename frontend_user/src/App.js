@@ -76,7 +76,7 @@ function App() {
         .then(response => {
           console.log(response.data);
       });
-      axios.get(`http://52.193.252.15/api/1.0/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
+      axios.get(`http://52.193.252.15/api/1.0/user/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
         .then(response => {
           var stores = response.data.message
           setStoresData(stores);
