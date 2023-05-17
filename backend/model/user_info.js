@@ -39,6 +39,7 @@ userInfoSchema.pre('save', async function (next) {
 userInfoSchema.methods.generateAuthToken = async function (type) {
   const user = this
   const payload = {
+    _id: user._id,
     name: user.name,
     email: user.email,
     favorite_stores: user.favorite_stores
