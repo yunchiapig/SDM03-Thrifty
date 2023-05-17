@@ -106,12 +106,14 @@ function App() {
   }
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("user");
-    console.log(loggedInUser);
-    if (loggedInUser) {
-      setIsLoggedIn(true);
-      setCurrentUserInfo(loggedInUser);
-      // localStorage.clear();
+    if (isLoggedIn) {
+      const loggedInUser = localStorage.getItem("name");
+      console.log(loggedInUser);
+      if (loggedInUser) {
+        setIsLoggedIn(true);
+        setCurrentUserInfo(loggedInUser);
+        // localStorage.clear();
+      }
     }
   }, [isLoggedIn]);
 
@@ -127,8 +129,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage filteredValues={filteredValues} setOnHomePage={setOnHomePage}
               userLocation={userLocation} mapCenter={mapCenter} setMapCenter={setMapCenter}
-              storesData={storesData} />}/>
-          <Route path="/store/:id" element={ <StorePage setOnHomePage={setOnHomePage}/>} />
+              storesData={storesData} isLoggedIn={isLoggedIn} />}/>
+          <Route path="/store/:id" element={ <StorePage setOnHomePage={setOnHomePage} />} />
           <Route path="/login" element={ <LoginPage currentUserInfo={currentUserInfo} setCurrentUserInfo={handleLogin} setOnHomePage={setOnHomePage}/>} />
           <Route path="/signup" element={ <SignupPage setOnHomePage={setOnHomePage}/>} />
         </Routes>

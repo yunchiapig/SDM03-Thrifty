@@ -39,7 +39,7 @@ function SignupCard() {
   const isPasswordError = (password.length < 8 || password.length > 20 || password === password.toLowerCase() || password === password.toUpperCase() || !(/\d/.test(password)))
 
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const handleSubmit = (event) => {
     if (!(isAccountNameError || isEmailError || isPasswordError)) {
