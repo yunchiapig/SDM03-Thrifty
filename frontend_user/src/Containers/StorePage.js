@@ -168,6 +168,7 @@ const StorePage = ({setOnHomePage}) => {
                     </Box>
                 </VStack>
             </VStack>
+            <Box h="80px"></Box>
         </Box>
     )
 };

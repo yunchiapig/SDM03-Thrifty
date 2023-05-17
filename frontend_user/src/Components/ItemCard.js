@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 // import Rating from './Rating';
 
 
-const imageURL = "https://img.craiyon.com/2023-05-09/768ea19460d4429d8ffdafae96f47783.webp"
+// const imageURL = "https://img.craiyon.com/2023-05-09/768ea19460d4429d8ffdafae96f47783.webp"
 // "https://www.7-11.com.tw/freshfoods/1_Ricerolls/images/ricerolls_266.png";
 
   
@@ -33,7 +33,7 @@ export default function ItemCard(foodData) {
                     <Image
                     objectFit="cover"
                     boxSize="100%"
-                    src={ imageURL }
+                    src={ foodInfo.food.img_url }
                     />
                 </Flex>
                 <Stack
