@@ -73,7 +73,8 @@ def reformatFamily(store_infos):
                             'category': category,
                             'tag': [tag],
                             'original_price' : 0,
-                            'discount_price' : '7折',
+                            'discount_price' : 0,
+                            'discount_rate' : '7折',
                             'img_url': f'https://prod-aim.azurewebsites.net/AIM/C0000000{pid}.jpg'
                         }
                         familyPIDs[pid] = food_collection.insert_one(food).inserted_id
@@ -189,8 +190,9 @@ def reformatSeven(response):
                     'brand':'7-11',
                     'category': cat_name,
                     'tags': [tag_name],
-                    'original_price': '',
-                    'discount_price': '65折',
+                    'original_price': 0,
+                    'discount_price': 0,
+                    'discount_rate': '65折',
                     'img_url' : 'https://corp.7-eleven.com/images/media_assets/7_Eleven_Vertical_2022_RBG_thumb_1639377127_5694.png'
                 }
                 if name in sevenPrices:

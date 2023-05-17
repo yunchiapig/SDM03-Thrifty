@@ -523,7 +523,8 @@ def initializeFamily(store_infos):
               'location': {
                   'type': 'Point', 
                   'coordinates':[data['longitude'], data['latitude']]
-                  }
+                  },
+              'img_url': 'https://i.imgur.com/u2stOGp.jpg'
           }
           msgs.append(store)
     
