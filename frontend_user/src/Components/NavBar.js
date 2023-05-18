@@ -77,7 +77,7 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
             fontSize={'sm'}
             fontWeight={400}
             variant={'link'}>
-            Hi, {localStorage.getItem('name')}!
+            {t('Hi')} {localStorage.getItem('name')} {t('exclamation')}
           </Button>
           <Button
             as={'a'}
@@ -91,7 +91,7 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
               bg: 'pink.300',
             }}
             onClick={handleLogOut}>
-            Log out
+            {t('logout')}
           </Button>
           </Stack>
           ) : (
