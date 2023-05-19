@@ -33,6 +33,9 @@ cityCodes = {'台北市': '01',
              '金門縣': '25',
              }
 
+mainpage_img_url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/7-eleven_logo.svg/250px-7-eleven_logo.svg.png'
+storepage_img_url = 'https://images.contentstack.io/v3/assets/blt79dc99fad342cc45/bltaea3ad03c180ee64/633f08d845693810d212c437/7_Eleven_Horizontal_2022_RGB_thumb_1639377127_8824.png'
+
 
 # Database Settings
 load_dotenv()
@@ -72,8 +75,9 @@ def initializeSeven(store_infos):
                 'type': 'Point', 
                 'coordinates':[float(X[:3]+'.'+X[3:]), float(Y[:2]+'.'+Y[2:])]
                 },
-            'img_url': 'https://corp.7-eleven.com/images/media_assets/7_Eleven_Vertical_2022_RBG_thumb_1639377127_5694.png'
-        }
+            'mainpage_img_url': mainpage_img_url,
+            'storepage_img_url': storepage_img_url
+            }
         sevenKeys.append(id)
         msgs.append(store)
     
