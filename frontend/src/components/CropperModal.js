@@ -108,7 +108,7 @@ function CustomModal({setImageFile, storeImage}) {
         setZoom(zoom);
     };
 
-  console.log(initialImage?.height,initialImage?.width)
+  
   return (
     <Box w = '635px' h = '512px' borderWidth='1px' borderRadius='lg' overflow='hidden'>
         {croppedImage === "" ? (storeImage === undefined ? <IconButton aria-label='Upload Image' w = 'full' h = 'full' icon={<FaUpload />} onClick={() => document.getElementById('image-input').click()} /> :

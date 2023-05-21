@@ -193,7 +193,6 @@ export default ({ isOpen, onOpen, onClose, item, certain, addToTag}) => {
             onClose();
         })
         .catch(e => {
-            console.log(e);
             setNameErr("此商品名稱已存在")
         });
         setLoading(false);

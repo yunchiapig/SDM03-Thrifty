@@ -139,7 +139,7 @@ import {
         }
         return pass
     }
-    console.log(loading)
+    
     const HandleSubmit = async (event) => {
         if (!FormCheck()) {
             return

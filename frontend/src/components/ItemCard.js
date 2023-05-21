@@ -29,7 +29,6 @@ import { FcAddImage } from "react-icons/fc";
 
 
 export default ({item}) => {
-    //console.log(item)
     const { isOpen: updateIsOpen , onOpen: updateOnOpen, onClose: updateOnClose } = useDisclosure()
     const { isOpen: deleteIsOpen , onOpen: deleteOnOpen, onClose: deleteOnClose } = useDisclosure()
     const [ certain, setCertain] = useState(null);

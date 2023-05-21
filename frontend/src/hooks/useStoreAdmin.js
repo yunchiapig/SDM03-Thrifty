@@ -24,8 +24,6 @@ const StoreAdminProvider = (props) => {
 
   const checkTokenExpiration = () => {
     const currentTime = Math.floor(Date.now() / 1000); // Get the current time in seconds
-    console.log(localStorage.getItem('exp'))
-    console.log(currentTime)
     if(jwt_decode(jwt).exp < currentTime) {
       localStorage.removeItem("login");
       localStorage.removeItem("jwt");
@@ -43,15 +41,12 @@ const StoreAdminProvider = (props) => {
   const getItems = async() => {
       //const storeInfo = JSON.parse(localStorage.getItem('store_info'))
       //const jwt = localStorage.getItem('jwt')
-      console.log(jwt)
-      console.log(storeInfo)
       setLoading(true);
       const res
         = await instance.get('/api/1.0/foods', { 
           params: {  
               id: storeInfo._id
       },}).catch( e => {
-         console.log(e)
           //if(status === 400) {
               setStocks([]);
           //}
@@ -89,7 +84,6 @@ const StoreAdminProvider = (props) => {
         id: storeInfo._id
       },}).then( res => {
         let data = res.data.data
-        console.log(data)
         let info = {
           "_id": data._id,
           "email": data.email,

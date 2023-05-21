@@ -41,7 +41,6 @@ export default () => {
   
   useEffect(() => {
     if(localStorage.getItem('login') == null) {
-      console.log('get')
       updateStoreInfo()
       localStorage.setItem('login', false)
     }

@@ -74,7 +74,7 @@ export default function SimpleCard() {
         navigate('/mainpage/ProductManagement');
     })
     .catch((e) => {
-      console.log(e)
+      
       setAccountErr('login.error')
       setPasswordErr('login.error')
     })

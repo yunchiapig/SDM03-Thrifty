@@ -22,7 +22,6 @@ import { FaUpload } from 'react-icons/fa';
 import { useStoreAdmin } from '../hooks/useStoreAdmin';
 
 function CustomModal({setImage, itemImage}) {
-    console.log(itemImage)
     const {checkTokenExpiration} = useStoreAdmin();
     const boxHeight =  400 * 512 / 635;
     const boxWidth = 400
@@ -109,7 +108,7 @@ function CustomModal({setImage, itemImage}) {
         setZoom(zoom);
     };
 
-  console.log(initialImage?.height,initialImage?.width)
+  
   return (
     <Box w = '280px' h = '224px' borderWidth='1px' borderRadius='lg' overflow='hidden'>
         {croppedImage === "" ? (itemImage === undefined ? <IconButton aria-label='Upload Image' w = 'full' h = 'full' icon={<FaUpload />} onClick={() => document.getElementById('image-input').click()} /> :
