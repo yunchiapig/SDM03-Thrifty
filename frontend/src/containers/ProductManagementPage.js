@@ -9,11 +9,6 @@ import {
     Flex,
     HStack,
     VStack,
-    Icon,
-    useColorModeValue,
-    Link,
-    Drawer,
-    DrawerContent,
     Text,
     useDisclosure,
     BoxProps,
@@ -37,12 +32,14 @@ import { FiEdit, FiPlus } from "react-icons/fi";
 import instance from "../api.js";
 import {useStoreAdmin} from "../hooks/useStoreAdmin";
 import TypeCard from '../components/TypeCard';
+import { useTranslation } from 'react-i18next';
 
 
 export default () => {
     const [items, setItems] = useState([]);
     const {stocks, selectedType, setStock, setSelectedType} = useStoreAdmin();
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { t } = useTranslation();
 
 
     //const scrollRefs = useMemo(() => Array.from({ length: stocks.length }, () => createRef()), [stocks]);
@@ -66,12 +63,12 @@ export default () => {
         <>
         {stocks?.length === 0 ?
             <Box display='flex' justifyContent='center' alignItems='center' h='100%'>
-                <Text fontSize='5xl' color='lightgrey'>尚無品項資訊</Text>
+                <Text fontSize='5xl' color='lightgrey'>{t("management.noItem")}</Text>
             </Box> : 
             <Stack divider={<StackDivider h = '100%'/>} direction = 'row' h = '100%' overflow='hidden'  >
                 <Box w= '25%' h = '100%'>
                     <Box mb = {10} ml = {5} mt = {3} display = 'flex'>
-                        <Text  fontSize= '26px' textAlign = 'left' >商品類別</Text>
+                        <Text  fontSize= '26px' textAlign = 'left' >{t("management.type")}</Text>
                     </Box>
                     <Accordion overflow='scroll'>
                         {stocks?.map((s, i) => {
@@ -104,8 +101,6 @@ export default () => {
                     </VStack>
                 </Box>
             </Stack> }
-    </>
-    
-        
+    </> 
     )
 }

@@ -11,14 +11,17 @@ import {
     Stack,
     Button,
     Input,
+    FormControl,
     FormLabel,
+    FormErrorMessage,
     Textarea,
     NumberInput,
     NumberInputField,
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
-    useToast
+    useToast,
+    Img
     //Select
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons'
@@ -27,132 +30,227 @@ import CustomSelect from './CustomSelect';
 import instance from '../api';
 import styled from 'styled-components';
 import {useStoreAdmin} from "../hooks/useStoreAdmin";
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
+import ItemCropperModal from './ItemCropperModal';
 
 
 
 export default ({ isOpen, onOpen, onClose, item, certain, addToTag}) => {
-    const toast = useToast()
-    const {store, stocks, setStocks, loading, setLoading, setDrawerMount, getItems} = useStoreAdmin();
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+    const toast = useToast(); 
+    const {store, stocks, setStocks, loading, setLoading, setDrawerMount, getItems, storeInfo, jwt, checkTokenExpiration} = useStoreAdmin();
     const firstField = React.useRef();
     const QtyRef = React.useRef();
     const [name, setName] = useState(item?.food.name || "");
+    const [nameErr, setNameErr] =useState(false)
     const [tag, setTag] = useState(item?.food.tag || addToTag || "");
-    const [quantity, setQuantity] = useState(item?.quantity || 0);
+    const [tagErr, setTagErr] =useState(false)
+    const [quantity, setQuantity] = useState(item?.quantity || "0");
+    const [qtyErr, setQtyErr] =useState(false)
     const [discountedPrice, setDiscountedPrice] = useState(item?.food.discount_price || "");
+    const [dPriceErr, setDPriceErr] =useState(false)
     const [price, setPrice] = useState(item?.food.original_price || "");
-    const [submit, setSubmit] = useState(false);
-    const [exist, setExist] = useState(false);
-    const [priceErr, setPriceErr] = useState(false);
-    //const [exist, setExist] = useState(false);
-    //const existList = useState([]);
-    const formCheck = () => { 
-        setSubmit(true);
-        if(name != "" && tag != "" && quantity !== "" && price != "" && discountedPrice != "") {
-            /*if(typeof parseInt(price) === Int) {
-                setPriceErr(true)
-                toast({
-                    title: "原始價格格式錯誤",
-                    status: 'error',
-                    isClosable: true,
-                })
-                return false
-            }*/
-            return true
+    const [priceErr, setPriceErr] =useState(false)
+    const [description, setDescription] = useState(item?.food.description || "");
+    const [desErr, setDesErr] =useState(false)
+    const [initialImg, setInitialImg] = useState(item?.food ? 'https://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + item.food.mainImage: undefined)
+    const [image, setImage] = useState(null);
+    const [imgErr, setImgErr] =useState(false)
 
+    useEffect(() => {
+        if(checkTokenExpiration()){
+            navigate('/login')
+        }
+    }, [onOpen])
+
+    const FormCheck = () => {
+        let pass = true
+        //name
+        if (name == ''){
+            setNameErr('signup.inputBlank')
+            pass = false
         }
         else {
-            return false
+            setNameErr('')
         }
-    }
-    const HandleSubmit = async() => {
-        if (formCheck() === true) {
-            setLoading(true);
-            const res
-            = await instance.post('api/1.0/admin/food', { 
-                    storeID: store,
-                    updateInfo: {
-                        name,
-                        category: "其他",
-                        tag,
-                        original_price: price,
-                        discount_price: discountedPrice
-                    }
-            }).catch(e => {
-                if(e.response.status === 400) {
-                    toast({
-                        title: `${e.response.data.message}`,
-                        status: 'error',
-                        isClosable: true,
-                    })
-                    setExist(true)
-                }
-            })
-            const submittedItem = res?.data.data
-            if (res?.status === 200) {
-                const res = 
-                await instance.put('api/1.0/admin/stock', {
-                    storeID: store,
-                    foodID: submittedItem._id,
-                    updateQty: quantity
-                })
-                let added = false;
-                const tmpStocks = stocks
-                setStocks(tmpStocks.map(e => {
-                    if(e.tag === submittedItem.tag) {
-                        added = true
-                        return (
-                            {tag: e.tag, items: [{food: submittedItem, quantity}, ...e.items]}
-                        )
-                    }
-                    else {
-                        return e
-                    }
-                }))
-                if(added === false) {
-                    setStocks([{tag: submittedItem.tag, items: [{food:submittedItem, quantity}]},...tmpStocks])
-                }
-                toast({
-                    title: `已成功新增 ${submittedItem.name}`,
-                    status: 'success',
-                    isClosable: true,
-                })
-                onClose();
+        //tag
+        if (tag == ''){
+            setTagErr('signup.inputBlank')
+            pass = false
+        }
+        else {
+            setTagErr('')
+        }
+        //des
+        if (description == ''){
+            setDesErr('signup.inputBlank')
+            pass = false
+        }
+        else {
+            setDesErr('')
+        }
+        //qty
+        if (quantity == ''){
+            setQtyErr('signup.inputBlank')
+            pass = false
+        }
+        else {
+            setQtyErr('')
+        }
+        let priceCorrect = true
+         //price
+        if (price == ''){
+            setPriceErr('signup.inputBlank')
+            priceCorrect = false
+            pass = false
+        }
+        else if (!(/^\d+$/.test(price))){
+            setPriceErr("價格格式錯誤")
+            pass = false
+            priceCorrect = false
+        }
+        else {
+            setPriceErr('')
+        }
+         //dprice
+         if (discountedPrice == ''){
+            setDPriceErr('signup.inputBlank')
+            pass = false
+            priceCorrect = false
+        }
+        else if (!(/^\d+$/.test(discountedPrice))){
+            setDPriceErr("價格格式錯誤")
+            priceCorrect = false
+            pass = false
+        }
+        else {
+            setDPriceErr('')
+        }
+
+        if(priceCorrect) {
+            if(Number(price) <= Number(discountedPrice)) {
+                setDPriceErr("折扣價須低於原價")
+                setPriceErr("折扣價須低於原價")
+                pass = false
             }
-            setLoading(false);
         }
+        //image
+        if (!item && image === null) {
+            setImgErr('signup.inputBlank')
+            pass = false
+        }
+        else {
+            setImgErr('')
+        }
+        
+        return pass
+      }
+
+    const HandleSubmit = async() => {
+        setLoading(true);
+        if (!FormCheck()) {
+            setLoading(false)
+            return
+        }
+        let formData = new FormData();
+        formData.append('mainImage', image);
+        formData.append('storeID', storeInfo._id);
+        let updateInfo = {
+            name,
+            category: "其他",
+            tag,
+            original_price: price,
+            discount_price: discountedPrice,
+            description
+        }
+        formData.append('updateInfo', JSON.stringify(updateInfo));
+    
+        instance.post('api/1.0/admin/food', formData, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`,
+                'Content-Type': 'multipart/form-data'
+            },
+        })
+        .then(async(res) => {
+            let stock = {
+                storeID: storeInfo._id,
+                foodID: res.data.data._id,
+                updateQty: quantity
+            }
+            await instance.put('api/1.0/admin/stock', stock, 
+            { headers: {
+                'Authorization': `Bearer ${jwt}`,
+            }}
+            )
+            await getItems()
+            toast({
+                title: `已成功新增 ${name}`,
+                status: 'success',
+                isClosable: true,
+            })
+            onClose();
+        })
+        .catch(e => {
+            console.log(e);
+            setNameErr("此商品名稱已存在")
+        });
+        setLoading(false);
         
     }
 
     const HandleUpdate = async() => {
-        if (formCheck() === true) {
-            const {data, status}
-            = await instance.put('api/1.0/admin/food', { 
-                    foodID: item.food._id,
-                    updateInfo: {
-                        name,
-                        category: "其他",
-                        tag,
-                        original_price: price,
-                        discount_price: discountedPrice
-                    }
-            })
-            const submittedItem = data.data
-
-            if (status === 200) {
-                await instance.put('api/1.0/admin/stock', {
-                    storeID: store,
-                    foodID: submittedItem._id,
-                    updateQty: quantity
-                })
-                await getItems();
-                toast({
-                    title: `已成功更新 ${submittedItem.name}`,
-                    status: 'success',
-                    isClosable: true,
-                })
-                onClose();
-            }
+        setLoading(true);
+        if (!FormCheck()) {
+            setLoading(false);
+            return
         }
+        let formData = new FormData();
+        if (image !== null) {
+            formData.append('mainImage', image);
+        }
+        formData.append('foodID', item.food._id);
+        let updateInfo = {
+            name,
+            category: "其他",
+            tag,
+            original_price: price,
+            discount_price: discountedPrice,
+            description
+        }
+        formData.append('updateInfo', JSON.stringify(updateInfo));
+    
+        instance.put('api/1.0/admin/food', formData, {
+            headers: {
+                'Authorization': `Bearer ${jwt}`,
+                'Content-Type': 'multipart/form-data'
+            },
+        })
+        .then(async(res) => {
+            let stock = {
+                storeID: storeInfo._id,
+                foodID: res.data.data._id,
+                updateQty: quantity
+            }
+            await instance.put('api/1.0/admin/stock', stock, 
+            { headers: {
+                'Authorization': `Bearer ${jwt}`,
+            }}
+            )
+            await getItems()
+            toast({
+                title: `已成功新增 ${name}`,
+                status: 'success',
+                isClosable: true,
+            })
+            onClose();
+        })
+        .catch(e => {
+            setNameErr("此商品名稱已存在")
+        });
+        setLoading(false);
+        
     }
     return (
         <Drawer
@@ -175,58 +273,79 @@ export default ({ isOpen, onOpen, onClose, item, certain, addToTag}) => {
             <DrawerBody>
                 <Stack spacing='24px'>
                 <Box>
-                    <FormLabel htmlFor='username'>品項名稱</FormLabel>
-                    <Input
-                    isInvalid = {submit && (name === "" || exist)}
-                    errorBorderColor='crimson'
-                    ref={firstField}
-                    placeholder='輸入品項名稱'
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    />
+                    <FormControl isInvalid = {nameErr} isRequired>
+                        <FormLabel htmlFor='username'>品項名稱</FormLabel>
+                        <Input
+                        ref={firstField}
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        />
+                        <FormErrorMessage>{t(nameErr)}</FormErrorMessage>
+                    </FormControl>
                 </Box>
 
                 <Box>
-                    <FormLabel htmlFor='owner'>自訂品項類別</FormLabel>
-                    <CustomSelect tag = {tag} setTag={setTag} submit = {submit}/>
+                    <FormControl isInvalid = {tagErr} isRequired>
+                        <FormLabel htmlFor='owner'>自訂品項類別</FormLabel>
+                        <CustomSelect tag = {tag} setTag={setTag}/>
+                        <FormErrorMessage>{t(tagErr)}</FormErrorMessage>
+                    </FormControl>
                 </Box>
 
                 <Box>
-                    <FormLabel htmlFor='desc'>品項說明</FormLabel>
-                    <Textarea id='desc' />
+                    <FormControl isInvalid = {desErr} isRequired>
+                        <FormLabel htmlFor='desc'>品項說明</FormLabel>
+                        <Textarea id='desc' value={description}
+                        onChange={e => setDescription(e.target.value)}/>
+                        <FormErrorMessage>{t(desErr)}</FormErrorMessage>
+                    </FormControl>
                 </Box>
                 <Box>
-                    <FormLabel htmlFor='username'>庫存</FormLabel>
-                    <NumberInput size='sm' value={quantity} min={0} onChange={e => setQuantity(e)}
-                        isInvalid = {submit && quantity === ""}
-                        errorBorderColor='crimson'>
-                        <NumberInputField 
-                        ref={QtyRef}/>
-                        <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                        </NumberInputStepper>
-                    </NumberInput>
+                    <FormControl isInvalid = {qtyErr} isRequired>
+                        <FormLabel htmlFor='username'>庫存</FormLabel>
+                        <NumberInput size='sm' value={quantity} min={0} onChange={e => setQuantity(e)}>
+                            <NumberInputField 
+                            ref={QtyRef}/>
+                            <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                            </NumberInputStepper>
+                        </NumberInput>
+                        <FormErrorMessage>{t(qtyErr)}</FormErrorMessage>
+                    </FormControl>
                 </Box>
                 <Box>
-                    <FormLabel htmlFor='username'>原始價錢</FormLabel>
-                    <Input
-                    isInvalid = {submit && price === ""}
-                    errorBorderColor='crimson'
-                    placeholder='輸入原始價錢'
-                    value={price}
-                    onChange={e => setPrice(e.target.value)}
-                    />
+                    <FormControl isInvalid = {priceErr} isRequired>
+                        <FormLabel htmlFor='username'>原始價錢</FormLabel>
+                        <Input
+                        errorBorderColor='crimson'
+                        placeholder='輸入原始價錢'
+                        value={price}
+                        onChange={e => setPrice(e.target.value)}
+                        />
+                        <FormErrorMessage>{t(priceErr)}</FormErrorMessage>
+                    </FormControl>
                 </Box>
                 <Box>
-                    <FormLabel htmlFor='username'>折扣後價錢</FormLabel>
-                    <Input
-                    isInvalid = {submit && discountedPrice === ""}
-                    errorBorderColor='crimson'
-                    placeholder='輸入折扣後價錢'
-                    value={discountedPrice}
-                    onChange={e => setDiscountedPrice(e.target.value)}
-                    />
+                    <FormControl isInvalid = {dPriceErr} isRequired>
+                        <FormLabel htmlFor='username'>折扣後價錢</FormLabel>
+                        <Input
+                        errorBorderColor='crimson'
+                        placeholder='輸入折扣後價錢'
+                        value={discountedPrice}
+                        onChange={e => setDiscountedPrice(e.target.value)}
+                        />
+                        <FormErrorMessage>{t(dPriceErr)}</FormErrorMessage>
+                    </FormControl>
+                </Box>
+                <Box>
+                    <FormControl isInvalid = {imgErr} isRequired>
+                        <FormLabel htmlFor='image'>圖片</FormLabel>
+                        {/*<ItemCropperModal itemImage = {initialImg} setImageFile = {setImage}/>*/}
+                        <Input type='file' id='image' accept="image/png, image/jpeg" onChange={e => setImage(e.target.files[0])} />
+                        {(image || initialImg) && <Img src={ image == null ? initialImg : URL.createObjectURL(image)} alt='Preview' />}
+                        <FormErrorMessage>{t(imgErr)}</FormErrorMessage>
+                    </FormControl>
                 </Box>
                 </Stack>
             </DrawerBody>

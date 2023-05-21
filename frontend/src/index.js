@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 //template
 import { ChakraProvider } from '@chakra-ui/react'
 import {StoreAdminProvider} from './hooks/useStoreAdmin';
+import './translation'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

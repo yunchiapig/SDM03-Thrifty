@@ -18,13 +18,18 @@ export default ({ isOpen, onOpen, onClose, item }) => {
   const {store, stocks, setStocks, getItems} = useStoreAdmin();
   const toast = useToast()
   const cancelRef = React.useRef()
+  const storeInfo = JSON.parse(localStorage.getItem('store_info'));
+  const jwt = localStorage.getItem('jwt')
   const HandleDelete = async() => {
     const {data, status}
-    = await instance.delete('api/1.0/admin/food', { 
-        params: {
-            storeID: store,
-            foodID: item.food._id
-        }
+    = await instance.delete('api/1.0/admin/food', {  
+      headers: {
+        'Authorization': `Bearer ${jwt}`,
+      },
+      params: {
+          storeID: storeInfo.storeID,
+          foodID: item.food._id
+      }
     })
     if (status === 200) {
         await getItems();

@@ -144,7 +144,7 @@ function checkStoreInfo(req, res, next){
 
   next();
 }
-
+  
 
 // 檢查店家更新資訊格式
 function checkStoreUpdateInfo(req, res, next){
