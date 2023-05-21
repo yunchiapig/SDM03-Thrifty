@@ -9,6 +9,9 @@ let foodInfoSchema = new mongoose.Schema({
   original_id: {
     type: String,
   },
+  brand: {
+    type: String,
+  },
   name: {
     type: String,
     required: true
