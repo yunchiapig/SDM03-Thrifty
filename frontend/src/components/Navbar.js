@@ -41,17 +41,18 @@ import { IconType } from 'react-icons';
 import { ReactText } from 'react';
 import {useStoreAdmin} from "../hooks/useStoreAdmin";
 import NavItem from './NavItem';
+import LanguageSelector from './LanguageSelector';
+import { useTranslation } from 'react-i18next';
 
-const storeInfo = JSON.parse(localStorage.getItem('store_info'));
 
 interface LinkItemProps {
   name: string;
   icon: IconType;
 }
 const LinkItems: Array<LinkItemProps> = [
-    { name: '基本資料', icon: FiHome, ref: "/Profile" },
-    { name: '商品管理', icon: FiServer, ref: "/ProductManagement"},
-    { name: '設定', icon: FiSettings, ref: "/Settings" },
+    { name: 'nav.profile', icon: FiHome, ref: "/Profile" },
+    { name: 'nav.productManagement', icon: FiServer, ref: "/ProductManagement"},
+    { name: 'nav.setting', icon: FiSettings, ref: "/Settings" },
   ];
 
 export default function SidebarWithHeader({
@@ -61,7 +62,7 @@ export default function SidebarWithHeader({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH = '100vh' bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box h = '100%' overflow='scroll' bg={useColorModeValue('gray.100', 'gray.900')}>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: 'none', md: 'block' }}
@@ -92,10 +93,11 @@ interface SidebarProps extends BoxProps {
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     const {setTitle} = useStoreAdmin();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const HandleNav = (t) => {
         navigate('/mainpage' + t.ref);
-        setTitle(t)
+        //setTitle(t)
         onClose();
     }
   return (
@@ -114,7 +116,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       </Flex>
       {LinkItems.map((link) => (
         <NavItem key={link.name} icon={link.icon} name = {link.name} onClick = {() => HandleNav(link)}>
-          {link.name}
+          {t(link.name)}
         </NavItem>
       ))}
     </Box>
@@ -125,44 +127,20 @@ interface NavItemProps extends FlexProps {
   icon: IconType;
   children: ReactText;
 }
-/*const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
-  return (
-    <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: 'cyan.400',
-          color: 'white',
-        }}
-        {...rest}>
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: 'white',
-            }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
-    </Link>
-  );
-};*/
+
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+  const {storeInfo, setStoreInfo} = useStoreAdmin();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const HandleLogOut = () => {
     localStorage.removeItem("login");
+    localStorage.removeItem("signup");
+    localStorage.removeItem("jwt");
+    setStoreInfo(null);
     navigate('/login')
   }
   return (
@@ -195,13 +173,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         Logo
       </Text>
 
-      <HStack spacing={{ base: '0', md: '6' }}>
-        <IconButton
-          size="lg"
-          variant="ghost"
-          aria-label="open menu"
-          icon={<FiBell />}
-        />
+      <HStack spacing={{ base: '2', md: '8' }}>
+        <Box display={{base: 'none', md: 'flex'}}>
+          <LanguageSelector/>
+        </Box>
         <Flex alignItems={'center'}>
           <Menu>
             <MenuButton
@@ -210,7 +185,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               _focus={{ boxShadow: 'none' }}>
               <HStack>
                 <VStack
-                  display={{ base: 'none', md: 'flex' }}
+                  display= 'flex'
                   alignItems="flex-start"
                   spacing="1px"
                   ml="2">
@@ -219,7 +194,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                     Admin
                   </Text>
                 </VStack>
-                <Box display={{ base: 'none', md: 'flex' }}>
+                <Box display='flex'>
                   <FiChevronDown />
                 </Box>
               </HStack>
@@ -227,7 +202,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             <MenuList
               bg={useColorModeValue('white', 'gray.900')}
               borderColor={useColorModeValue('gray.200', 'gray.700')}>
-              <MenuItem onClick = {HandleLogOut}>Sign out</MenuItem>
+              <MenuItem onClick = {HandleLogOut}>{t("nav.signout")}</MenuItem>
             </MenuList>
           </Menu>
         </Flex>

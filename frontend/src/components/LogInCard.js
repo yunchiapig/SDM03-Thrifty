@@ -6,6 +6,7 @@ import {
   Box,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Input,
   Checkbox,
   Stack,
@@ -14,30 +15,72 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import Spinner from './Spinner';
 import jwt_decode from "jwt-decode";
 import instance from '../api';
+import { useStoreAdmin } from '../hooks/useStoreAdmin';
+import { useTranslation } from 'react-i18next';
 
 export default function SimpleCard() {
+  const { t } = useTranslation();
+  const {loading, setLoading, setStoreInfo, setJwt} = useStoreAdmin();
   const navigate = useNavigate();
   const [account, setAccount] = useState('');
   const [password, setPassword] = useState('');
+  const [accountErr, setAccountErr] = useState('');
+  const [passwordErr, setPasswordErr] = useState('');
 
+  const FormCheck = () => {
+    let pass = true
+    //email
+    if (account == ''){
+        setAccountErr('signup.inputBlank')
+        pass = false
+    }
+    else if (!/^[^\s@~`!#$%^&*()\-+={}[\]]+@[^\s@]+\.[^\s@]+$/.test(account)){
+       setAccountErr('signup.emailErr')
+       pass = false
+    }
+    else {
+        setAccountErr('')
+    }
+    //password
+    if (password == ''){
+        setPasswordErr('signup.inputBlank')
+        pass = false
+    }
+    else {
+        setPasswordErr('')
+    }
+    
+    return pass
+  }
   const HandleSubmit = async (event) => {
-        
+    if(!FormCheck()) {
+      return
+    }
+    setLoading(true);
     const data = 
     { 'email': account, 
     'password': password}
     await instance.post('api/1.0/admin/signin', data)
-    .then(res => {
-       /*console.log(jwt_decode(res.data.thriftyAdminJWT))*/
+    .then((res) => {
         localStorage.setItem('jwt', res.data.thriftyAdminJWT)
-        localStorage.setItem('store_info', JSON.stringify(jwt_decode(res.data.thriftyAdminJWT).data));
+        setJwt(res.data.thriftyAdminJWT)
+        const data = jwt_decode(res.data.thriftyAdminJWT).data
+        localStorage.setItem('store_info', JSON.stringify({_id: data.storeID, email: data.email}));
+        setStoreInfo({_id: data.storeID, email: data.email})
         localStorage.removeItem("login");
         navigate('/mainpage/ProductManagement');
     })
+    .catch((e) => {
+      console.log(e)
+      setAccountErr('login.error')
+      setPasswordErr('login.error')
+    })
+    setLoading(false);
   }
   return (
-    
     <Box
       rounded={'lg'}
       w = '65%'
@@ -46,13 +89,15 @@ export default function SimpleCard() {
       boxShadow={'lg'}
       p={8}>
       <Stack spacing={6}>
-        <FormControl id="email">
-          <FormLabel>Account</FormLabel>
-          <Input type="email" value={account} onChange={e => setAccount(e.target.value)}/>
+        <FormControl id="email" isInvalid={accountErr}>
+          <FormLabel>{t('login.account')}</FormLabel>
+          <Input type="email" borderColor='whiteAlpha' value={account} onChange={e => setAccount(e.target.value)}/>
+          <FormErrorMessage>{t(accountErr)}</FormErrorMessage>
         </FormControl>
-        <FormControl id="password">
-          <FormLabel>Password</FormLabel>
-          <Input type="password" value={password} onChange={e => setPassword(e.target.value)}/>
+        <FormControl id="password" isInvalid={accountErr}>
+          <FormLabel>{t('login.password')}</FormLabel>
+          <Input type="password" borderColor='whiteAlpha' value={password} onChange={e => setPassword(e.target.value)}/>
+          <FormErrorMessage>{t(passwordErr)}</FormErrorMessage>
         </FormControl>
         <Stack spacing={4}>
           {/*<Stack
@@ -70,7 +115,7 @@ export default function SimpleCard() {
             }}
             onClick={HandleSubmit}
             >
-            Sign in
+            {t('login.login')}
           </Button>
           <Button
             bg= '#72A8DB'
@@ -79,7 +124,7 @@ export default function SimpleCard() {
               bg: '#85C4FF',
             }}>
             <Link to = '/signup'>
-              New account
+            {t('login.new')}
             </Link>
           </Button>
         </Stack>
