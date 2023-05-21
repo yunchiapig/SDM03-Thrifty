@@ -2,12 +2,14 @@ import {AlignLeftOutlined, DownOutlined} from '@ant-design/icons';
 import { Box, Circle, HStack, VStack } from '@chakra-ui/react';
 import { Input,Select, Checkbox, Col, Row, Badge } from 'antd';
 import { useEffect, useState } from 'react';
+import { useTranslation } from "react-i18next";
 // import type { SelectProps } from 'antd';
 
 export default function Filter({filterOptions, filteredValues, setFilteredValues}){
     const [isOpen, setIsOpen] = useState(false);
     const [filterBottom, setFilterBottom] = useState(0); 
     const [filteredCnt, setFilteredCnt] = useState(0);
+    const [t, i18n] = useTranslation();
 
     const itemOptions = filterOptions.item.map((option)=>{
         return({label: option, value: option})
@@ -53,7 +55,7 @@ export default function Filter({filterOptions, filteredValues, setFilteredValues
                 <HStack justifyContent={'space-between'} onClick={handleClick} >
                     <AlignLeftOutlined/>
                     <Badge count={filteredCnt? filteredCnt:0} offset={[-99, 0]} color={'#13c2c2'}>
-                        <p style={{'left':0}}>篩選食物類別</p>
+                        <p style={{'left':0}}>{t('categoryFilter')}</p>
                     </Badge>
                     <DownOutlined style={{right: 0}}/>
                 </HStack>

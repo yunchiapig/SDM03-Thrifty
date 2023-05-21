@@ -1,0 +1,36 @@
+{
+    "language": "en",
+    "toggle": {
+        "map": "Map",
+        "list": "List"
+    },
+    "categoryFilter": "Food Category Filter",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "Hi": "Hi, ",
+    "exclamation": "!",
+    "logout": "Log Out",
+    "loginCard": {
+        "title": "Log In to Your Account",
+        "subtitle": "Don't have an account?",
+        "signupLink": "Sign up",
+        "email": "Email",
+        "password": "Password",
+        "rememberMe": "Remember me",
+        "forgotPassword": "Forgot password?",
+        "loginButton": "Login",
+        "orContinueWith": "or continue with"
+    },
+    "signupCard": {
+        "title": "Sign Up for an Account",
+        "subtitle": "to enjoy all of our features ✌️",
+        "accountName": "Account Name",
+        "emailAddress": "Email Address",
+        "password": "Password",
+        "passwordValid": "Valid password.",
+        "passwordError": "Password should contain 8 to 20 characters, with at least one numeric digit, one uppercase and one lowercase letter.",
+        "signupButton": "Sign Up",
+        "alreadyaUser": "Already a user?",
+        "loginLink": "Login"
+    }
+}

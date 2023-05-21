@@ -4,13 +4,19 @@ import Map from '../Components/Map';
 import Toggle from 'react-styled-toggle';
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 // import axios from "axios";
 
-export default function HomePage({filteredValues, userLocation, mapCenter, setMapCenter, storesData, storesDataforList}){
+export default function HomePage({filteredValues, userLocation, mapCenter, setMapCenter, storesData, setOnHomePage, isLoggedIn}){
     const [ifMapMode, setIfMapMode] = useState(true);
     const [filteredData, setFilteredData] = useState(storesData);
     const [filteredDoubleColData, setFilteredDoubleColData] = useState([]);
     const navigate = useNavigate();
+    const { t } = useTranslation();
+
+    useEffect(()=>{
+        setOnHomePage(true);
+    },[])
 
     useEffect(()=>{
         if(!filteredValues.item.length && !filteredValues.store.length){
@@ -48,7 +54,7 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
     return(
         <Box ml={5}>
             <Flex>
-                <Toggle labelLeft='Map' labelRight='List' style={{zIndex:10}}
+                <Toggle labelLeft={t('toggle.map')} labelRight={t('toggle.list')} style={{zIndex:10}}
                 backgroundColorUnchecked='#82BFF3'backgroundColorChecked='#76CFCF'
                 onChange={()=>{setIfMapMode(!ifMapMode)}}/>
             </Flex>
@@ -60,26 +66,29 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
                         <Box w='50%'>
                             <Map userLocation={userLocation} storesData={filteredData} mapCenter={mapCenter} setMapCenter={setMapCenter}/>
                         </Box>
-                        <Box w='50%'>
-                            {filteredData.map((storeData, i)=>{ return(
-                            <Flex onClick={()=>{
-                                navigate(`/store/${storeData._id}`, 
-                                    { state: { storeData: storeData } });}} 
-                                w={{ sm: '100%', md: '100%' }} key={i} >
-                                <StoreSmallCard storeData={storeData}/>
-                            </Flex>)
-                            })}
-                        </Box>
+                        <div style={{width: '50%', height: '75vh', overflowY: 'scroll'}}>
+                            <Box>
+                                {filteredData.map((storeData, i)=>{ return(
+                                <Flex onClick={()=>{
+                                    navigate(`/store/${storeData._id}`, 
+                                        { state: { storeData: storeData } });}} 
+                                    w={{ sm: '100%', md: '100%' }} key={i} >
+                                    <StoreSmallCard storeData={storeData} isLoggedIn={isLoggedIn}/>
+                                </Flex>)
+                                })}
+                            </Box>
+                        </div>
                     </Flex>:
                     <Box w="100%">
                         {filteredDoubleColData.map((twoStoresData, i)=>{ return(
                         <Flex key={i}>
                             {twoStoresData.map((storeData, ii)=>{return(
-                            <Flex onClick={()=>{
+                            <Flex onClick={(e)=>{
+                                e.stopPropagation();
                                 navigate(`/store/${storeData._id}`, 
                                     { state: { storeData: storeData } });}} 
                                 w={{ sm: '100%', md: '50%' }} key={ii}>
-                                <StoreSmallCard storeData={storeData}/>
+                                <StoreSmallCard storeData={storeData} isLoggedIn={isLoggedIn}/>
                             </Flex>
                             )})}
                         </Flex>)

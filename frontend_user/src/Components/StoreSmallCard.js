@@ -7,9 +7,12 @@ import {
     Text,
     useColorModeValue,
 } from '@chakra-ui/react';
+import { useState } from 'react';
+import Heart from "react-animated-heart";
+import axios from 'axios';
+import jwt_decode from "jwt-decode";
 // import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs';
 // import Rating from './Rating';
-
 
 const imageURL = {
     'Family': "https://images.1111.com.tw/discussPic/63/51562263_97023180.2701459.jpg",
@@ -17,10 +20,51 @@ const imageURL = {
     'others': "https://pics.craiyon.com/2023-05-09/756e18f59e1d499a8eba020cb4106f00.webp"
 }
 
-export default function StoreSmallCard({storeData}) {
+export default function StoreSmallCard({storeData, isLoggedIn}) {
+    let is_favorite = false;
+    if (isLoggedIn) {
+        if (localStorage.getItem('favorite_stores').includes(storeData._id)) {
+            is_favorite = true;
+        }
+    }
+
+    const [isClick, setClick] = useState(is_favorite);
+    
+    function handleHeartClick(e) {
+        e.stopPropagation();
+        setClick(!isClick);
+        if (!isClick) {
+            let favorite_stores = localStorage.getItem('favorite_stores');
+            favorite_stores += storeData.id;
+            localStorage.setItem('favorite_stores', favorite_stores);
+            const data = { "userID": localStorage.getItem('_id'), "storeID": storeData._id, "type": "add" };
+            console.log(data);
+            axios.put('http://52.193.252.15/api/1.0/user/fav', data, { crossdomain: true })
+                .then(response => {
+                    console.log(jwt_decode(response.data.message));
+                    // setCurrentUserInfo(jwt_decode(response.data.message));
+                })
+                .catch(error => { console.log(error);});
+        }
+        else {
+            let favorite_stores = localStorage.getItem('favorite_stores');
+            favorite_stores = favorite_stores.replace(storeData.id, '');
+            localStorage.setItem('favorite_stores', favorite_stores);
+            const data = { "userID": localStorage.getItem('_id'), "storeID": storeData._id, "type": "remove" };
+            console.log(data);
+            axios.put('http://52.193.252.15/api/1.0/user/fav', data, { crossdomain: true })
+                .then(response => {
+                    console.log(jwt_decode(response.data.message));
+                    // setCurrentUserInfo(jwt_decode(response.data.message));
+                })
+                .catch(error => { console.log(error);});
+        }
+    }
+
     var url = imageURL['others']
     if (storeData.category === "全家") {url = imageURL['Family']}
     else if (storeData.category === "7-11") { url = imageURL['711']}
+    else { url = imageURL['others']}
 
     return (
         <Box py={4} px={5} w={{ sm: '100%', md: '100%' }}>
@@ -52,6 +96,11 @@ export default function StoreSmallCard({storeData}) {
                     <Text  color={'gray.500'} size="sm" mb={4}> {storeData.address} </Text>
                     <Text  color={'gray.500'} size="sm" mb={4}> {storeData.tel} </Text>
                 </Stack>
+                {isLoggedIn && (
+                <Flex>
+                    <Heart isClick={isClick} onClick={handleHeartClick} />
+                </Flex>
+                )}
             </Stack>
         </Box>
     );

@@ -17,6 +17,9 @@ const healthcheckRouter = require('./routes/healthcheck');
 // user routers
 const userRouter = require('./routes/user_info_api');
 const userGoogleRouter = require('./routes/user_google_api');
+const getStoresRouter = require('./routes/get_stores_api');
+const getFoodsRouter = require('./routes/get_foods_api');
+const userFavStoresRouter = require('./routes/fav_stores_api');
 
 // admin routers
 const storeAdminRouter = require('./routes/store_info_api');
@@ -24,10 +27,6 @@ const foodAdminRouter = require('./routes/food_info_api');
 const stockAdminRouter = require('./routes/stock_info_api');
 const signUpAdminRouter = require('./routes/admin_signup_api');
 const signInAdminRouter = require('./routes/admin_signin_api');
-
-// get routers
-const getStoresRouter = require('./routes/get_stores_api');
-const getFoodsRouter = require('./routes/get_foods_api');
 
 const app = express();
 
@@ -49,6 +48,9 @@ app.use('/healthcheck', healthcheckRouter);
 // user routers
 app.use('/api/1.0/user', userRouter);
 app.use('/api/1.0/user/google', userGoogleRouter);
+app.use('/api/1.0/user/stores', getStoresRouter);
+app.use('/api/1.0/user/foods', getFoodsRouter);
+app.use('/api/1.0/user/fav', userFavStoresRouter);
 
 // admin routers
 app.use('/api/1.0/admin/store', storeAdminRouter);
@@ -56,10 +58,6 @@ app.use('/api/1.0/admin/food', foodAdminRouter);
 app.use('/api/1.0/admin/stock', stockAdminRouter);
 app.use('/api/1.0/admin/signup', signUpAdminRouter);
 app.use('/api/1.0/admin/signin', signInAdminRouter);
-
-// get routers
-app.use('/api/1.0/stores', getStoresRouter);
-app.use('/api/1.0/foods', getFoodsRouter);
 
 // swagger ui
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

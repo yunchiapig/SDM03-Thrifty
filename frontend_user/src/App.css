@@ -1,17 +1,3 @@
-/* .App {
-  text-align: center;
-} */
-/* img {
-  flex: 1;
-  width: null;
-  height: null;
-  resize: 'contain';
-} */
-
-/* .logo {
-  cursor: pointer;
-} */
-
 .sticky {
   position: fixed;
   width: 100%-20rem;
@@ -32,6 +18,12 @@
   width:800px
 }
 
+.food-category-menu-option:hover{
+  color: green;
+  text-decoration:overline ;
+  font-weight: bold;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -41,6 +33,18 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.info-window-text {
+  line-height: 200%;
+  font-weight: bold;
+}
+
+.info-window-link {
+  color: blue;
+  text-decoration: underline;
+  line-height: 200%;
+  font-weight: bold;
 }
 
 /* .App-link {

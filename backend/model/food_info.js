@@ -28,10 +28,14 @@ let foodInfoSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  discount_rate: {
+    type: String,
+    required: true
+  },
   description: {
     type: String
   },
-  mainImage: {
+  img_url: {
     type: String,
   }
   // images: {

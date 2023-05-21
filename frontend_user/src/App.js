@@ -8,19 +8,26 @@ import StorePage from './Containers/StorePage';
 import LoginPage from './Containers/LoginPage';
 import SignupPage from './Containers/SignupPage';
 import { Routes, Route } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from "axios";
+import { use } from 'i18next';
 
 
 function App() {
   const [filterOptions, setFilterOptions] = useState({'store':[], 'item':[]});
   const [filteredValues, setFilteredValues] = useState({'store':[], 'item':[]});
   const [storesData, setStoresData] = useState([]);
-  const [storesDataforList, setStoresDataforList] = useState([]);
   const DEFAULT_LOCATION = { lat: 25.03, lng: 121.55};
   const [userLocation, setUserLocation] = useState(DEFAULT_LOCATION);
   const [mapCenter, setMapCenter] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUserInfo, setCurrentUserInfo] = useState(null);
+  const { i18n } = useTranslation();
+  const [onHomePage, setOnHomePage] = useState(false); 
+
+  // useEffect(()=>{
+  //   setLanguageValue(i18n.language);
+  // }, [i18n.language])
 
   useEffect(()=>{
     console.log('storesData', storesData)
@@ -69,15 +76,10 @@ function App() {
         .then(response => {
           console.log(response.data);
       });
-      axios.get(`http://52.193.252.15/api/1.0/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
+      axios.get(`http://52.193.252.15/api/1.0/user/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
         .then(response => {
           var stores = response.data.message
           setStoresData(stores);
-          const data = stores.reduce(function (rows, key, index) { 
-              return (index % 2 === 0 ? rows.push([key]) 
-              : rows[rows.length-1].push(key)) && rows;
-          }, []);
-          setStoresDataforList(data);
           
           var storeCategories = stores.map(store => store.category);
           storeCategories = storeCategories.filter(
@@ -104,31 +106,33 @@ function App() {
   }
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("user");
-    console.log(loggedInUser);
-    if (loggedInUser) {
-      setIsLoggedIn(true);
-      setCurrentUserInfo(loggedInUser);
-      // localStorage.clear();
+    if (isLoggedIn) {
+      const loggedInUser = localStorage.getItem("name");
+      console.log(loggedInUser);
+      if (loggedInUser) {
+        setIsLoggedIn(true);
+        setCurrentUserInfo(loggedInUser);
+        // localStorage.clear();
+      }
     }
   }, [isLoggedIn]);
 
   return (
     <VStack >
       <Box w="100%" bg={useColorModeValue('gray.100', 'gray.900')}minH="100vh">
-        <NavBar zIndex={100} filterOptions={filterOptions} 
+        <NavBar zIndex={100} filterOptions={filterOptions} onHomePage={onHomePage}
           filteredValues={filteredValues} setFilteredValues={setFilteredValues} 
-          isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} currentUserInfo={currentUserInfo}/>
+          isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} currentUserInfo={currentUserInfo} />
         {/* <SimpleSidebar/> */}
         <Box w="100%" h="19vh"/>
         
         <Routes>
-          <Route path="/" element={<HomePage filteredValues={filteredValues}
+          <Route path="/" element={<HomePage filteredValues={filteredValues} setOnHomePage={setOnHomePage}
               userLocation={userLocation} mapCenter={mapCenter} setMapCenter={setMapCenter}
-              storesData={storesData} storesDataforList={storesDataforList}/>}/>
-          <Route path="/store/:id" element={ <StorePage/>} />
-          <Route path="/login" element={ <LoginPage currentUserInfo={currentUserInfo} setCurrentUserInfo={handleLogin}/>} />
-          <Route path="/signup" element={ <SignupPage/>} />
+              storesData={storesData} isLoggedIn={isLoggedIn} />}/>
+          <Route path="/store/:id" element={ <StorePage setOnHomePage={setOnHomePage} />} />
+          <Route path="/login" element={ <LoginPage currentUserInfo={currentUserInfo} setCurrentUserInfo={handleLogin} setOnHomePage={setOnHomePage}/>} />
+          <Route path="/signup" element={ <SignupPage setOnHomePage={setOnHomePage}/>} />
         </Routes>
       </Box>
     </VStack>

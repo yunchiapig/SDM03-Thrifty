@@ -10,9 +10,11 @@ import {
 } from '@chakra-ui/react'
 import { forwardRef, useRef } from 'react'
 import { HiEye, HiEyeOff } from 'react-icons/hi'
+import { useTranslation } from 'react-i18next'
 
 export const PasswordField = forwardRef(({value, onChange}, ref) => {
   const { isOpen, onToggle } = useDisclosure()
+  const { t, i18n } = useTranslation()
   const inputRef = useRef(null)
   const mergeRef = useMergeRefs(inputRef, ref)
   const onClickReveal = () => {
@@ -25,7 +27,7 @@ export const PasswordField = forwardRef(({value, onChange}, ref) => {
   }
   return (
     <FormControl>
-      <FormLabel htmlFor="password">Password</FormLabel>
+      <FormLabel htmlFor="password">{t('loginCard.password')}</FormLabel>
       <InputGroup>
         <InputRightElement>
           <IconButton

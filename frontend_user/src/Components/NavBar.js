@@ -6,10 +6,13 @@ import { Input } from "antd";
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Filter from './Filter';
+import LanguageSelector from './LanguageSelector';
+import { useTranslation } from 'react-i18next';
 
-export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filterOptions, filteredValues, setFilteredValues}) {
+export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filterOptions, filteredValues, setFilteredValues, onHomePage}) {
   const navigate = useNavigate();
   const { isOpen, onToggle } = useDisclosure();
+  const { t } = useTranslation();
   
   // useEffect(() => {
   //   console.log(isLoggedIn);
@@ -53,8 +56,11 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
           <Flex display={{ base: 'none', md: 'flex' }} ml={10} w="100%">
             <Square w="10vw"/>
             <Square>
-              <Filter filterOptions={filterOptions} 
-                filteredValues={filteredValues} setFilteredValues={setFilteredValues}/>
+              {onHomePage?
+                <Filter filterOptions={filterOptions}
+                  filteredValues={filteredValues} setFilteredValues={setFilteredValues}/>
+                :<></>
+              }
             </Square>
           </Flex>
         </Flex>
@@ -65,12 +71,13 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
+          <LanguageSelector />
           <Button
             as={'a'}
             fontSize={'sm'}
             fontWeight={400}
             variant={'link'}>
-            Hi, {localStorage.getItem('user')}!
+            {t('Hi')} {localStorage.getItem('name')} {t('exclamation')}
           </Button>
           <Button
             as={'a'}
@@ -84,7 +91,7 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
               bg: 'pink.300',
             }}
             onClick={handleLogOut}>
-            Log out
+            {t('logout')}
           </Button>
           </Stack>
           ) : (
@@ -93,13 +100,14 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
+          <LanguageSelector />
           <Button
             as={'a'}
             fontSize={'sm'}
             fontWeight={400}
             variant={'link'}
             href={'/login'}>
-            Log In
+            {t('login')}
           </Button>
           <Button
             as={'a'}
@@ -112,7 +120,7 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
             _hover={{
               bg: 'pink.300',
             }}>
-            Sign Up
+            {t('signup')}
           </Button>
         </Stack>)
         }

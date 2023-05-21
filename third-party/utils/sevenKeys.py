@@ -71,7 +71,8 @@ def initializeSeven(store_infos):
             'location': {
                 'type': 'Point', 
                 'coordinates':[float(X[:3]+'.'+X[3:]), float(Y[:2]+'.'+Y[2:])]
-                }
+                },
+            'img_url': 'https://corp.7-eleven.com/images/media_assets/7_Eleven_Vertical_2022_RBG_thumb_1639377127_5694.png'
         }
         sevenKeys.append(id)
         msgs.append(store)
