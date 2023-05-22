@@ -178,7 +178,7 @@ import {
 
   
     return (
-        <Box my = '10vh' w = '80%'>
+        <Box my = {{md: '10vh', sm: '5vh'}} w = {{'2xl': '70%', md: '80%', sm: '80%'}}>
             <Box
                 rounded={'lg'}
                 bg={useColorModeValue('white', 'gray.700')}

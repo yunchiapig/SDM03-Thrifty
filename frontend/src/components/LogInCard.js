@@ -83,9 +83,9 @@ export default function SimpleCard() {
   return (
     <Box
       rounded={'lg'}
-      w = '65%'
+      w = {{'2xl': '50%', xl: '60%',lg: '65%', md: '70%', sm: '70%'}}
       bg={useColorModeValue('white', 'gray.700')}
-      mt = '30vh'
+      mt = {{md: '30vh', sm: '5vh'}}
       boxShadow={'lg'}
       p={8}>
       <Stack spacing={6}>
