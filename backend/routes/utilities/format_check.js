@@ -81,10 +81,10 @@ function checkLatitude(latitude, res){
 }
 
 // 檢查是否有 mainImage
-function checkMainImage(mainImage, res){
-  if (mainImage === undefined){
+function checkMainImage(img_url, res){
+  if (img_url === undefined){
     res.status(400).send(
-      {message: "沒有 mainImage，請提供照片。"}
+      {img_url: "沒有 mainImage，請提供照片。"}
     );
     return true; // 代表有錯誤
   }
@@ -148,6 +148,13 @@ function checkStoreInfo(req, res, next){
 
 // 檢查店家更新資訊格式
 function checkStoreUpdateInfo(req, res, next){
+  if (req.body.updateInfo === ""){
+    req.updateInfo = {};
+    next();
+    return;
+  }
+
+  console.log(req.body.updateInfo);
   req.body.updateInfo = JSON.parse(req.body.updateInfo);
 
   // 取得要更新的欄位
@@ -307,8 +314,8 @@ function checkFoodInfo(req, res, next){
     return;
   }
 
-  const mainImage = req.files.mainImage;
-  if (checkMainImage(mainImage, res)){
+  const img_url = req.files.img_url;
+  if (checkMainImage(img_url, res)){
     return;
   }
 
