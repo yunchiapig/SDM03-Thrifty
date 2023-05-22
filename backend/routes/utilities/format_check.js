@@ -153,8 +153,7 @@ function checkStoreUpdateInfo(req, res, next){
     next();
     return;
   }
-
-  console.log(req.body.updateInfo);
+  
   req.body.updateInfo = JSON.parse(req.body.updateInfo);
 
   // 取得要更新的欄位
