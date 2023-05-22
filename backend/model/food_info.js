@@ -33,7 +33,7 @@ let foodInfoSchema = new mongoose.Schema({
   },
   discount_rate: {
     type: String,
-    required: true
+    // required: true
   },
   description: {
     type: String
