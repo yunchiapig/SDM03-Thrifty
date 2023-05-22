@@ -43,19 +43,19 @@ export default ({ isOpen, onOpen, onClose, item, certain, addToTag}) => {
     const {store, stocks, setStocks, loading, setLoading, setDrawerMount, getItems, storeInfo, jwt, checkTokenExpiration} = useStoreAdmin();
     const firstField = React.useRef();
     const QtyRef = React.useRef();
-    const [name, setName] = useState(item?.food.name || "");
+    const [name, setName] = useState(item?.foodInfo.name || "");
     const [nameErr, setNameErr] =useState(false)
-    const [tag, setTag] = useState(item?.food.tag || addToTag || "");
+    const [tag, setTag] = useState(item?.foodInfo.tag || addToTag || "");
     const [tagErr, setTagErr] =useState(false)
     const [quantity, setQuantity] = useState(item?.quantity || "0");
     const [qtyErr, setQtyErr] =useState(false)
-    const [discountedPrice, setDiscountedPrice] = useState(item?.food.discount_price || "");
+    const [discountedPrice, setDiscountedPrice] = useState(item?.foodInfo.discount_price || "");
     const [dPriceErr, setDPriceErr] =useState(false)
-    const [price, setPrice] = useState(item?.food.original_price || "");
+    const [price, setPrice] = useState(item?.foodInfo.original_price || "");
     const [priceErr, setPriceErr] =useState(false)
-    const [description, setDescription] = useState(item?.food.description || "");
+    const [description, setDescription] = useState(item?.foodInfo.description || "");
     const [desErr, setDesErr] =useState(false)
-    const [initialImg, setInitialImg] = useState(item?.food ? 'https://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + item.food.mainImage: undefined)
+    const [initialImg, setInitialImg] = useState(item?.foodInfo ? 'https://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + item.foodInfo.mainImage: undefined)
     const [image, setImage] = useState(null);
     const [imgErr, setImgErr] =useState(false)
 
@@ -209,7 +209,7 @@ export default ({ isOpen, onOpen, onClose, item, certain, addToTag}) => {
         if (image !== null) {
             formData.append('mainImage', image);
         }
-        formData.append('foodID', item.food._id);
+        formData.append('foodID', item.foodInfo._id);
         let updateInfo = {
             name,
             category: "其他",

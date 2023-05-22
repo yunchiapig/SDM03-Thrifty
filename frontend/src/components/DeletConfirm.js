@@ -28,13 +28,13 @@ export default ({ isOpen, onOpen, onClose, item }) => {
       },
       params: {
           storeID: storeInfo.storeID,
-          foodID: item.food._id
+          foodID: item.foodInfo._id
       }
     })
     if (status === 200) {
         await getItems();
         toast({
-            title: `已成功刪除 ${item.food.name}`,
+            title: `已成功刪除 ${item.foodInfo.name}`,
             status: 'success',
             isClosable: true,
         })
@@ -53,7 +53,7 @@ export default ({ isOpen, onOpen, onClose, item }) => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              確定刪除 {item.food.name} ?
+              確定刪除 {item.foodInfo.name} ?
             </AlertDialogHeader>
 
             {/*<AlertDialogBody>
