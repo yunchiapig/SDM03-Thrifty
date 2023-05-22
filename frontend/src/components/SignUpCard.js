@@ -26,7 +26,7 @@ import {
 
   
   export default function SignupCard() {
-    const {loading, setLoading, setStoreInfo} = useStoreAdmin();
+    const {loading, setLoading, setStoreInfo, setJwt} = useStoreAdmin();
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
@@ -162,6 +162,7 @@ import {
         await instance.post('api/1.0/admin/signup', data)
         .then(res => {
             localStorage.setItem('jwt', res.data.thriftyAdminJWT)
+            setJwt(res.data.thriftyAdminJWT)
             const data = jwt_decode(res.data.thriftyAdminJWT).data
             localStorage.setItem('store_info', JSON.stringify({_id: data.storeID, email: data.email}));
             setStoreInfo({_id: data.storeID, email: data.email})
@@ -243,7 +244,7 @@ import {
                     <Input borderColor='whiteAlpha' type = 'text' value={lon} onChange={e => setLon(e.target.value)}/>
                     <FormErrorMessage>{t(lonErr)}</FormErrorMessage>
                 </FormControl>
-                <FormControl id="address" isInvalid = {latErr} isRequired>
+                <FormControl id="lat" isInvalid = {latErr} isRequired>
                     <FormLabel>{t('signup.lat')}</FormLabel>
                     <Input borderColor='whiteAlpha' type = 'text' value={lat} onChange={e => setLat(e.target.value)}/>
                     <FormErrorMessage>{t(latErr)}</FormErrorMessage>
