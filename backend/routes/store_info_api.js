@@ -72,7 +72,7 @@ router.get('/', checkID, async function(req, res, next) {
 // 建立店家資訊
 router.post('/', 
   upload.fields([
-    {name: 'mainImage', maxCount: 1},
+    {name: 'mainpage_img_url', maxCount: 1},
     // {name: 'images'}
   ]),
   checkStoreInfo,
@@ -87,7 +87,8 @@ router.post('/',
     location: JSON.parse(req.body.location),
     updateDate: Date.now(),
     stocks: [],
-    mainImage: req.files.mainImage[0].key,
+    mainpage_img_url: req.files.mainpage_img_url[0].key,
+    storepage_img_url: req.files.mainpage_img_url[0].key
     // images: req.files.images ? req.files.images.map(file => file.key) : []
   });
 
@@ -110,7 +111,7 @@ router.post('/',
 router.put('/', 
   JWTValidate, 
   upload.fields([
-    {name: 'mainImage', maxCount: 1},
+    {name: 'mainpage_img_url', maxCount: 1},
     // {name: 'images'}
   ]),
   checkStoreUpdateInfo,
@@ -129,15 +130,15 @@ router.put('/',
     // 透過 ID 更新店家資訊
     try {
       // 更新主要圖片
-      if (req.files.mainImage) {
-        updateInfo.mainImage = req.files.mainImage[0].key;
+      if (req.files.mainpage_img_url) {
+        updateInfo.mainpage_img_url = req.files.mainpage_img_url[0].key;
         
         // 刪除舊的主要圖片
-        const oldMainImage = await StoreInfo.findById(storeID).select('mainImage -_id').lean();
-        if (!oldMainImage) {
+        const oldMainImageUrl = await StoreInfo.findById(storeID).select('mainpage_img_url -_id').lean();
+        if (!oldMainImageUrl) {
 
           // 刪除剛剛上傳的主要圖片
-          deleteImage(updateInfo.mainImage);
+          deleteImage(updateInfo.mainpage_img_url);
 
           res.status(400).send(
             {message: "查無店家資訊"}
@@ -145,7 +146,7 @@ router.put('/',
           return;
         }
 
-        deleteImage(oldMainImage.mainImage);
+        deleteImage(oldMainImageUrl.mainpage_img_url);
       }
 
       // 更新其他圖片
@@ -188,8 +189,8 @@ router.delete('/', checkID, async function(req, res, next) {
 
   try {
     // 刪除舊的主要圖片
-    const oldMainImage = await StoreInfo.findById(storeID).select('mainImage -_id').lean();
-    deleteImage(oldMainImage.mainImage); 
+    const oldMainImageUrl = await StoreInfo.findById(storeID).select('mainpage_img_url -_id').lean();
+    deleteImage(oldMainImageUrl.mainpage_img_url); 
 
     // 刪除店家資訊
     const deleteResult = await StoreInfo.findByIdAndDelete(storeID);
