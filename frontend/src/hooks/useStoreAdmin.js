@@ -43,7 +43,7 @@ const StoreAdminProvider = (props) => {
       //const jwt = localStorage.getItem('jwt')
       setLoading(true);
       const res
-        = await instance.get('/api/1.0/foods', { 
+        = await instance.get('/api/1.0/admin/stock', { 
           params: {  
               id: storeInfo._id
       },}).catch( e => {
@@ -54,21 +54,23 @@ const StoreAdminProvider = (props) => {
       )
       // from stock to items
       setLoading(false);
-      let tempStocks = res?.data.message;
+      let tempStocks = res?.data.data;
+      console.log(tempStocks)
       if(res?.status === 200) {
         // sort items by tags
         let stockList = [];
         tempStocks.forEach(e => {
           let added = false
           stockList.forEach(s => {
-            if(s.tag === e.food.tag) {
+            console.log(s)
+            if(s.tag === e.foodInfo.tag) {
               s.items.push(e);
               added = true;
               return false;
             }
           })
           if(added === false) {
-            stockList.push({tag: e.food.tag, items: [e]});
+            stockList.push({tag: e.foodInfo.tag, items: [e]});
           }
           setStocks(stockList);
         });

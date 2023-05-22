@@ -30,7 +30,7 @@ export default ({typeStocks, r, index}) => {
                 null}
             </Box>
             {typeStocks.items.map(s => {
-                return <ItemCard item = {s} key = {s.food._id}/>
+                return <ItemCard item = {s} key = {s.foodInfo._id}/>
             })}
         </Box>
     )

@@ -52,7 +52,7 @@ export default ({item}) => {
                 <Stack w = '75%'>
                     <CardBody h = '100%'>
                         <Box display = 'flex' h='35%'>
-                            <Heading size='md' mr={2}>{item.food.name}</Heading>
+                            <Heading size='md' mr={2}>{item.foodInfo.name}</Heading>
                             <Box className = "iconButton" bottom= {2} color='white' mx = {2} onClick={() => {setDrawerMount(true); updateOnOpen()}}>
                                 <Icon as={AiOutlineEdit} fontSize={18} fill='gray'/>
                             </Box>
@@ -65,12 +65,12 @@ export default ({item}) => {
                             <DeletConfirm isOpen = {deleteIsOpen} onOpen = {deleteOnOpen} onClose = {deleteOnClose} item={item}/>
                         </Box>
                         <Text w = '90%' h='45%' color='gray.600'>
-                            {item.food?.description}
+                            {item.foodInfo?.description}
                         </Text>
                         <Box display='flex' flexDirection='row' h='20%'>
                             <Box display='flex' flexDirection='row' w = '70%'>
-                                <Text as = 'b' textDecoration='line-through' color='darkgray'>${item.food.original_price}</Text>
-                                <Text as = 'b' color='crimson' mx={2}>${item.food.discount_price}</Text>
+                                <Text as = 'b' textDecoration='line-through' color='darkgray'>${item.foodInfo.original_price}</Text>
+                                <Text as = 'b' color='crimson' mx={2}>${item.foodInfo.discount_price}</Text>
                                 {/*<Tag backgroundColor='#b0e0e6' mx={3} borderRadius='full'>20% off</Tag>*/}
                             </Box>
                             <Box display='flex' w='40%'>
@@ -105,8 +105,8 @@ export default ({item}) => {
                         h='100%'
                         w='100%'
                         objectFit='cover'
-                        src= {'https://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + item.food.mainImage}
-                        alt= {item.food.name}
+                        src= {'https://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + item.foodInfo.mainImage}
+                        alt= {item.foodInfo.name}
                     />
                 </Box>
             </Card>
