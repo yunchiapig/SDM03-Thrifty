@@ -55,6 +55,9 @@ const StoreAdminProvider = (props) => {
       // from stock to items
       setLoading(false);
       let tempStocks = res?.data.data;
+      if(tempStocks === undefined) {
+        setStocks([]);
+      }
       console.log(tempStocks)
       if(res?.status === 200) {
         // sort items by tags
@@ -79,6 +82,7 @@ const StoreAdminProvider = (props) => {
   }
 
   const updateStoreInfo = async() => {
+    console.log(storeInfo)
     checkTokenExpiration();
     const res
     = await instance.get('/api/1.0/admin/store', { 
