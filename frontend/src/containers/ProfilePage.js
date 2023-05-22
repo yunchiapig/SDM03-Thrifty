@@ -113,6 +113,7 @@ export default () => {
         return pass
     }
     const HandleSave = async() => {
+        //console.log(jwt)
         if(!FormCheck()) {
             return
         }
@@ -141,8 +142,7 @@ export default () => {
             headers: {
                 'Authorization': `Bearer ${jwt}`,
                 'Content-Type': 'multipart/form-data'
-            },
-        })
+            }, }, { crossdomain: true })
         .then(async(res) => {
             await updateStoreInfo()
             toast({
@@ -150,6 +150,9 @@ export default () => {
                 status: 'success',
                 isClosable: true,
             })
+        })
+        .catch(e => {
+            //console.log(e)
         })
         
         setLoading(false);
