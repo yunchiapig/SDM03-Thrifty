@@ -39,7 +39,7 @@ export default function StoreSmallCard({storeData, isLoggedIn}) {
             localStorage.setItem('favorite_stores', favorite_stores);
             const data = { "userID": localStorage.getItem('_id'), "storeID": storeData._id, "type": "add" };
             console.log(data);
-            axios.put('http://52.193.252.15/api/1.0/user/fav', data, { crossdomain: true })
+            axios.put('https://52.193.252.15/api/1.0/user/fav', data, { crossdomain: true })
                 .then(response => {
                     console.log(jwt_decode(response.data.message));
                     // setCurrentUserInfo(jwt_decode(response.data.message));
@@ -52,7 +52,7 @@ export default function StoreSmallCard({storeData, isLoggedIn}) {
             localStorage.setItem('favorite_stores', favorite_stores);
             const data = { "userID": localStorage.getItem('_id'), "storeID": storeData._id, "type": "remove" };
             console.log(data);
-            axios.put('http://52.193.252.15/api/1.0/user/fav', data, { crossdomain: true })
+            axios.put('https://52.193.252.15/api/1.0/user/fav', data, { crossdomain: true })
                 .then(response => {
                     console.log(jwt_decode(response.data.message));
                     // setCurrentUserInfo(jwt_decode(response.data.message));

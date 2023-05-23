@@ -45,7 +45,7 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
   const handleSubmit = async e => {
     e.preventDefault();
     if (true) { // Error handling
-      axios.get(`http://52.193.252.15/api/1.0/user?email=${email}&password=${password}`, { crossdomain: true })
+      axios.get(`https://52.193.252.15/api/1.0/user?email=${email}&password=${password}`, { crossdomain: true })
           .then(response => {
               console.log(jwt_decode(response.data.message));
               setCurrentUserInfo(jwt_decode(response.data.message));
