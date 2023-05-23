@@ -7,10 +7,11 @@ import {
     Text,
     useColorModeValue,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Heart from "react-animated-heart";
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
+import { use } from 'i18next';
 // import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs';
 // import Rating from './Rating';
 
@@ -20,22 +21,27 @@ const imageURL = {
     'others': "https://pics.craiyon.com/2023-05-09/756e18f59e1d499a8eba020cb4106f00.webp"
 }
 
-export default function StoreSmallCard({storeData, isLoggedIn}) {
-    let is_favorite = false;
-    if (isLoggedIn) {
-        if (localStorage.getItem('favorite_stores').includes(storeData._id)) {
-            is_favorite = true;
-        }
-    }
+export default function StoreSmallCard({storeData, is_favorite}) {
+    // let is_favorite = false;
+    // if (isLoggedIn) {
+    //     if (localStorage.getItem('favorite_stores').includes(storeData._id)) {
+    //         is_favorite = true;
+    //     }
+    // }
+    // console.log(is_favorite);
+    const [isClick, setClick] = useState(false);
+    useEffect(() => {
+        setClick(is_favorite);
+    }, [is_favorite]);
 
-    const [isClick, setClick] = useState(is_favorite);
+    // console.log(isClick);
     
     function handleHeartClick(e) {
         e.stopPropagation();
         setClick(!isClick);
+        let favorite_stores = localStorage.getItem('favorite_stores');
         if (!isClick) {
-            let favorite_stores = localStorage.getItem('favorite_stores');
-            favorite_stores += storeData.id;
+            favorite_stores += storeData._id;
             localStorage.setItem('favorite_stores', favorite_stores);
             const data = { "userID": localStorage.getItem('_id'), "storeID": storeData._id, "type": "add" };
             console.log(data);
@@ -47,8 +53,7 @@ export default function StoreSmallCard({storeData, isLoggedIn}) {
                 .catch(error => { console.log(error);});
         }
         else {
-            let favorite_stores = localStorage.getItem('favorite_stores');
-            favorite_stores = favorite_stores.replace(storeData.id, '');
+            favorite_stores = favorite_stores.replace(storeData._id, '');
             localStorage.setItem('favorite_stores', favorite_stores);
             const data = { "userID": localStorage.getItem('_id'), "storeID": storeData._id, "type": "remove" };
             console.log(data);
@@ -96,7 +101,7 @@ export default function StoreSmallCard({storeData, isLoggedIn}) {
                     <Text  color={'gray.500'} size="sm" mb={4}> {storeData.address} </Text>
                     <Text  color={'gray.500'} size="sm" mb={4}> {storeData.tel} </Text>
                 </Stack>
-                {isLoggedIn && (
+                {(localStorage.getItem("name") !== null) && (
                 <Flex>
                     <Heart isClick={isClick} onClick={handleHeartClick} />
                 </Flex>

@@ -14,7 +14,7 @@ function LanguageSelector() {
             i18n.changeLanguage(e.target.value)
         }
         >
-            <option value="zh">繁體中文</option>
+            <option value="zh-TW">繁體中文</option>
             <option value="en">English</option>
         </Select>
     </Box>

@@ -9,7 +9,7 @@ import Filter from './Filter';
 import LanguageSelector from './LanguageSelector';
 import { useTranslation } from 'react-i18next';
 
-export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filterOptions, filteredValues, setFilteredValues, onHomePage}) {
+export default function NavBar({filterOptions, filteredValues, setFilteredValues, onHomePage}) {
   const navigate = useNavigate();
   const { isOpen, onToggle } = useDisclosure();
   const { t } = useTranslation();
@@ -20,7 +20,6 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
 
   const handleLogOut = () => {
     localStorage.clear();
-    setIsLoggedIn(false);
     navigate(`/`);
   }
 
@@ -65,7 +64,7 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
           </Flex>
         </Flex>
 
-        {isLoggedIn ? 
+        {(localStorage.getItem('name') !== null) ? 
         (<Stack
           flex={{ base: 1, md: 0 }}
           justify={'flex-end'}
@@ -76,7 +75,8 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
             as={'a'}
             fontSize={'sm'}
             fontWeight={400}
-            variant={'link'}>
+            variant={'link'}
+            href={'/myfav'}>
             {t('Hi')} {localStorage.getItem('name')} {t('exclamation')}
           </Button>
           <Button

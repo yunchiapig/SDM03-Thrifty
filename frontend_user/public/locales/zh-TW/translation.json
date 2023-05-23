@@ -32,5 +32,6 @@
         "signupButton": "註冊",
         "alreadyaUser": "已經有帳號了？",
         "loginLink": "登入"
-    }
+    },
+    "favorites": "我的收藏"
 }
