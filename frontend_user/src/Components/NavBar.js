@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filterOptions, filteredValues, setFilteredValues, onHomePage}) {
   const navigate = useNavigate();
   const { isOpen, onToggle } = useDisclosure();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   
   // useEffect(() => {
   //   console.log(isLoggedIn);
@@ -77,7 +77,7 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
             fontSize={'sm'}
             fontWeight={400}
             variant={'link'}>
-            Hi, {localStorage.getItem('user')}!
+            {t('Hi')} {localStorage.getItem('name')} {t('exclamation')}
           </Button>
           <Button
             as={'a'}
@@ -91,7 +91,7 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
               bg: 'pink.300',
             }}
             onClick={handleLogOut}>
-            Log out
+            {t('logout')}
           </Button>
           </Stack>
           ) : (

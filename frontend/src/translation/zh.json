@@ -1,0 +1,49 @@
+{
+    "login": {
+        "login": "登入",
+        "account": "帳號",
+        "password": "密碼",
+        "new": "建立新帳號",
+        "error": "信箱尚未註冊或密碼錯誤"
+    },
+    "signup": {
+        "signup": "註冊",
+        "join": "加入Thrifty",
+        "name": "商店名稱",
+        "account": "電子郵件",
+        "password": "密碼",
+        "category": "店家種類",
+        "phone": "聯絡電話",
+        "address": "地址",
+        "lat": "經度",
+        "lon": "緯度",
+        "login": "登入",
+        "reminder": "已註冊Thrifty帳號?",
+        "inputBlank": "此欄位不可為空白",
+        "fieldBlank": "完成此欄位",
+        "nameErr": "店家名稱格式錯誤，僅接受中英數字",
+        "emailErr": "地址格式錯誤",
+        "phoneErr": "電話格式錯誤",
+        "addressErr": "地址格式錯誤",
+        "latErr": "緯度格式錯誤",
+        "lonErr": "經度格式錯誤",
+        "error": "信箱已經被註冊過了"
+      },
+      "profile": {
+        "save": "儲存"
+      },
+      "nav": {
+        "profile": "基本資料",
+        "productManagement": "商品管理",
+        "setting": "設定",
+        "signout": "登出"
+      },
+      "addItem": "新增品項",
+      "management": {
+        "type": "商品類別",
+        "noItem": "尚無品項資訊"
+      },
+      "setting": {
+        "language": "語言"
+      }
+}

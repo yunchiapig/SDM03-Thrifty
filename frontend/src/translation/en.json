@@ -1,0 +1,49 @@
+{
+  "login": {
+    "login": "Sign In",
+    "account": "Account",
+    "password": "Password",
+    "new": "New account",
+    "error": "Email address is not registered or incorrect password."
+  },
+  "signup": {
+    "signup": "Sign Up",
+    "join": "Join Thrifty",
+    "name": "Store name",
+    "account": "Email",
+    "password": "Password",
+    "category": "Store Type",
+    "phone": "Phone number",
+    "address": "Address",
+    "login": "Login",
+    "lat": "Latitude",
+    "lon": "Longitude",
+    "reminder": "Already in Thrifty?",
+    "inputBlank": "Field cannot be blank.",
+    "fieldBlank": "Complete this field.",
+    "nameErr": "Please enter a valid name, only accept number or Chinese/English.",
+    "emailErr": "Please enter a valid email address",
+    "phoneErr": "Please enter a valid phone number",
+    "addressErr": "Please enter a valid address",
+    "latErr": "Please enter a valid latitude",
+    "lonErr": "Please enter a valid longitude",
+    "error": "The email address has been registereds."
+  },
+  "profile": {
+    "save": "Save"
+  },
+  "nav": {
+    "profile": "Profile",
+    "productManagement": "Product Management",
+    "setting": "Setting",
+    "signout": "Sign out"
+  },
+  "addItem": "New product",
+  "management": {
+    "type": "Type",
+    "noItem": "No Item Information"
+  },
+  "setting": {
+    "language": "Language"
+  }
+}

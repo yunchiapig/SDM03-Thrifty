@@ -5,15 +5,14 @@ import Toggle from 'react-styled-toggle';
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import cloneDeep from 'lodash/cloneDeep';
 // import axios from "axios";
 
-export default function HomePage({filteredValues, userLocation, mapCenter, setMapCenter, storesData, setOnHomePage}){
+export default function HomePage({filteredValues, userLocation, mapCenter, setMapCenter, storesData, setOnHomePage, isLoggedIn}){
     const [ifMapMode, setIfMapMode] = useState(true);
     const [filteredData, setFilteredData] = useState(storesData);
     const [filteredDoubleColData, setFilteredDoubleColData] = useState([]);
     const navigate = useNavigate();
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     useEffect(()=>{
         setOnHomePage(true);
@@ -74,7 +73,7 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
                                     navigate(`/store/${storeData._id}`, 
                                         { state: { storeData: storeData } });}} 
                                     w={{ sm: '100%', md: '100%' }} key={i} >
-                                    <StoreSmallCard storeData={storeData}/>
+                                    <StoreSmallCard storeData={storeData} isLoggedIn={isLoggedIn}/>
                                 </Flex>)
                                 })}
                             </Box>
@@ -84,11 +83,12 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
                         {filteredDoubleColData.map((twoStoresData, i)=>{ return(
                         <Flex key={i}>
                             {twoStoresData.map((storeData, ii)=>{return(
-                            <Flex onClick={()=>{
+                            <Flex onClick={(e)=>{
+                                e.stopPropagation();
                                 navigate(`/store/${storeData._id}`, 
                                     { state: { storeData: storeData } });}} 
                                 w={{ sm: '100%', md: '50%' }} key={ii}>
-                                <StoreSmallCard storeData={storeData}/>
+                                <StoreSmallCard storeData={storeData} isLoggedIn={isLoggedIn}/>
                             </Flex>
                             )})}
                         </Flex>)

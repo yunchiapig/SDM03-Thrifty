@@ -7,6 +7,9 @@
     "categoryFilter": "Food Category Filter",
     "login": "Log In",
     "signup": "Sign Up",
+    "Hi": "Hi, ",
+    "exclamation": "!",
+    "logout": "Log Out",
     "loginCard": {
         "title": "Log In to Your Account",
         "subtitle": "Don't have an account?",

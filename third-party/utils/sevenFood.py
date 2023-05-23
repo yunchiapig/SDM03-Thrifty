@@ -1,19 +1,19 @@
-food_category = {0: ['ricerolls', '御飯糰'], 
-                 1: ['light', '光合蔬果沙拉'], 
-                 2: ['cuisine', '台式料理'], 
-                 3: ['Snacks', '風味小食'], 
-                 4: ['ForeignDishes', '異國料理'], 
-                 5: ['Noodles', '麵食'], 
+food_category = {0: 'ricerolls', 
+                 1: 'light', 
+                 2: 'cuisine', 
+                 3: 'Snacks', 
+                 4: 'ForeignDishes', 
+                 5: 'Noodles', 
                 #  6: 'Oden',  # 關東煮
                 #  7: 'Bigbite', # 大亨堡
-                 10: ['bread', '麵包甜品'], 
+                 10: 'bread', 
                 #  12: 'steam', 
-                 13: ['luwei', '御料小館'], 
+                 13: 'luwei', 
                 #  14: 'health',  # 沒在用了好像 
-                 15: ['sandwich', '原賞三明治'], 
-                 16: ['ohlala', 'Ohlala'], 
-                 17: ['veg', '天素地蔬'], 
-                 18: ['star', '星級饗宴'] 
+                 15: 'sandwich',
+                 16: 'ohlala',
+                 17: 'veg',
+                 18: 'star'
                 #  19: 'panini'
                  }
 
@@ -25,17 +25,17 @@ from dotenv import load_dotenv
 from runThreading import runThreading
 from queue import Queue
 import xml.etree.ElementTree as ET
+from threading import Lock
+import re
+
 
 # Database Settings
 load_dotenv()
 CONNECTION_STRING = "mongodb+srv://{}:{}@thrifty.0xdedx2.mongodb.net/?retryWrites=true&w=majority"\
     .format(os.getenv('MONGODB_USER'), os.getenv('MONGODB_PASSWORD'))
 db = MongoClient(CONNECTION_STRING).Thrifty
-food_collection = db['food']
 meta_collection = db['meta']
-sevenPIDs = meta_collection.find_one({'brand':'7-11'})['sevenPIDs']
-sevenPrices = set(meta_collection.find_one({'brand':'7-11'})['sevenPrices'])
-n = len(sevenPIDs)
+sevenPrices = meta_collection.find_one({'brand':'7-11'})['sevenPrices']
 m = len(sevenPrices)
 
 # API settings
@@ -47,20 +47,21 @@ headers = {
 
 # thread settings
 my_queue = Queue()
-for i, info in food_category.items():
-    my_queue.put((i, info))
+for i, cat_eng in food_category.items():
+    my_queue.put((i, cat_eng))
 
+def regex(s):
+    return re.sub('\(\w\)|\w\)\w\)| |★', '', s)
 
 # main scrapping function
-def func(i, info):
-    cat_eng, cat_chinese = info
+def func(i, cat_eng):
     r = requests.get(food_api, headers=headers, params={"":f"{i}"}).text
 
     if i == 12: 
         i-=1
 
     for child in ET.fromstring(r).findall('Item'):
-        name = child.find('name').text.strip()
+        name = regex(child.find('name').text)
         if name not in sevenPrices:
             try:
                 original_price = int(child.find('price').text.strip())
@@ -75,31 +76,20 @@ def func(i, info):
                         .format(i+1, cat_eng, child.find('image').text.strip()),
                     'original_price' : original_price,
                     'discount_price' : round(original_price*0.65),
-                    'description' : f"熱量{kcal}kcal。{content}",
-                    'category': cat_chinese
+                    'description' : f"熱量{kcal}kcal。{content}"
                 }
-            
-            if name in sevenPIDs:
-                food_collection.update_one({'name':name, 'brand': "7-11"},{'$set':msg},upsert=True)
-            else:
-                msg['name'] = name
-                msg['brand'] = '7-11'
-                _id = food_collection.insert_one(msg).inserted_id
-                sevenPIDs[name] = _id
+            lock.acquire()
+            sevenPrices[name] = msg
+            lock.release()
 
-            sevenPrices.add(name)
-                
 
 
 if __name__ == "__main__":
-    runThreading(my_queue, func, 10)
-
-    if len(sevenPIDs) > n:
-        meta_collection.update_one({'brand':'7-11'}, {'$set': {'sevenPIDs': sevenPIDs}})
-        print(f"{len(sevenPIDs)-n} new foods inserted.")
+    lock = Lock()
+    runThreading(my_queue, func, os.cpu_count())
 
     if len(sevenPrices) > m:
-        meta_collection.update_one({'brand':'7-11'}, {'$set': {'sevenPrices': list(sevenPrices)}})
-        print(f"{len(sevenPrices)-m-len(sevenPIDs)+n} new foods updated.")
+        meta_collection.update_one({'brand':'7-11'}, {'$set': {'sevenPrices': sevenPrices}})
+        print(f"{len(sevenPrices)-m} new foods updated.")
 
     print("Test Success!")

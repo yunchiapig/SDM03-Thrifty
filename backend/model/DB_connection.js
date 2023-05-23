@@ -10,7 +10,6 @@ async function connectDB() {
   try{
       // 連線至 mongoDB
       await mongoose.connect( `mongodb+srv://${mongoDbUser}:${mongoDbPassword}@thrifty.0xdedx2.mongodb.net/Thrifty?retryWrites=true&w=majority`);
-      //await mongoose.connect( `mongodb+srv://${mongoDbUser}:${mongoDbPassword}@cluster0.4sm1peu.mongodb.net/?retryWrites=true&w=majority`);
       console.log('Connect to MongoDB successfully!');
 
     } catch(err) {

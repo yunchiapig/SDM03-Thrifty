@@ -38,9 +38,12 @@ let storeInfoSchema = new mongoose.Schema({
     type: Array,
     default: []
   },
-  mainImage: {
+  mainpage_img_url: {
     type: String,
   },
+  storepage_img_url: {
+    type: String,
+  }
   // images: {
   //   type: Array,
   //   default: []

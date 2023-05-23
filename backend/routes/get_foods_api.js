@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// 引入 FoodINfo 和 StoreInfo model
+// 引入 FoodInfo 和 StoreInfo model
 const FoodInfo = require('../model/food_info');
 const StoreInfo = require('../model/store_info');
 

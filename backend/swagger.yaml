@@ -377,12 +377,11 @@ paths:
         '500':
           description: Internal Server Error
 
-  /api/1.0/stores:
-    summary: 測試
+  /api/1.0/user/stores:
     get:
       summary: Return stores' information around the user.
       tags:
-        - Get Store API
+        - User API
       parameters:
         - name: longitude
           in: query
@@ -413,12 +412,13 @@ paths:
         '500':
           description: Internal Server Error
   
-  /api/1.0/foods:
-    summary: 測試
+  /api/1.0/user/foods:
     get:
       summary: Return foods' information of the store.
+      description: |-
+        Example 的 Store ID 可能會因為資料庫的變動而改變，請以當下請求資料作為測試資料。
       tags:
-        - Get Food API
+        - User API
       parameters:
         - name: id
           in: query
@@ -435,6 +435,52 @@ paths:
           description: 回傳裝有 foods 資訊的 data Object。
         '400':
           description: 無對應店家的ID、店家目前無食物，或是無對應食物的ID
+        '500':
+          description: Internal Server Error
+  
+  /api/1.0/user/fav:
+    put:
+      summary: Update user's favorite stores.
+      description: |-
+        Example 的 User ID 和 Store ID 可能會因為資料庫的變動而改變，請以當下請求資料作為測試資料。
+        若要新增，type 為 "add"；若要移除，type 為 "remove"。
+      tags:
+        - User API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserFavStore'
+      responses:
+        '200':
+          description: 回傳 JWT
+        '400':
+          description: ID invalid 或找不到 user/store 
+        '500':
+          description: Internal Server Error
+
+    get:
+      summary: Return user's favorite stores.
+      description: |-
+        Example 的 User ID 可能會因為資料庫的變動而改變，請以當下請求資料作為測試資料。
+      tags:
+        - User API
+      parameters:
+        - name: userID
+          in: query
+          description: |-
+            The User's id that you want to access. 
+
+            *Example*: 644cbf7e8ef0249dc2f41f48
+          required: false
+          schema:
+            type: string
+            example: '644cbf7e8ef0249dc2f41f48'
+      responses:
+        '200':
+          description: 回傳裝有 stores 資訊的 data Object
+        '400':
+          description: ID is not a valid ObjectID
         '500':
           description: Internal Server Error
 
@@ -638,5 +684,18 @@ components:
           type: string
         credential:
           type: string
+    
+    UserFavStore:
+      type: object
+      properties: 
+        userID:
+          type: string
+          example: 644cbf7e8ef0249dc2f41f48
+        storeID:
+          type: string
+          example: 6432cf41c105a89cb9d4fbac
+        type:
+          type: string
+          example: add
         
 

@@ -49,9 +49,14 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
           .then(response => {
               console.log(jwt_decode(response.data.message));
               setCurrentUserInfo(jwt_decode(response.data.message));
-              localStorage.setItem('user', jwt_decode(response.data.message).name);
+              localStorage.setItem('_id', jwt_decode(response.data.message)._id);
+              localStorage.setItem('name', jwt_decode(response.data.message).name);
+              localStorage.setItem('email', jwt_decode(response.data.message).email);
+              localStorage.setItem('favorite_stores', jwt_decode(response.data.message).favorite_stores);
+              localStorage.setItem('iat', jwt_decode(response.data.message).iat);
               window.alert('Login successfully!');
               navigate('/');
+              console.log(localStorage.getItem('favorite_stores'));
            })
           .catch(error => { window.alert('Login failed!');
           console.log(error);});
@@ -62,7 +67,7 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
     setCurrentUserInfo(user);
   }
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <Container

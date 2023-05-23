@@ -1,6 +1,6 @@
 import React from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { Box, Button, VisuallyHidden } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import jwt_decode from "jwt-decode";
@@ -16,7 +16,11 @@ function GoogleSSO(setCurrentUserInfo) {
             .then(response => {
                 console.log(jwt_decode(response.data.message));
                 setCurrentUserInfo.setCurrentUserInfo(jwt_decode(response.data.message));
-                localStorage.setItem('user', jwt_decode(response.data.message).name);
+                localStorage.setItem('_id', jwt_decode(response.data.message)._id);
+                localStorage.setItem('name', jwt_decode(response.data.message).name);
+                localStorage.setItem('email', jwt_decode(response.data.message).email);
+                localStorage.setItem('favorite_stores', jwt_decode(response.data.message).favorite_stores);
+                localStorage.setItem('iat', jwt_decode(response.data.message).iat);
                 window.alert('Login successfully!');
                 navigate('/');
             })
