@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 require('dotenv').config();
 
 // 引入檢查格式的 middleware function
@@ -36,7 +37,7 @@ router.post('/', checkStoreInfo, checkStoreEmailAndPassword, async function(req,
   // admin 基本資料獲取
   const provider = 'native';
   const email = req.body.email;
-  let password = req.body.password
+  let password = req.body.password;
 
   // 將密碼加密
   password = await bcrypt.hash(password, 10);
@@ -47,7 +48,7 @@ router.post('/', checkStoreInfo, checkStoreEmailAndPassword, async function(req,
     "type": "Point",
     "coordinates": GetCoordinates
   }
-  
+
   try{
     // 創建店家資訊
     const storeInfo = new StoreInfo({
@@ -58,8 +59,8 @@ router.post('/', checkStoreInfo, checkStoreEmailAndPassword, async function(req,
       location: location,
       updateDate: Date.now(),
       stocks: [],
-      mainpage_img_url: "",
-      storepage_img_url: ""
+      mainpage_img_url: "default",
+      storepage_img_url: "defualt"
       // images: req.files.images ? req.files.images.map(file => file.key) : []
     });
 

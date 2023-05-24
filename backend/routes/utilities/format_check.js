@@ -133,9 +133,9 @@ function checkStoreInfo(req, res, next){
   }
 
   // 檢查是否有圖片
-  if (checkMainImage(req.files, res)){
-    return;
-  }
+  // if (checkMainImage(req.files, res)){
+  //   return;
+  // }
 
   // 檢查經度格式是否正確
   // if (checkLongitude(longitude, res)){
