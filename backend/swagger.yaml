@@ -549,17 +549,6 @@ components:
         address:
           type: string
           example: 台北市中正區重慶南路一段122號
-        location:
-          type: object
-          properties:
-            type:
-              type: string
-              example: Point
-            coordinates:
-              type: array
-              items:
-                type: number
-              example: [121.513, 25.032]
 
 
     StoreSignIn:
