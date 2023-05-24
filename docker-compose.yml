@@ -17,19 +17,13 @@ services:
     image: lee920024/thrifty-frontend-admin
     volumes: 
       - admin:/frontend/build
-    # restart: always
-    # ports:
-    #   - "3000:3000"
-    # networks:
-    #   - thrifty_network
+    restart: no
 
   frontend-user:
     image: lee920024/thrifty-frontend-user
     volumes: 
       - user:/frontend/build
-    # restart: always
-    # networks:
-    #   - thrifty_network
+    restart: no
       
   nginx:
     image: nginx
