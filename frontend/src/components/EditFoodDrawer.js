@@ -55,7 +55,7 @@ export default ({ isOpen, onOpen, onClose, item, certain, addToTag}) => {
     const [priceErr, setPriceErr] =useState(false)
     const [description, setDescription] = useState(item?.foodInfo.description || "");
     const [desErr, setDesErr] =useState(false)
-    const [initialImg, setInitialImg] = useState(item?.foodInfo ? 'https://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + item.foodInfo.mainImage: undefined)
+    const [initialImg, setInitialImg] = useState(item?.foodInfo ? 'http://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + item.foodInfo.mainImage: undefined)
     const [image, setImage] = useState(null);
     const [imgErr, setImgErr] =useState(false)
 

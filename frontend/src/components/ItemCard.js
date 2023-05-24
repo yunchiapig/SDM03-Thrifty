@@ -105,7 +105,7 @@ export default ({item}) => {
                         h='100%'
                         w='100%'
                         objectFit='cover'
-                        src= {'https://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + item.foodInfo.mainImage}
+                        src= {'http://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + item.foodInfo.mainImage}
                         alt= {item.foodInfo.name}
                     />
                 </Box>
