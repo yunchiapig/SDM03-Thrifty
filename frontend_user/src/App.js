@@ -102,11 +102,13 @@ function App() {
   }, [mapCenter]);
 
   useEffect(() => {
-    axios.get(`http://52.193.252.15/api/1.0/user/fav?userID=${localStorage.getItem('_id')}`,  { crossdomain: true })
-      .then(response => {
-        var favs = response.data.message
-        setMyFavData(favs);
-    });
+    if (localStorage.getItem('_id') !== null) {
+      axios.get(`http://52.193.252.15/api/1.0/user/fav?userID=${localStorage.getItem('_id')}`,  { crossdomain: true })
+        .then(response => {
+          var favs = response.data.message
+          setMyFavData(favs);
+      });
+    }
   }, []);
 
 

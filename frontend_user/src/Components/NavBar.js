@@ -20,7 +20,7 @@ export default function NavBar({filterOptions, filteredValues, setFilteredValues
 
   const handleLogOut = () => {
     localStorage.clear();
-    navigate(`/`);
+    navigate('/');
   }
 
   return (
@@ -70,7 +70,9 @@ export default function NavBar({filterOptions, filteredValues, setFilteredValues
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
-          <LanguageSelector />
+          <Flex display={{ base: 'none', md: 'flex' }} ml={10} w="100%">
+            <LanguageSelector />
+          </Flex>
           <Button
             as={'a'}
             fontSize={'sm'}
