@@ -74,11 +74,11 @@ function App() {
     
     if (mapCenter){
       // trigger 711 cron job
-      axios.post(`https://52.193.252.15/third-party`, {Longitude: mapCenter.lng, Latitude: mapCenter.lat}, { crossdomain: true })
+      axios.post(`http://52.193.252.15/third-party`, {Longitude: mapCenter.lng, Latitude: mapCenter.lat}, { crossdomain: true })
         .then(response => {
           console.log(response.data);
       });
-      axios.get(`https://52.193.252.15/api/1.0/user/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
+      axios.get(`http://52.193.252.15/api/1.0/user/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
         .then(response => {
           var stores = response.data.message
           setStoresData(stores);

@@ -33,7 +33,7 @@ const StorePage = ({setOnHomePage}) => {
     }, [])
 
     useEffect(()=>{
-        axios.get(`https://52.193.252.15/api/1.0/user/foods?id=${storeID}`,  { crossdomain: true })
+        axios.get(`http://52.193.252.15/api/1.0/user/foods?id=${storeID}`,  { crossdomain: true })
             .then(response => {
                 var msg = response.data.message;
                 console.log(msg)

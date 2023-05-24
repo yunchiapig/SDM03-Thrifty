@@ -58,7 +58,7 @@ router.post('/', checkStoreInfo, checkStoreEmailAndPassword, async function(req,
         'email': email,
         'storeID': storeID
       }
-    }, process.env.JWT_ADMIN_SECRECT, { expiresIn: 600});
+    }, process.env.JWT_ADMIN_SECRECT, { expiresIn: 25200});
 
     res.send(
       {message: '註冊成功！',
