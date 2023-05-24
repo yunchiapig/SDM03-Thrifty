@@ -156,6 +156,7 @@ router.put('/',
       // 更新主要圖片
       if (req.files.mainpage_img_url) {
         updateInfo.mainpage_img_url = req.files.mainpage_img_url[0].key;
+        updateInfo.storepage_img_url = req.files.mainpage_img_url[0].key;
         
         // 刪除舊的主要圖片
         const oldMainImageUrl = await StoreInfo.findById(storeID).select('mainpage_img_url -_id').lean();
