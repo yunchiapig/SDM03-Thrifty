@@ -21,7 +21,7 @@ const upload = multer({
     bucket: process.env.AWS_BUCKET_NAME,
     key: function (req, file, cb) {
       const ext = file.mimetype.split('/')[1];
-      const key = `img-${Date.now()}.${ext}`;
+      const key = `https://stylish-img-bucket.s3.ap-northeast-1.amazonaws.com/public/images/img-${Date.now()}.${ext}`;
       cb(null, key);
     }
   }),
