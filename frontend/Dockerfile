@@ -1,6 +1,6 @@
 # build stage
 # build 代表 stage 名稱
-FROM node:18-bullseye-slim as build
+FROM node:18-bullseye-slim
 
 # 在 contaianer 中創建 front end directory
 WORKDIR /frontend
