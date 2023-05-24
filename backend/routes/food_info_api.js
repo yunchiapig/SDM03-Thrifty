@@ -25,7 +25,7 @@ const upload = multer({
     bucket: process.env.AWS_BUCKET_NAME,
     key: function (req, file, cb) {
       const ext = file.mimetype.split('/')[1];
-      const key = `https://stylish-img-bucket.s3.ap-northeast-1.amazonaws.com/public/images/img-${Date.now()}.${ext}`;
+      const key = `img-${Date.now()}.${ext}`;
       cb(null, key);
     }
   }),
@@ -93,7 +93,7 @@ router.post('/',
       original_price: updateInfo.original_price,
       discount_price: updateInfo.discount_price,
       description: updateInfo.description,
-      img_url : req.files.img_url[0].key,
+      img_url : `sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/${req.files.img_url[0].key}`,
     });
 
     try{
