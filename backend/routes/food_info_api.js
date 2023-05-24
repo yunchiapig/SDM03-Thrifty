@@ -166,7 +166,7 @@ router.put('/',
         
         // 刪除舊的主要圖片
         const oldImg_url  = await FoodInfo.findById(foodID).select('img_url  -_id').lean();
-        if (!oldImgUrl) {
+        if (!oldImg_url) {
 
           // 刪除剛剛上傳的主要圖片
           deleteImage(updateInfo.img_url );
@@ -177,7 +177,7 @@ router.put('/',
           return;
         }
 
-        deleteImage(oldImgUrl.img_url );
+        deleteImage(oldImg_url.img_url );
       }
 
       // 透過 ID 更新食物品項資訊
