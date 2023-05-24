@@ -4,6 +4,7 @@ const multer = require('multer');
 const multerS3 = require('multer-s3')
 const { s3Client, deleteImage } = require('./utilities/aws_s3');
 require('dotenv').config();
+const axios = require('axios');
 
 // 引入 StoreInfo model
 const StoreInfo = require('../model/store_info');
@@ -36,6 +37,17 @@ const upload = multer({
     }
   }
 })
+
+// 店家地址轉經緯度
+async function addressToGeoinfo(address) {
+  let data = await (await axios(`https://www.google.com/maps/place?q=${encodeURI(address)}`)).data;
+  data = data.toString();
+  let pos = data.indexOf('center') + 7;
+  data = data.slice(pos, pos + 50);
+  const lat = data.slice(0, data.indexOf('%2C'));
+  const lng = data.slice(data.indexOf('%2C') + 3, data.indexOf('&amp'));
+  return [parseFloat(lng), parseFloat(lat)];
+} 
 
 
 // 讀取店家資訊
@@ -79,16 +91,22 @@ router.post('/',
   async function(req, res, next) {
   // console.log(req.body);
 
+  const GetCoordinates = await addressToGeoinfo(req.body.address)
+  const location = {
+      "type": "Point",
+      "coordinates": GetCoordinates
+    }
+
   const storeInfo = new StoreInfo({
     name: req.body.name,
     category: req.body.category,
     tel: req.body.tel,
     address: req.body.address,
-    location: JSON.parse(req.body.location),
+    location: location,
     updateDate: Date.now(),
     stocks: [],
-    mainpage_img_url: req.files.mainpage_img_url[0].key,
-    storepage_img_url: req.files.mainpage_img_url[0].key
+    mainpage_img_url: `https://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/${req.files.mainpage_img_url[0].key}`,
+    storepage_img_url: `https://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/${req.files.mainpage_img_url[0].key}`
     // images: req.files.images ? req.files.images.map(file => file.key) : []
   });
 
@@ -126,6 +144,12 @@ router.put('/',
 
     // 更新日期
     updateInfo.updateDate = Date.now();
+
+    // 更新經緯度
+    if (req.body.address) {
+      const GetCoordinates = addressToGeoinfo(req.body.address)
+      updateInfo.location = GetCoordinates;
+    }
     
     // 透過 ID 更新店家資訊
     try {

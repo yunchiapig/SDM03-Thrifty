@@ -81,8 +81,8 @@ function checkLatitude(latitude, res){
 }
 
 // 檢查是否有 mainImage
-function checkMainImage(img_url, res){
-  if (img_url === undefined){
+function checkMainImage(files, res){
+  if (!files.mainpage_img_url){
     res.status(400).send(
       {img_url: "沒有 mainImage，請提供照片。"}
     );
@@ -132,15 +132,20 @@ function checkStoreInfo(req, res, next){
     return;
   }
 
-  // 檢查經度格式是否正確
-  if (checkLongitude(longitude, res)){
+  // 檢查是否有圖片
+  if (checkMainImage(req.files, res)){
     return;
   }
 
+  // 檢查經度格式是否正確
+  // if (checkLongitude(longitude, res)){
+  //   return;
+  // }
+
   // 檢查緯度格式是否正確
-  if (checkLatitude(latitude, res)){
-    return;
-  }
+  // if (checkLatitude(latitude, res)){
+  //   return;
+  // }
 
   next();
 }

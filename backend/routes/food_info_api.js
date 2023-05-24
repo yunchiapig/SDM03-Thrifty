@@ -93,7 +93,7 @@ router.post('/',
       original_price: updateInfo.original_price,
       discount_price: updateInfo.discount_price,
       description: updateInfo.description,
-      img_url : req.files.img_url[0].key,
+      img_url : `sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/${req.files.img_url[0].key}`,
     });
 
     try{
