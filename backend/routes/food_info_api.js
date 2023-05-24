@@ -162,7 +162,7 @@ router.put('/',
     try{
       // 更新主要圖片
       if (req.files.img_url ) {
-        updateInfo.img_url  = req.files.img_url [0].key;
+        updateInfo.img_url  =`sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/${req.files.img_url[0].key}`;
         
         // 刪除舊的主要圖片
         const oldImg_url  = await FoodInfo.findById(foodID).select('img_url  -_id').lean();
