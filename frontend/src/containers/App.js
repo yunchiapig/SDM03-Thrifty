@@ -13,9 +13,9 @@ function App() {
     <Router>
       {loading && <Spinner/>}
       <Routes>
-        <Route path="/login" element = {<LogInContainer />}/>
-        <Route path="/signup" element = {<LogInContainer />}/>
-        <Route path="/mainpage">
+        <Route path="/admin/login" element = {<LogInContainer />}/>
+        <Route path="/admin/ignup" element = {<LogInContainer />}/>
+        <Route path="/admin/mainpage">
           <Route path="Profile" element={<Navbar children = {<SubPage />} />}/>
           <Route path="ProductManagement" element={<Navbar children = {<SubPage />} />}/>
           <Route path="Settings" element={<Navbar children = {<SubPage />} />}/>
