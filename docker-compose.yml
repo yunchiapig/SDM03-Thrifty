@@ -17,13 +17,13 @@ services:
     image: lee920024/thrifty-frontend-admin
     volumes: 
       - admin:/frontend/build
-    restart: no
+    restart: "no"
 
   frontend-user:
     image: lee920024/thrifty-frontend-user
     volumes: 
       - user:/frontend/build
-    restart: no
+    restart: "no"
       
   nginx:
     image: nginx
