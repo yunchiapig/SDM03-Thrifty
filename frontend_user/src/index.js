@@ -8,7 +8,7 @@ import './i18n';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <ChakraProvider>
-      <BrowserRouter>
+      <BrowserRouter basename='/user'>
         <App />
       </BrowserRouter>
     </ChakraProvider>
