@@ -27,8 +27,10 @@ import {
     //Select
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons'
+import { useTranslation } from 'react-i18next';
 
 export default ({tag, setTag }) => {
+    const { t } = useTranslation();
     const {stocks} = useStoreAdmin();
     const [focus, setFocus] = useState(false);
     const cardRef = useRef(null);
@@ -62,7 +64,7 @@ export default ({tag, setTag }) => {
     return (
         <Box>
             <InputGroup>
-                <Input onClick={() => {setFocus(true)}} value={tag} onChange={e => handleInput(e)} placeholder='輸入新類別或選擇已使用類別' 
+                <Input onClick={() => {setFocus(true)}} value={tag} onChange={e => handleInput(e)} />
                 errorBorderColor='crimson'/>
                 <InputRightElement children={<ChevronDownIcon color='grey' />} />
                 </InputGroup>

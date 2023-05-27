@@ -36,6 +36,7 @@ import {
   FiBell,
   FiChevronDown,
 } from 'react-icons/fi';
+import { GrLanguage } from "react-icons/gr";
 import logo from '../Images/logo.png';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
@@ -52,7 +53,7 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
     { name: 'nav.profile', icon: FiHome, ref: "/Profile" },
     { name: 'nav.productManagement', icon: FiServer, ref: "/ProductManagement"},
-    { name: 'nav.setting', icon: FiSettings, ref: "/Settings" },
+    {/* name: 'nav.setting', icon: FiSettings, ref: "/Settings" */},
   ];
 
 export default function SidebarWithHeader({
@@ -65,7 +66,7 @@ export default function SidebarWithHeader({
     <Box h = '100%' overflow='scroll' bg={useColorModeValue('gray.100', 'gray.900')}>
       <SidebarContent
         onClose={() => onClose}
-        display={{ base: 'none', md: 'block' }}
+        display={{ base: 'none', lg: 'block' }}
       />
       <Drawer
         autoFocus={false}
@@ -80,7 +81,7 @@ export default function SidebarWithHeader({
         </DrawerContent>
       </Drawer>
       <MobileNav onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} minH = '100vh' p="4"> 
+      <Box ml={{ base: 0, lg: 60 }} h = {{base: 'calc(100vh - 70px)', md: 'auto'}} w = {{base: '100vw', md: 'auto'}} minH = {{base: 'none', md: '100vh'}} p={{base: "0", md: "4"}}> 
         {children}
       </Box>
     </Box>
@@ -106,13 +107,13 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       bg={useColorModeValue('white', 'gray.900')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-      w={{ base: 'full', md: 60 }}
+      w={{ base: 'full', lg: 60 }}
       pos="fixed"
       h="full"
       {...rest}>
-      <CloseButton position = 'absolute' top = {5} right = {5} display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+      <CloseButton position = 'absolute' top = {5} right = {5} display={{ base: 'flex', lg: 'none' }} onClick={onClose} />
       <Flex alignItems="center" mt = {4} mb={8} ml="6" mr="10" justifyContent="center" >
-        <Img w={{base: '55%', md: '75%'}} pt={10} src= {logo} alt = "Logo"/>
+        <Img w={{base: '55%', lg: '75%'}} pt={10} src= {logo} alt = "Logo"/>
       </Flex>
       {LinkItems.map((link) => (
         <NavItem key={link.name} icon={link.icon} name = {link.name} onClick = {() => HandleNav(link)}>
@@ -145,36 +146,30 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   }
   return (
     <Flex
-      ml={{ base: 0, md: 60 }}
-      px={{ base: 4, md: 4 }}
-      height="20"
-      width = {{ base: 'full', md: 'calc(100% - 240px)'}}
+      ml={{ base: 0, lg: 60 }}
+      px={{ base: 4, lg: 4 }}
+      height="80px"
+      width = {{ base: 'full', lg: 'calc(100% - 240px)'}}
       alignItems="center"
       pos='fixed'
       zIndex = '1'
       bg={useColorModeValue('white', 'gray.900')}
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
-      justifyContent={{ base: 'space-between', md: 'flex-end' }}
+      justifyContent={{ base: 'space-between', lg: 'flex-end' }}
       {...rest}>
       <IconButton
-        display={{ base: 'flex', md: 'none' }}
+        display={{ base: 'flex', lg: 'none' }}
         onClick={onOpen}
         variant="outline"
         aria-label="open menu"
         icon={<FiMenu />}
       />
 
-      <Text
-        display={{ base: 'flex', md: 'none' }}
-        fontSize="2xl"
-        fontFamily="monospace"
-        fontWeight="bold">
-        Logo
-      </Text>
+      
 
-      <HStack spacing={{ base: '2', md: '8' }}>
-        <Box display={{base: 'none', md: 'flex'}}>
+      <HStack spacing={{ base: '2', lg: '8' }}>
+        <Box display='flex' >
           <LanguageSelector/>
         </Box>
         <Flex alignItems={'center'}>

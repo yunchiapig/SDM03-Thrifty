@@ -22,9 +22,8 @@ import { FaUpload } from 'react-icons/fa';
 import { useStoreAdmin } from '../hooks/useStoreAdmin';
 
 function CustomModal({setImage, itemImage}) {
+    
     const {checkTokenExpiration} = useStoreAdmin();
-    const boxHeight =  400 * 512 / 635;
-    const boxWidth = 400
     const [initialImage, setInitialImg] = useState(null);
     const [crop, setCrop] = useState({x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
@@ -80,6 +79,8 @@ function CustomModal({setImage, itemImage}) {
         canvas.width = croppedAreaPixels.width;
         canvas.height = croppedAreaPixels.width * 512 / 635;
         const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(
           initialImage,
           croppedAreaPixels.x,
@@ -110,11 +111,11 @@ function CustomModal({setImage, itemImage}) {
 
   
   return (
-    <Box w = '280px' h = '224px' borderWidth='1px' borderRadius='lg' overflow='hidden'>
+    <Box w = '280px' h = '224px' borderWidth='1px' borderRadius='lg'>
         {croppedImage === "" ? (itemImage === undefined ? <IconButton aria-label='Upload Image' w = 'full' h = 'full' icon={<FaUpload />} onClick={() => document.getElementById('image-input').click()} /> :
           <ImgComponent
             w = 'full' h = 'full'
-            src= {'https://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + itemImage}
+            src= {'https://' + itemImage}
             alt= "Item image"
             onClick={() => document.getElementById('image-input').click()} cursor='pointer'
           />) : 
@@ -132,7 +133,7 @@ function CustomModal({setImage, itemImage}) {
                   image={src}
                   crop={crop}
                   zoom={zoom}
-                  aspect={boxWidth/boxHeight}
+                  aspect={5/4}
                   onCropChange={handleCropChange}
                   onZoomChange={handleZoomChange}
                   onCropComplete={onCropComplete}

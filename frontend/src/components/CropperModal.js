@@ -111,8 +111,8 @@ function CustomModal({setImageFile, storeImage}) {
 
   
   return (
-    <Box w = '635px' h = '512px' borderWidth='1px' borderRadius='lg' overflow='hidden'>
-        {croppedImage === "" ? (storeImage === undefined ? <IconButton aria-label='Upload Image' w = 'full' h = 'full' icon={<FaUpload />} onClick={() => document.getElementById('image-input').click()} /> :
+    <Box w = {{base: '330px', md:'635px'}} h = {{base: '268px', md: '512px'}} borderWidth='1px' borderRadius='lg' overflow='hidden'>
+        {croppedImage === "" ? (storeImage === "default" ? <IconButton aria-label='Upload Image' w = 'full' h = 'full' icon={<FaUpload />} onClick={() => document.getElementById('image-input').click()} /> :
           <ImgComponent
             w = 'full' h = 'full'
             src= {'https://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + storeImage}
