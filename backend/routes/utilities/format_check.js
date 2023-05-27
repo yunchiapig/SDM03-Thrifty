@@ -81,8 +81,8 @@ function checkLatitude(latitude, res){
 }
 
 // 檢查是否有 mainImage
-function checkMainImage(img_url, res){
-  if (img_url === undefined){
+function checkMainImage(files, res){
+  if (!files.mainpage_img_url){
     res.status(400).send(
       {img_url: "沒有 mainImage，請提供照片。"}
     );
@@ -90,6 +90,15 @@ function checkMainImage(img_url, res){
   }
 }
 
+// 檢查是否有 foodImage
+function checkfoodImage(files, res){
+  if (!files.img_url){
+    res.status(400).send(
+      {img_url: "沒有 mainImage，請提供照片。"}
+    );
+    return true; // 代表有錯誤
+  }
+}
 
 // 檢查店家資訊格式
 function checkStoreInfo(req, res, next){
@@ -132,15 +141,20 @@ function checkStoreInfo(req, res, next){
     return;
   }
 
+  // 檢查是否有圖片
+  // if (checkMainImage(req.files, res)){
+  //   return;
+  // }
+
   // 檢查經度格式是否正確
-  if (checkLongitude(longitude, res)){
-    return;
-  }
+  // if (checkLongitude(longitude, res)){
+  //   return;
+  // }
 
   // 檢查緯度格式是否正確
-  if (checkLatitude(latitude, res)){
-    return;
-  }
+  // if (checkLatitude(latitude, res)){
+  //   return;
+  // }
 
   next();
 }
@@ -313,8 +327,8 @@ function checkFoodInfo(req, res, next){
     return;
   }
 
-  const img_url = req.files.img_url;
-  if (checkMainImage(img_url, res)){
+  const files = req.files;
+  if (checkfoodImage(files, res)){
     return;
   }
 

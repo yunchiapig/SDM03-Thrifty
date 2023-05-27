@@ -17,7 +17,7 @@
         "email": "電子信箱",
         "password": "密碼",
         "rememberMe": "記住我",
-        "forgotPassword": "你忘了密碼？",
+        "forgotPassword": "忘了密碼？",
         "loginButton": "登入",
         "orContinueWith": "或以其他方式繼續"
     },

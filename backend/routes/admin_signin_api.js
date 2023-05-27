@@ -46,7 +46,7 @@ router.post('/', async function(req, res) {
         'email': email,
         'storeID': storeID
       }
-    }, process.env.JWT_ADMIN_SECRECT, { expiresIn: 3600});
+    }, process.env.JWT_ADMIN_SECRECT, { expiresIn: 25200});
 
     res.send(
       {message: '登入成功！',

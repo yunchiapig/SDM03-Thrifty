@@ -61,7 +61,7 @@ export default function MyFavPage({filteredValues, storesData, setOnHomePage}){
                                 {t('favorites')}
                             </Heading>
                             <Text fontSize={'lg'} color={'gray.600'}>
-                                {localStorage.getItem('name')}
+                                {localStorage.getItem('name')} | {localStorage.getItem('email')}
                             </Text>
                         </Stack>
                         {filteredDoubleColData.map((twoStoresData, i)=>{ return(
