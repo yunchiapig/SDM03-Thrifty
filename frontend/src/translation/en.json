@@ -30,7 +30,8 @@
     "error": "The email address has been registereds."
   },
   "profile": {
-    "save": "Save"
+    "save": "Save", 
+    "success": "Profile has been updated successfully"
   },
   "nav": {
     "profile": "Profile",
@@ -41,9 +42,36 @@
   "addItem": "New product",
   "management": {
     "type": "Type",
-    "noItem": "No Item Information"
+    "noItem": "No Product Information"
   },
   "setting": {
     "language": "Language"
-  }
+  },
+  "fooddrawer": {
+    "edititem": "Edit Product",
+    "name": "Product name",
+    "tag": "Self-defined type",
+    "description": "Product description",
+    "inventory": "Inventory",
+    "originalP": "Original price",
+    "discountedP": "Discounted price",
+    "img": "Prduct image",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "update": "Update",
+    "tagdes": "Input new type or select used type",
+    "priceErr": "Please enter a valid price",
+    "priceErr2": "discounted price must be lower than orignal one",
+    "existErr": "The product name already exists"
+  },
+  "toast": {
+    "addItem": "{{name}} has been added successfully",
+    "editItem": "{{name}} has been updated successfully", 
+    "addfail": "Fail to add item",
+    "modifyfail": "Fail to update item",
+    "delete": "{{name}} has been deleted successfully"
+  },
+  "deleteconfirm": "Are you sure to delete",
+  "yes": "Yes",
+  "no": "No"
 }

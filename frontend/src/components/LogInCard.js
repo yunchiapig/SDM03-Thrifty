@@ -74,7 +74,6 @@ export default function SimpleCard() {
         navigate('/mainpage/ProductManagement');
     })
     .catch((e) => {
-      
       setAccountErr('login.error')
       setPasswordErr('login.error')
     })
@@ -83,9 +82,8 @@ export default function SimpleCard() {
   return (
     <Box
       rounded={'lg'}
-      w = {{'2xl': '50%', xl: '60%',lg: '65%', md: '70%', sm: '70%'}}
+      w = {{'2xl': '70%', md: '80%', sm: '80%'}}
       bg={useColorModeValue('white', 'gray.700')}
-      mt = {{md: '30vh', sm: '5vh'}}
       boxShadow={'lg'}
       p={8}>
       <Stack spacing={6}>

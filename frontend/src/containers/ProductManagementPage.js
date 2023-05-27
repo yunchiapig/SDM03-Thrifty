@@ -50,6 +50,7 @@ export default () => {
           return acc;
         }, {});
       }, [stocks]);
+      
     const ScrollToTop = (tag) => {
         setSelectedType(tag);
         scrollRefs[tag].current?.scrollIntoView({
