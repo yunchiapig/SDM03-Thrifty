@@ -1,21 +1,21 @@
 import EditFoodDrawer from './EditFoodDrawer';
 import DeletConfirm from './DeletConfirm';
 import {
-Button,
-Avatar,
-Box,
-Icon,
-Text,
-useDisclosure,
-BoxProps,
-FlexProps,
-Card,
-CardHeader,
-CardBody,
-CardFooter,
-Heading,
-Stack,
-Image
+    Button,
+    Avatar,
+    Box,
+    Icon,
+    Text,
+    useDisclosure,
+    BoxProps,
+    FlexProps,
+    Card,
+    CardHeader,
+    CardBody,
+    CardFooter,
+    Heading,
+    Stack,
+    Image
 } from '@chakra-ui/react';
 
 import { FiTrash } from "react-icons/fi";
@@ -42,70 +42,67 @@ export default ({item}) => {
         <>
              <Card
             direction={{ base: 'column', sm: 'row' }}
-            overflow='hidden'
             variant='outline'
             my = {5}
             mx = {10}
-            h = {170}
-            w = '80%'
+            h = {{base: '250px', xl:'205px'}}
+            w = {{base: '450px',lg: '550px',xl: '80%'}}
+            display='grid'
+            gridTemplateColumns =  {{base: 'auto 180px',xl: 'auto 200px'}}
             >
-                <Stack w = '75%'>
-                    <CardBody h = '100%'>
-                        <Box display = 'flex' h='35%'>
+                <Stack>
+                    <CardBody h = '100%' display='grid' gridTemplateRows =  {{base: '40px 145px 65px', xl: '40px 100px 65px'}}>
+                        <Box display = 'flex'>
                             <Heading size='md' mr={2}>{item.foodInfo.name}</Heading>
-                            <Box className = "iconButton" bottom= {2} color='white' mx = {2} onClick={() => {setDrawerMount(true); updateOnOpen()}}>
-                                <Icon as={AiOutlineEdit} fontSize={18} fill='gray'/>
+                            <Box  display = {{base: 'none', xl: 'flex'}}>
+                                <Box className = "iconButton" bottom= {2} color='white' mx = {2} onClick={() => {setDrawerMount(true); updateOnOpen()}}>
+                                    <Icon as={AiOutlineEdit} fontSize={18} fill='gray'/>
+                                </Box>
+                                { drawerMount ? 
+                                <EditFoodDrawer isOpen = {updateIsOpen} onOpen = {updateOnOpen} onClose = {() => {updateOnClose(); setDrawerMount(false); setCertain(null)}} item={item} certain={certain}/> :
+                                null}
+                                <Box className = "iconButton2" bottom= {2} color='white' onClick={() => deleteOnOpen()}>
+                                    <Icon as={TbTrashX} fontSize={20} color='gray'/>
+                                </Box>
+                                <DeletConfirm isOpen = {deleteIsOpen} onOpen = {deleteOnOpen} onClose = {deleteOnClose} item={item}/>
                             </Box>
-                            { drawerMount ? 
-                            <EditFoodDrawer isOpen = {updateIsOpen} onOpen = {updateOnOpen} onClose = {() => {updateOnClose(); setDrawerMount(false); setCertain(null)}} item={item} certain={certain}/> :
-                            null}
-                            <Box className = "iconButton2" bottom= {2} color='white' onClick={() => deleteOnOpen()}>
-                                <Icon as={TbTrashX} fontSize={20} color='gray'/>
-                            </Box>
-                            <DeletConfirm isOpen = {deleteIsOpen} onOpen = {deleteOnOpen} onClose = {deleteOnClose} item={item}/>
                         </Box>
-                        <Text w = '90%' h='45%' color='gray.600'>
-                            {item.foodInfo?.description}
-                        </Text>
-                        <Box display='flex' flexDirection='row' h='20%'>
-                            <Box display='flex' flexDirection='row' w = '70%'>
-                                <Text as = 'b' textDecoration='line-through' color='darkgray'>${item.foodInfo.original_price}</Text>
-                                <Text as = 'b' color='crimson' mx={2}>${item.foodInfo.discount_price}</Text>
+                        <Box overflow='scroll' mb = '15px'>
+                            <Text w = '90%' color='gray.600'>
+                                {item.foodInfo?.description}
+                            </Text>
+                        </Box>
+                        <Box display='flex'  flexDirection= 'row'>
+                            <Box display='flex' flexDirection='row'>
+                                <Text as = 'b' textDecoration='line-through' color='darkgray'  mr={2}>${item.foodInfo.original_price}</Text>
+                                <Text as = 'b' color='crimson'>${item.foodInfo.discount_price}</Text>
                                 {/*<Tag backgroundColor='#b0e0e6' mx={3} borderRadius='full'>20% off</Tag>*/}
                             </Box>
-                            <Box display='flex' w='40%'>
-                                <Text mx = '3' as = 'b' color = '#084B8A'>庫存</Text> 
+                            <Box display='flex' justifyContent='flex-end' w = 'full'>
+                                <Text mr = '3' as = 'b' color = '#084B8A'>庫存</Text> 
                                 <Box maxH={8} minW={14} borderRadius={1.5} px={1.5} boxShadow='outline' onClick={HandleFocus} cursor='pointer'>{item.quantity}</Box>
-                                {/*<Text as = 'b' m={1.5}>{20}</Text> */}
-                                {/*<NumberInput size='sm' maxW={14} value={item.quantity} bottom={1}h = '120%'>
-                                    <NumberInputField h = '100%' w='100%'/>
-                                    {/*<NumberInputStepper>
-                                        <NumberIncrementStepper/>
-                                        <NumberDecrementStepper/>
-                                    </NumberInputStepper>
-                                </NumberInput>*/}
                             </Box>
                         </Box>
                     </CardBody>
                 </Stack>
-                <Box h = {170} w={{ base: '100%', sm: '25%' }}>
-                    { /*<Box
-                            h='100%'
-                            w='100%'
-                            objectFit='cover'
-                            bg='gray.300'
-                            display='flex'
-                            justifyContent='center'
-                            alignItems='center'
-                            cursor='pointer'
-                    >
-                        <Icon as={FcAddImage} fontSize={24} fill='gray'zIndex='1'/>
-                            </Box> */} 
+                <Box  h = {{base: '250px', xl:'205px'}} w= {{lg: '180px', xl:'205px'}} float= 'right' display = 'flex' flexDirection = 'column' justifyContent={{base: 'space-between', xl: 'center'}} py = {{base: '30px', xl: '0'}}alignItems='center' overflow='hidden'>
+                    <Box display = {{base: 'flex', xl:'none'}} mb = '10px'>
+                        <Box className = "iconButton" bottom= {2} color='white' mx = {2} onClick={() => {setDrawerMount(true); updateOnOpen()}}>
+                            <Icon as={AiOutlineEdit} fontSize={18} fill='gray'/>
+                        </Box>
+                        { drawerMount ? 
+                        <EditFoodDrawer isOpen = {updateIsOpen} onOpen = {updateOnOpen} onClose = {() => {updateOnClose(); setDrawerMount(false); setCertain(null)}} item={item} certain={certain}/> :
+                        null}
+                        <Box className = "iconButton2" bottom= {2} color='white' onClick={() => deleteOnOpen()}>
+                            <Icon as={TbTrashX} fontSize={20} color='gray'/>
+                        </Box>
+                        <DeletConfirm isOpen = {deleteIsOpen} onOpen = {deleteOnOpen} onClose = {deleteOnClose} item={item}/>
+                    </Box>
                     <Image
-                        h='100%'
-                        w='100%'
+                        h={{base: '136px', xl: '80%'}}
+                        w={{base: '170px', xl: '80%'}}
                         objectFit='cover'
-                        src= {'http://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + item.foodInfo.mainImage}
+                        src= {'https://' + item.foodInfo.img_url}
                         alt= {item.foodInfo.name}
                     />
                 </Box>
