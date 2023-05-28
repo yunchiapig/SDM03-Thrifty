@@ -3,7 +3,7 @@ import { Box, Flex, Text, IconButton, Button, Stack, Collapse, Icon, Link,
 import {HamburgerIcon, CloseIcon, ChevronDownIcon, ChevronRightIcon} from '@chakra-ui/icons';
 import Logo from '../images/logo.png';
 import { Input } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import Filter from './Filter';
 import LanguageSelector from './LanguageSelector';
@@ -12,11 +12,10 @@ import { useTranslation } from 'react-i18next';
 export default function NavBar({filterOptions, filteredValues, setFilteredValues, onHomePage}) {
   const navigate = useNavigate();
   const { isOpen, onToggle } = useDisclosure();
-  const { t } = useTranslation();
-  
-  // useEffect(() => {
-  //   console.log(isLoggedIn);
-  // }, []);
+  const { t, i18n } = useTranslation();
+  // var posDefault = -99;
+  // if (i18n.language =='en') {posDefault = -145}
+  // const [notificationPos, setNotificationPos] = useState(posDefault);
 
   const handleLogOut = () => {
     localStorage.clear();
@@ -56,7 +55,7 @@ export default function NavBar({filterOptions, filteredValues, setFilteredValues
             <Square w="10vw"/>
             <Square>
               {onHomePage?
-                <Filter filterOptions={filterOptions}
+                <Filter filterOptions={filterOptions} notificationPos={notificationPos}
                   filteredValues={filteredValues} setFilteredValues={setFilteredValues}/>
                 :<></>
               }
