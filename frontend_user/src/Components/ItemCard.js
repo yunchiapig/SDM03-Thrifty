@@ -8,6 +8,7 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+const DefaultImg = require('../images/foodImgDefault.png')
 // import Rating from './Rating';
 
 
@@ -34,6 +35,7 @@ export default function ItemCard(foodData) {
                     objectFit="cover"
                     boxSize="100%"
                     src={ foodInfo.food.img_url }
+                    onError = {(e) => {e.target.src = DefaultImg}}
                     />
                 </Flex>
                 <Stack
