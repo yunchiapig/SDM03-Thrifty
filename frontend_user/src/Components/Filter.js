@@ -11,6 +11,10 @@ export default function Filter({filterOptions, filteredValues, setFilteredValues
     const [filteredCnt, setFilteredCnt] = useState(0);
     const [t, i18n] = useTranslation();
 
+    useEffect(()=>{
+        console.log("t", t)
+    }, [t])
+
     const itemOptions = filterOptions.item.map((option)=>{
         return({label: option, value: option})
     })
@@ -35,7 +39,7 @@ export default function Filter({filterOptions, filteredValues, setFilteredValues
         window.onresize = () => resetFilterCheckListTop();
         var filter = document.getElementById('filter');
         // var bottom = filter.getBoundingClientRect().height + (filter.getBoundingClientRect().y)/2;
-        var bottom = filter.offsetHeight + 12;
+        var bottom = filter.offsetHeight + 12-3;
         resetFilterCheckListTop();
         function resetFilterCheckListTop(){
             setFilterBottom(bottom);
@@ -53,10 +57,12 @@ export default function Filter({filterOptions, filteredValues, setFilteredValues
             <Box w='45vw' rounded='md' p="2" boxShadow='base' id="filter"
                 style={{'outlineStyle':'solid', 'outlineColor':'#d9d9d9'}}>
                 <HStack justifyContent={'space-between'} onClick={handleClick} >
-                    <AlignLeftOutlined/>
-                    <Badge count={filteredCnt? filteredCnt:0} offset={[-99, 0]} color={'#13c2c2'}>
-                        <p style={{'left':0}}>{t('categoryFilter')}</p>
+                    <Badge count={filteredCnt? filteredCnt:0} offset={[4, 0]} color={'#13c2c2'}>
+                        <AlignLeftOutlined/>
                     </Badge>
+                    {/* <Badge count={filteredCnt? filteredCnt:0} offset={[notificationPos, 0]} color={'#13c2c2'}> */}
+                        <p style={{'left':0}}>{t('categoryFilter')}</p>
+                    {/* </Badge> */}
                     <DownOutlined style={{right: 0}}/>
                 </HStack>
             </Box>
