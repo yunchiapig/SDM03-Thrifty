@@ -30,6 +30,7 @@ import { FcAddImage } from "react-icons/fc";
 
 export default ({item}) => {
     const { isOpen: updateIsOpen , onOpen: updateOnOpen, onClose: updateOnClose } = useDisclosure()
+    const { isOpen: updateIsOpen2 , onOpen: updateOnOpen2, onClose: updateOnClose2 } = useDisclosure()
     const { isOpen: deleteIsOpen , onOpen: deleteOnOpen, onClose: deleteOnClose } = useDisclosure()
     const [ certain, setCertain] = useState(null);
     const { drawerMount, setDrawerMount} = useStoreAdmin();
@@ -91,7 +92,7 @@ export default ({item}) => {
                             <Icon as={AiOutlineEdit} fontSize={18} fill='gray'/>
                         </Box>
                         { drawerMount ? 
-                        <EditFoodDrawer isOpen = {updateIsOpen} onOpen = {updateOnOpen} onClose = {() => {updateOnClose(); setDrawerMount(false); setCertain(null)}} item={item} certain={certain}/> :
+                        <EditFoodDrawer isOpen = {updateIsOpen2} onOpen = {updateOnOpen2} onClose = {() => {updateOnClose2(); setDrawerMount(false); setCertain(null)}} item={item} certain={certain}/> :
                         null}
                         <Box className = "iconButton2" bottom= {2} color='white' onClick={() => deleteOnOpen()}>
                             <Icon as={TbTrashX} fontSize={20} color='gray'/>
@@ -102,7 +103,7 @@ export default ({item}) => {
                         h={{base: '136px', xl: '80%'}}
                         w={{base: '170px', xl: '80%'}}
                         objectFit='cover'
-                        src= {'https://' + item.foodInfo.img_url}
+                        src= { item.foodInfo.img_url}
                         alt= {item.foodInfo.name}
                     />
                 </Box>
