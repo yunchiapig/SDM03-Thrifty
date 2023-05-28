@@ -62,7 +62,7 @@ export default ({ isOpen, onOpen, onClose, item, certain, addToTag}) => {
     const [initialImg, setInitialImg] = useState(item?.foodInfo ? item.foodInfo.img_url: undefined)
     const [image, setImage] = useState(null);
     const [imgErr, setImgErr] =useState(false)
-    console.log(item)
+    
 
     const FormCheck = () => {
         let pass = true

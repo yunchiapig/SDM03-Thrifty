@@ -80,6 +80,8 @@ function CustomModal({setImageFile, storeImage}) {
         canvas.width = croppedAreaPixels.width;
         canvas.height = croppedAreaPixels.width * 512 / 635;
         const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(
           initialImage,
           croppedAreaPixels.x,
@@ -115,7 +117,7 @@ function CustomModal({setImageFile, storeImage}) {
         {croppedImage === "" ? (storeImage === "default" ? <IconButton aria-label='Upload Image' w = 'full' h = 'full' icon={<FaUpload />} onClick={() => document.getElementById('image-input').click()} /> :
           <ImgComponent
             w = 'full' h = 'full'
-            src= {'http://sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/' + storeImage}
+            src= {storeImage}
             alt= "Store image"
             onClick={() => document.getElementById('image-input').click()} cursor='pointer'
           />) : 

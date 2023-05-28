@@ -6,21 +6,13 @@ import { withRouter } from "../Hooks/withRouter";
 import axios from "axios";
 import { useParams, useLocation } from 'react-router-dom';
 import '../App.css';
-
-const imageURL = {
-    "Family": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/FamilyMart_Logo_%282016-%29.svg/1280px-FamilyMart_Logo_%282016-%29.svg.png",
-    "711": "https://corp.7-eleven.com/images/media_assets/7_Eleven_Horizontal_2022_RGB_1639377127_8977.jpg",
-    "others": "https://pics.craiyon.com/2023-05-09/756e18f59e1d499a8eba020cb4106f00.webp"
-}
+const DefaultImg = require('../images/storepageDefault.png');
 
 const StorePage = ({setOnHomePage}) => {
     let { id } = useParams();
     const [storeID, setStoreID] = useState(id);
     let location = useLocation()
     const [storeData, setStoreData] = useState(location.state.storeData);
-    var url = imageURL['others']
-    if (storeData.category === "全家") {url = imageURL['Family']}
-    else if (storeData.category === "7-11") { url = imageURL['711']}
 
     const [foodDataByCat, setFoodDataByCat] = useState({});
     const [foodCategories, setFoodCategories] = useState([]);
@@ -123,7 +115,8 @@ const StorePage = ({setOnHomePage}) => {
                         position="absolute"
                         objectFit="cover"
                         boxSize="100%"
-                        src={ url }/>
+                        src={ storeData.storepage_img_url }
+                        onError = {(e) => {e.target.src = DefaultImg}} />
                 </Flex>
                 <hr
                     style={{
