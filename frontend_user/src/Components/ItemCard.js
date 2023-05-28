@@ -31,12 +31,18 @@ export default function ItemCard(foodData) {
                 boxShadow={'md'}
                 padding={4}>
                 <Flex flex={1} bg="blue.200">
-                    <Image
-                    objectFit="cover"
-                    boxSize="100%"
-                    src={ foodInfo.food.img_url }
-                    onError = {(e) => {e.target.src = DefaultImg}}
-                    />
+                    {foodInfo.food.img_url?
+                        <Image
+                            objectFit="cover"
+                            boxSize="100%"
+                            src={ foodInfo.food.img_url }
+                            onError = {(e) => {e.target.src = DefaultImg}}
+                        />:
+                        <Image
+                            objectFit="cover"
+                            boxSize="100%"
+                            src={ DefaultImg }/>
+                    }
                 </Flex>
                 <Stack
                     flex={1}

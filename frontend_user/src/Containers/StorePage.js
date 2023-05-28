@@ -111,12 +111,20 @@ const StorePage = ({setOnHomePage}) => {
                 <Flex flex={1}  minH={{ sm: '476px', md: '10rem' }} zIndex={10}
                     bg="white" position="relative" overflowX={"hidden"} borderBottomColor="gray"
                     w="100%" boxSizing='border-box' flexDirection="column">
-                    <Image
+                    {storeData.storepage_img_url?
+                        <Image
                         position="absolute"
                         objectFit="cover"
                         boxSize="100%"
                         src={ storeData.storepage_img_url }
                         onError = {(e) => {e.target.src = DefaultImg}} />
+                        :<Image
+                        position="absolute"
+                        objectFit="cover"
+                        boxSize="100%"
+                        src={ DefaultImg } />
+                    }
+                    
                 </Flex>
                 <hr
                     style={{
