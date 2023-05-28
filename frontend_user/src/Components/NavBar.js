@@ -27,26 +27,14 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
   return (
     <Box w="100%" zIndex={100} bg={useColorModeValue('gray.100', 'gray.900')} px={4} position="fixed" id="navbar">
       <Flex
-        bg={useColorModeValue('white', 'gray.800')}
-        color={useColorModeValue('gray.600', 'white')}
-        minH={'60px'}
-        py={{ base: 2 }}
-        px={{ base: 4 }}
-        borderBottom={1}
-        borderStyle={'solid'}
-        borderColor={useColorModeValue('gray.200', 'gray.900')}
-        align={'center'}>
-        <Flex
-          flex={{ base: 1, md: 'auto' }}
-          ml={{ base: -2 }}
-          display={{ base: 'flex', md: 'none' }}>
+        bg={useColorModeValue('white', 'gray.800')} color={useColorModeValue('gray.600', 'white')}
+        minH={'60px'} py={{ base: 2 }} px={{ base: 4 }} borderBottom={1} borderStyle={'solid'}
+        borderColor={useColorModeValue('gray.200', 'gray.900')} align={'center'}>
+        <Flex flex={{ base: 1, md: 'auto' }} ml={{ base: -2 }} display={{ base: 'flex', md: 'none' }}>
           <IconButton
             onClick={onToggle}
-            icon={
-              isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />
-            }
-            variant={'ghost'}
-            aria-label={'Toggle Navigation'}
+            icon={ isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />}
+            variant={'ghost'} aria-label={'Toggle Navigation'}
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
@@ -66,60 +54,25 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
         </Flex>
 
         {isLoggedIn ? 
-        (<Stack
-          flex={{ base: 1, md: 0 }}
-          justify={'flex-end'}
-          direction={'row'}
-          spacing={6}>
+        (<Stack flex={{ base: 'none', md: 'flex' }} justify={'flex-end'} direction={'row'} spacing={6}>
           <LanguageSelector />
-          <Button
-            as={'a'}
-            fontSize={'sm'}
-            fontWeight={400}
-            variant={'link'}>
+          <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'}>
             {t('Hi')} {localStorage.getItem('name')} {t('exclamation')}
           </Button>
-          <Button
-            as={'a'}
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'sm'}
-            fontWeight={600}
-            color={'white'}
-            bg={'pink.400'}
-            href={'/'}
-            _hover={{
-              bg: 'pink.300',
-            }}
-            onClick={handleLogOut}>
+          <Button as={'a'} display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'}
+            fontWeight={600} color={'white'} bg={'pink.400'} href={'/'}
+            _hover={{bg: 'pink.300'}}  onClick={handleLogOut}>
             {t('logout')}
           </Button>
           </Stack>
-          ) : (
-        <Stack
-          flex={{ base: 1, md: 0 }}
-          justify={'flex-end'}
-          direction={'row'}
-          spacing={6}>
+        ) : (
+        <Stack flex={{ base: 'none', md: 'flex' }} justify={'flex-end'} direction={'row'} spacing={6}>
           <LanguageSelector />
-          <Button
-            as={'a'}
-            fontSize={'sm'}
-            fontWeight={400}
-            variant={'link'}
-            href={'/login'}>
+          <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={'/login'}>
             {t('login')}
           </Button>
-          <Button
-            as={'a'}
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize={'sm'}
-            fontWeight={600}
-            color={'white'}
-            bg={'pink.400'}
-            href={'/signup'}
-            _hover={{
-              bg: 'pink.300',
-            }}>
+          <Button as={'a'} display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'} fontWeight={600}
+            color={'white'} bg={'pink.400'} href={'/signup'} _hover={{bg: 'pink.300',}}>
             {t('signup')}
           </Button>
         </Stack>)
@@ -180,7 +133,7 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
     );
   };
   
-  const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
+  const DesktopSubNav = ({ label, href, subLabel }) => {
     return (
       <Link
         href={href}
@@ -227,7 +180,7 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
     );
   };
   
-  const MobileNavItem = ({ label, children, href }: NavItem) => {
+  const MobileNavItem = ({ label, children, href }) => {
     const { isOpen, onToggle } = useDisclosure();
   
     return (
@@ -277,14 +230,14 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
     );
   };
   
-  interface NavItem {
-    label: string;
-    subLabel?: string;
-    children?: Array<NavItem>;
-    href?: string;
-  }
+  // interface NavItem {
+  //   label: string;
+  //   subLabel?: string;
+  //   children?: Array<NavItem>;
+  //   href?: string;
+  // }
   
-  const NAV_ITEMS: Array<NavItem> = [
+  const NAV_ITEMS = [
     {
       label: 'Inspiration',
       children: [
