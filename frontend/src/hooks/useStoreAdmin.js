@@ -40,6 +40,7 @@ const StoreAdminProvider = (props) => {
   }
 
   const getItems = async() => {
+      console.log(stocks)
       setLoading(true);
       const res
         = await instance.get('/api/1.0/admin/stock', { 

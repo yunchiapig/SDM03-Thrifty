@@ -115,7 +115,7 @@ function CustomModal({setImage, itemImage}) {
         {croppedImage === "" ? (itemImage === undefined ? <IconButton aria-label='Upload Image' w = 'full' h = 'full' icon={<FaUpload />} onClick={() => document.getElementById('image-input').click()} /> :
           <ImgComponent
             w = 'full' h = 'full'
-            src= {'https://' + itemImage}
+            src= {itemImage}
             alt= "Item image"
             onClick={() => document.getElementById('image-input').click()} cursor='pointer'
           />) : 
