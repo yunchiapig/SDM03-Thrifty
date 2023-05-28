@@ -10,7 +10,8 @@ import { useStoreAdmin } from '../hooks/useStoreAdmin';
 function App() {
   const {loading} = useStoreAdmin();
   return (
-    <Router basename='/admin'>
+    // <Router basename='/admin'>
+    <Router>
       {loading && <Spinner/>}
       <Routes>
         <Route path="/login" element = {<LogInContainer />}/>
