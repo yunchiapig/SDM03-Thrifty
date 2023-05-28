@@ -11,17 +11,19 @@ import { Routes, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axios from "axios";
 import { use } from 'i18next';
+import MyFavPage from './Containers/MyFavPage';
 
 
 function App() {
   const [filterOptions, setFilterOptions] = useState({'store':[], 'item':[]});
   const [filteredValues, setFilteredValues] = useState({'store':[], 'item':[]});
   const [storesData, setStoresData] = useState([]);
+  const [myFavData, setMyFavData] = useState([]);
   const DEFAULT_LOCATION = { lat: 25.03, lng: 121.55};
   const [userLocation, setUserLocation] = useState(DEFAULT_LOCATION);
   const [mapCenter, setMapCenter] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUserInfo, setCurrentUserInfo] = useState(null);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [currentUserInfo, setCurrentUserInfo] = useState(null);
   const { i18n } = useTranslation();
   const [onHomePage, setOnHomePage] = useState(false); 
 
@@ -72,11 +74,11 @@ function App() {
     
     if (mapCenter){
       // trigger 711 cron job
-      axios.post(`http://52.193.252.15/third-party`, {Longitude: mapCenter.lng, Latitude: mapCenter.lat}, { crossdomain: true })
+      axios.post(`https://thrifty-tw.shop/third-party`, {Longitude: mapCenter.lng, Latitude: mapCenter.lat}, { crossdomain: true })
         .then(response => {
           console.log(response.data);
       });
-      axios.get(`http://52.193.252.15/api/1.0/user/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
+      axios.get(`https://thrifty-tw.shop/api/1.0/user/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
         .then(response => {
           var stores = response.data.message
           setStoresData(stores);
@@ -99,40 +101,49 @@ function App() {
     }
   }, [mapCenter]);
 
-
-  const handleLogin = (user) => {
-    setIsLoggedIn(true);
-    setCurrentUserInfo(user);
-  }
-
   useEffect(() => {
-    if (isLoggedIn) {
-      const loggedInUser = localStorage.getItem("name");
-      console.log(loggedInUser);
-      if (loggedInUser) {
-        setIsLoggedIn(true);
-        setCurrentUserInfo(loggedInUser);
-        // localStorage.clear();
-      }
+    if (localStorage.getItem('_id') !== null) {
+      axios.get(`https://thrifty-tw.shop/api/1.0/user/fav?userID=${localStorage.getItem('_id')}`,  { crossdomain: true })
+        .then(response => {
+          var favs = response.data.message
+          setMyFavData(favs);
+      });
     }
-  }, [isLoggedIn]);
+  }, []);
+
+
+  // const handleLogin = (user) => {
+  //   setCurrentUserInfo(user);
+  // }
+
+  // useEffect(() => {
+  //   if (localStorage.getItem("name") !== null) {
+  //     const loggedInUser = localStorage.getItem("name");
+  //     console.log(loggedInUser);
+  //     if (loggedInUser) {
+  //       setCurrentUserInfo(loggedInUser);
+  //       // localStorage.clear();
+  //     }
+  //   }
+  // }, [isLoggedIn]);
 
   return (
     <VStack >
-      <Box w="100%" bg={useColorModeValue('gray.100', 'gray.900')}minH="100vh">
+      <Box w="100%" bg={useColorModeValue('gray.100', 'gray.900')} minH="100vh">
         <NavBar zIndex={100} filterOptions={filterOptions} onHomePage={onHomePage}
-          filteredValues={filteredValues} setFilteredValues={setFilteredValues} 
-          isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} currentUserInfo={currentUserInfo} />
+          filteredValues={filteredValues} setFilteredValues={setFilteredValues} />
         {/* <SimpleSidebar/> */}
         <Box w="100%" h="19vh"/>
         
         <Routes>
           <Route path="/" element={<HomePage filteredValues={filteredValues} setOnHomePage={setOnHomePage}
               userLocation={userLocation} mapCenter={mapCenter} setMapCenter={setMapCenter}
-              storesData={storesData} isLoggedIn={isLoggedIn} />}/>
+              storesData={storesData}/>}/>
           <Route path="/store/:id" element={ <StorePage setOnHomePage={setOnHomePage} />} />
-          <Route path="/login" element={ <LoginPage currentUserInfo={currentUserInfo} setCurrentUserInfo={handleLogin} setOnHomePage={setOnHomePage}/>} />
+          <Route path="/login" element={ <LoginPage setOnHomePage={setOnHomePage}/>} />
           <Route path="/signup" element={ <SignupPage setOnHomePage={setOnHomePage}/>} />
+          <Route path="/myfav" element={ <MyFavPage filteredValues={filteredValues} setOnHomePage={setOnHomePage} 
+              storesData={ myFavData }/> } />
         </Routes>
       </Box>
     </VStack>

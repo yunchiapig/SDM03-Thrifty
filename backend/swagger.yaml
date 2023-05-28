@@ -507,18 +507,7 @@ components:
         address:
           type: string
           example: 台北市中正區重慶南路一段122號
-        location:
-          type: object
-          properties:
-            type:
-              type: string
-              example: Point
-            coordinates:
-              type: array
-              items:
-                type: number
-              example: [121.513, 25.032]
-        mainImage:
+        mainpage_img_url:
           type: file
     
     StoreUpdate:
@@ -536,18 +525,7 @@ components:
             tel:
               type: string
               example: 02-98938953
-            location:
-              type: object
-              properties:
-                type:
-                  type: string
-                  example: Point
-                coordinates:
-                  type: array
-                  items:
-                    type: number
-                  example: [81.513, 46.032]
-        mainImage:
+        mainpage_img_url:
           type: file
 
     StoreSignUp:
@@ -571,17 +549,6 @@ components:
         address:
           type: string
           example: 台北市中正區重慶南路一段122號
-        location:
-          type: object
-          properties:
-            type:
-              type: string
-              example: Point
-            coordinates:
-              type: array
-              items:
-                type: number
-              example: [121.513, 25.032]
 
 
     StoreSignIn:
@@ -621,7 +588,7 @@ components:
             description:
               type: string
               example: 濃郁的咖哩配上嫩雞，完美絕配！
-        mainImage:
+        img_url:
           type: file
 
     FoodUpdate:
@@ -648,7 +615,7 @@ components:
             discount_price:
               type: integer
               example: 125
-        mainImage:
+        img_url:
           type: file
 
     StocksUpdate:

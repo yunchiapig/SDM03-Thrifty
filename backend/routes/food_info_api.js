@@ -38,7 +38,10 @@ const upload = multer({
     } else {
       cb(new Error('不支援的檔案類型. 僅支援 JPEG, PNG.'));
     }
-  }
+  },
+
+  // 限制檔案大小
+  // limits: { fileSize: 1024 * 1024 * 30 } // 30 MB files
 })
 
 
@@ -76,7 +79,7 @@ router.get('/', checkID, async function(req, res, next) {
 router.post('/', 
   JWTValidate,
   upload.fields([
-    {name: 'mainImage', maxCount: 1},
+    {name: 'img_url', maxCount: 1},
   ]),
   checkFoodInfo, 
   async function(req, res, next) {
@@ -90,7 +93,7 @@ router.post('/',
       original_price: updateInfo.original_price,
       discount_price: updateInfo.discount_price,
       description: updateInfo.description,
-      mainImage: req.files.mainImage[0].key,
+      img_url : `sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/${req.files.img_url[0].key}`,
     });
 
     try{
@@ -98,7 +101,7 @@ router.post('/',
       const storeExists = await StoreInfo.exists({ _id: storeID });
       if (!storeExists) {
         // 刪除剛剛上傳的主要圖片
-        deleteImage(updateInfo.mainImage);
+        deleteImage(updateInfo.img_url );
 
         res.status(400).send({message: "店家不存在。"});
         return;
@@ -114,7 +117,7 @@ router.post('/',
       const foodExists = await FoodInfo.exists({ _id: {$in: stockIds}, name: updateInfo.name });
       if (foodExists) {
         // 刪除剛剛上傳的主要圖片
-        deleteImage(updateInfo.mainImage);
+        deleteImage(updateInfo.img_url );
         
         res.status(400).send({message: "食物品項已存在。"});
         return;
@@ -146,7 +149,7 @@ router.post('/',
 router.put('/',
   JWTValidate,
   upload.fields([
-    {name: 'mainImage', maxCount: 1},
+    {name: 'img_url', maxCount: 1},
   ]),
   checkFoodInfo,
   async function(req, res, next) {
@@ -158,15 +161,15 @@ router.put('/',
 
     try{
       // 更新主要圖片
-      if (req.files.mainImage) {
-        updateInfo.mainImage = req.files.mainImage[0].key;
+      if (req.files.img_url ) {
+        updateInfo.img_url  =`sdm03-thrifty.s3.ap-northeast-1.amazonaws.com/${req.files.img_url[0].key}`;
         
         // 刪除舊的主要圖片
-        const oldMainImage = await FoodInfo.findById(foodID).select('mainImage -_id').lean();
-        if (!oldMainImage) {
+        const oldImg_url  = await FoodInfo.findById(foodID).select('img_url  -_id').lean();
+        if (!oldImg_url) {
 
           // 刪除剛剛上傳的主要圖片
-          deleteImage(updateInfo.mainImage);
+          deleteImage(updateInfo.img_url );
 
           res.status(400).send(
             {message: "查無店家資訊"}
@@ -174,7 +177,7 @@ router.put('/',
           return;
         }
 
-        deleteImage(oldMainImage.mainImage);
+        deleteImage(oldImg_url.img_url );
       }
 
       // 透過 ID 更新食物品項資訊
@@ -212,8 +215,8 @@ router.delete('/', JWTValidate, async function(req, res, next) {
 
   try{
     // 刪除舊的主要圖片
-    const oldMainImage = await FoodInfo.findById(foodID).select('mainImage -_id').lean();
-    deleteImage(oldMainImage.mainImage); 
+    const oldImgUrl = await FoodInfo.findById(foodID).select('img_url  -_id').lean();
+    deleteImage(oldImgUrl.img_url ); 
     
     // 透過 ID 刪除食物品項資訊
     const deleteResult = await FoodInfo.findByIdAndDelete(foodID);

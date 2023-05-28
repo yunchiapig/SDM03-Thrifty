@@ -26,7 +26,7 @@ import {
 
   
   export default function SignupCard() {
-    const {loading, setLoading, setStoreInfo} = useStoreAdmin();
+    const {loading, setLoading, setStoreInfo, setJwt} = useStoreAdmin();
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
@@ -48,6 +48,7 @@ import {
     const [lonErr, setLonErr] = useState('');
     
     const FormCheck = () => {
+        //console.log('check')
         let pass = true
         // name
         if (name == ''){
@@ -81,14 +82,6 @@ import {
         else {
             setPasswordErr('')
         }
-        //category
-        if (category == ''){
-            setCatErr('signup.fieldBlank')
-            pass = false
-        }
-        else {
-            setCatErr('')
-        }
         //phone
         if (phone == ''){
             setPhoneErr('signup.inputBlank')
@@ -113,38 +106,15 @@ import {
         else {
             setAddrErr('')
         }
-        //lat
-        if (lat === ''){
-            setLatErr('signup.inputBlank')
-            pass = false
-        }
-        else if (!(/^(-?(?:1[0-7]|[1-9])?\d(?:\.\d+)?|180(?:\.0+)?)$/).test(lat)){
-            setLatErr('signup.latErr')
-            pass = false
-        }
-        else {
-            setLatErr('')
-        }
-        //lat
-        if (lon === ''){
-            setLonErr('signup.inputBlank')
-            pass = false
-        }
-        else if (!(/^(-?(?:1[0-7]|[1-9])?\d(?:\.\d+)?|180(?:\.0+)?)$/).test(lon)){
-            setLonErr('signup.lonErr')
-            pass = false
-        }
-        else {
-            setLonErr('')
-        }
         return pass
     }
     
     const HandleSubmit = async (event) => {
+        setLoading(true);
         if (!FormCheck()) {
+            setLoading(false);
             return
         }
-        setLoading(true);
         const data = 
         { 'name': name, 
         'email': account, 
@@ -162,6 +132,7 @@ import {
         await instance.post('api/1.0/admin/signup', data)
         .then(res => {
             localStorage.setItem('jwt', res.data.thriftyAdminJWT)
+            setJwt(res.data.thriftyAdminJWT)
             const data = jwt_decode(res.data.thriftyAdminJWT).data
             localStorage.setItem('store_info', JSON.stringify({_id: data.storeID, email: data.email}));
             setStoreInfo({_id: data.storeID, email: data.email})
@@ -178,7 +149,7 @@ import {
 
   
     return (
-        <Box my = {{md: '10vh', sm: '5vh'}} w = {{'2xl': '70%', md: '80%', sm: '80%'}}>
+        <Box w = {{'2xl': '70%', md: '80%', sm: '80%'}}>
             <Box
                 rounded={'lg'}
                 bg={useColorModeValue('white', 'gray.700')}
@@ -219,7 +190,7 @@ import {
                     </InputGroup>
                     <FormErrorMessage>{t(passwordErr)}</FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid = {catErr} isRequired>
+                {/*<FormControl isInvalid = {catErr} isRequired>
                     <FormLabel>{t('signup.category')}</FormLabel>
                     <Select borderColor='whiteAlpha'size = 'md' cursor = 'pointer' value={category} onChange={e => setCategory(e.target.value)}>
                         <option>其他</option>
@@ -227,7 +198,7 @@ import {
                         <option>全家</option>
                     </Select>
                     <FormErrorMessage>{t(catErr)}</FormErrorMessage>
-                </FormControl>
+                    </FormControl>*/}
                 <FormControl id="phone" isInvalid = {phoneErr} isRequired>
                     <FormLabel>{t('signup.phone')}</FormLabel>
                     <Input borderColor='whiteAlpha' type = 'tel' value={phone} onChange={e => setPhone(e.target.value)}/>
@@ -238,16 +209,16 @@ import {
                     <Input borderColor='whiteAlpha' type = 'text' value={address} onChange={e => setAddress(e.target.value)}/>
                     <FormErrorMessage>{t(addrErr)}</FormErrorMessage>
                 </FormControl>
-                <FormControl id="lon" isInvalid = {lonErr} isRequired>
+                {/*<FormControl id="lon" isInvalid = {lonErr} isRequired>
                     <FormLabel>{t('signup.lon')}</FormLabel>
                     <Input borderColor='whiteAlpha' type = 'text' value={lon} onChange={e => setLon(e.target.value)}/>
                     <FormErrorMessage>{t(lonErr)}</FormErrorMessage>
                 </FormControl>
-                <FormControl id="address" isInvalid = {latErr} isRequired>
+                <FormControl id="lat" isInvalid = {latErr} isRequired>
                     <FormLabel>{t('signup.lat')}</FormLabel>
                     <Input borderColor='whiteAlpha' type = 'text' value={lat} onChange={e => setLat(e.target.value)}/>
                     <FormErrorMessage>{t(latErr)}</FormErrorMessage>
-                </FormControl>
+                </FormControl>*/}
                 <Stack spacing={10} pt={2}>
                     <Button
                     loadingText="Submitting"

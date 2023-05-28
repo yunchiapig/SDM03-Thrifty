@@ -32,5 +32,6 @@
         "signupButton": "Sign Up",
         "alreadyaUser": "Already a user?",
         "loginLink": "Login"
-    }
+    },
+    "favorites": "My Favorites"
 }

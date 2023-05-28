@@ -9,7 +9,7 @@ import Filter from './Filter';
 import LanguageSelector from './LanguageSelector';
 import { useTranslation } from 'react-i18next';
 
-export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filterOptions, filteredValues, setFilteredValues, onHomePage}) {
+export default function NavBar({filterOptions, filteredValues, setFilteredValues, onHomePage}) {
   const navigate = useNavigate();
   const { isOpen, onToggle } = useDisclosure();
   const { t } = useTranslation();
@@ -20,8 +20,7 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
 
   const handleLogOut = () => {
     localStorage.clear();
-    setIsLoggedIn(false);
-    navigate(`/`);
+    navigate('/');
   }
 
   return (
@@ -53,10 +52,28 @@ export default function NavBar({isLoggedIn, setIsLoggedIn, currentUserInfo, filt
           </Flex>
         </Flex>
 
+<<<<<<< HEAD
         {isLoggedIn ? 
         (<Stack flex={{ base: 'none', md: 'flex' }} justify={'flex-end'} direction={'row'} spacing={6}>
           <LanguageSelector />
           <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'}>
+=======
+        {(localStorage.getItem('name') !== null) ? 
+        (<Stack
+          flex={{ base: 1, md: 0 }}
+          justify={'flex-end'}
+          direction={'row'}
+          spacing={6}>
+          <Flex display={{ base: 'none', md: 'flex' }} ml={10} w="100%">
+            <LanguageSelector />
+          </Flex>
+          <Button
+            as={'a'}
+            fontSize={'sm'}
+            fontWeight={400}
+            variant={'link'}
+            href={'/myfav'}>
+>>>>>>> develop
             {t('Hi')} {localStorage.getItem('name')} {t('exclamation')}
           </Button>
           <Button as={'a'} display={{ base: 'none', md: 'inline-flex' }} fontSize={'sm'}

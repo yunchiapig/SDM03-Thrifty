@@ -1,5 +1,4 @@
 import React, { ReactNode, useState, useEffect } from 'react';
-import { useLocation} from "react-router-dom";
 import './SubPage.css';
 import Navbar from '../components/Navbar';
 import ProductManagementPage from './ProductManagementPage';
@@ -19,7 +18,6 @@ import {
   Stack,
   StackDivider,
 } from '@chakra-ui/react';
-import Spinner from '../components/Spinner'
 import {
   FiServer,
   FiHome,
@@ -28,16 +26,16 @@ import {
 import {useStoreAdmin} from "../hooks/useStoreAdmin";
 import { FiPlus } from "react-icons/fi";
 import { useTranslation } from 'react-i18next';
-//const storeInfo = JSON.parse(localStorage.getItem('store_info'));
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default () => {
   //for test
   //const [title, setTitle] = useState("");
-  const {title, stocks, loading, drawerMount, setTitle, setDrawerMount, getItems, storeInfo, updateStoreInfo} = useStoreAdmin();
+  const {title, stocks, loading, drawerMount, setTitle, setDrawerMount, getItems, storeInfo, updateStoreInfo, checkTokenExpiration} = useStoreAdmin();
   const location = useLocation();
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { t } = useTranslation();
-
+  const navigate = useNavigate();
   
   useEffect(() => {
     if(localStorage.getItem('login') == null) {
@@ -54,14 +52,23 @@ export default () => {
     else if(location.pathname === "/mainpage/Settings") {
       setTitle({ name: 'nav.setting', icon: FiSettings, ref: "/Settings" })
     }
-}, [location])
+  }, [location])
+
+  const HandleAdd = () => {
+    if(checkTokenExpiration()){
+      navigate('/login')
+      return
+    }
+    setDrawerMount(true); 
+    onOpen()
+  }
 
   return (  
       
-    <Box w = 'full' h = {title.name !== 'nav.profile' ? '90vh' : 'auto'} mt = '80px' display = 'flex' px = '4%' py = '2%'>
+    <Box w = 'full' h = {title.name !== 'nav.profile' ? {base: 'auto',md: '90vh'} : 'auto'} mt = '80px' display = 'flex' px = {{base: '0', md: '4%'}} py = {{base: '0', md: '2%'}} overflow={{sm: 'hidden', md:'auto'}}>
       <Card  display = 'flex' w = '100%' h = '100%'>
         <Stack divider={<StackDivider />} h = '100%' w = '100%'>
-          <Box h = '8%' display="flex" alignItems="center" pt = {2}>
+          <Box h = '70px' display="flex" alignItems="center" pt = {2}>
             <Flex
                 align="center"
                 p="4"
@@ -83,7 +90,7 @@ export default () => {
             </Flex>
             {title.name === "nav.productManagement" ? 
             <>
-              <Button leftIcon={<FiPlus />} color='cadetblue' variant='solid' onClick={() => {setDrawerMount(true); onOpen()}}>
+              <Button leftIcon={<FiPlus />} mr = '10px' color='cadetblue' variant='solid' onClick={HandleAdd}>
                 {t("addItem")}
               </Button>
               {drawerMount? <EditFoodDrawer isOpen = {isOpen} onOpen = {onOpen} onClose = {() => {onClose(); setDrawerMount(false)}}/> : null}

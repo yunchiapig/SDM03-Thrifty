@@ -17,7 +17,7 @@
         "email": "電子信箱",
         "password": "密碼",
         "rememberMe": "記住我",
-        "forgotPassword": "你忘了密碼？",
+        "forgotPassword": "忘了密碼？",
         "loginButton": "登入",
         "orContinueWith": "或以其他方式繼續"
     },
@@ -32,5 +32,6 @@
         "signupButton": "註冊",
         "alreadyaUser": "已經有帳號了？",
         "loginLink": "登入"
-    }
+    },
+    "favorites": "我的收藏"
 }

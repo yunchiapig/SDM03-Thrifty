@@ -40,6 +40,7 @@ export default () => {
     const [latErr, setLatErr] = useState('');
     const [lonErr, setLonErr] = useState('');
     const toast = useToast()
+    console.log(storeInfo)
     const FormCheck = () => {
         let pass = true
         // name
@@ -113,14 +114,14 @@ export default () => {
         return pass
     }
     const HandleSave = async() => {
-        //console.log(jwt)
         if(!FormCheck()) {
             return
         }
         setLoading(true);
         let formData = new FormData();
+        //console.log(imageFile)
         if (imageFile !== null) {
-            formData.append('mainImage', imageFile);
+            formData.append('mainpage_img_url', imageFile);
         }
         formData.append('storeID', storeInfo._id);
         let updateInfo = {
@@ -146,7 +147,7 @@ export default () => {
         .then(async(res) => {
             await updateStoreInfo()
             toast({
-                title: `資料更新成功`,
+                title: t('profile.success'),
                 status: 'success',
                 isClosable: true,
             })
@@ -160,16 +161,16 @@ export default () => {
     }
 
     return (
-        <Box h='100%' w = '100%' p = '10'>
-        <Stack spacing={6} w = '500px'>  
-        <CropperModal storeImage = {storeInfo.mainImage} setImageFile = {setImageFile}/>
+        <Box h='100%' w = '100%' p = '10' overflow='scroll'>
+        <Stack spacing={6} w = {{base: '340px', md:'635px'}}>  
+        <CropperModal storeImage = {storeInfo.mainpage_img_url} setImageFile = {setImageFile}/>
         {/*imageFile && <Image src= {URL.createObjectURL(imageFile)} alt='Preview' />*/}
         <FormControl id="name" isInvalid={nameErr} isRequired>
             <FormLabel>{t('signup.name')}</FormLabel>
             <Input value={name} borderColor='whiteAlpha' onChange={e => setName(e.target.value)}/>
             <FormErrorMessage>{t(nameErr)}</FormErrorMessage>
         </FormControl>
-        <FormControl isInvalid = {catErr} isRequired>
+        {/*<FormControl isInvalid = {catErr} isRequired>
             <FormLabel>{t('signup.category')}</FormLabel>
             <Select borderColor='whiteAlpha'size = 'md' cursor = 'pointer' value={category} onChange={e => setCategory(e.target.value)}>
                 <option>其他</option>
@@ -177,7 +178,7 @@ export default () => {
                 <option>全家</option>
             </Select>
             <FormErrorMessage>{t(catErr)}</FormErrorMessage>
-        </FormControl>
+        </FormControl>*/}
         <FormControl id="phone" isInvalid = {phoneErr} isRequired>
             <FormLabel>{t('signup.phone')}</FormLabel>
             <Input type = 'tel' borderColor='whiteAlpha' value={phone} onChange={e => setPhone(e.target.value)}/>
@@ -188,7 +189,7 @@ export default () => {
             <Input type = 'text' borderColor='whiteAlpha' value={address} onChange={e => setAddress(e.target.value)}/>
             <FormErrorMessage>{t(addrErr)}</FormErrorMessage>
         </FormControl>
-        <FormControl id="lon" isInvalid = {lonErr} isRequired>
+        {/*<FormControl id="lon" isInvalid = {lonErr} isRequired>
             <FormLabel>{t('signup.lon')}</FormLabel>
             <Input borderColor='whiteAlpha' type = 'text' value={lon} onChange={e => setLon(e.target.value)}/>
             <FormErrorMessage>{t(lonErr)}</FormErrorMessage>
@@ -197,10 +198,12 @@ export default () => {
             <FormLabel>{t('signup.lat')}</FormLabel>
             <Input borderColor='whiteAlpha' type = 'text' value={lat} onChange={e => setLat(e.target.value)}/>
             <FormErrorMessage>{t(latErr)}</FormErrorMessage>
-        </FormControl>
-        <Button colorScheme='teal' size='md' w = '80px' left = '400px' onClick={() => HandleSave()}>
-            {t("profile.save")}
-        </Button>
+    </FormControl>*/}
+        <Box display='flex' flexDirection='row-reverse'>
+            <Button colorScheme='teal' size='md' w = '80px' onClick={() => HandleSave()}>
+                {t("profile.save")}
+            </Button>
+        </Box>
         </Stack>
     </Box>
     )

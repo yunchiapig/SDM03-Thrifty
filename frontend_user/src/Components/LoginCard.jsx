@@ -22,7 +22,7 @@ import axios from 'axios';
 import jwt_decode from "jwt-decode";
 import GoogleSSO from './GoogleSSO.js';
 
-function LoginCard({currentUserInfo, setCurrentUserInfo}) {
+function LoginCard() {
 
   const passwordRef = useRef(null);
   // console.log(currentUserInfo); // { current: null }
@@ -45,10 +45,10 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
   const handleSubmit = async e => {
     e.preventDefault();
     if (true) { // Error handling
-      axios.get(`http://52.193.252.15/api/1.0/user?email=${email}&password=${password}`, { crossdomain: true })
+      axios.get(`https://thrifty-tw.shop/api/1.0/user?email=${email}&password=${password}`, { crossdomain: true })
           .then(response => {
               console.log(jwt_decode(response.data.message));
-              setCurrentUserInfo(jwt_decode(response.data.message));
+              // setCurrentUserInfo(jwt_decode(response.data.message));
               localStorage.setItem('_id', jwt_decode(response.data.message)._id);
               localStorage.setItem('name', jwt_decode(response.data.message).name);
               localStorage.setItem('email', jwt_decode(response.data.message).email);
@@ -63,9 +63,9 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
     }
   }
 
-  const handleGoogleLogin = (user) => {
-    setCurrentUserInfo(user);
-  }
+  // const handleGoogleLogin = (user) => {
+  //   setCurrentUserInfo(user);
+  // }
 
   const { t } = useTranslation();
 
@@ -157,7 +157,7 @@ function LoginCard({currentUserInfo, setCurrentUserInfo}) {
                 <Divider />
               </HStack>
               <Box alignItems="flex-end" width={"100%"} justifyContent="center">
-                <GoogleSSO setCurrentUserInfo={handleGoogleLogin}/>
+                <GoogleSSO />
               </Box>
             </Stack>
           </Stack>

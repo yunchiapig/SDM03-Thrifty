@@ -5,17 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
-function GoogleSSO(setCurrentUserInfo) {
+function GoogleSSO() {
 
     const navigate = useNavigate();
 
     const handleGoogleSubmit = (credentialResponse) => {
         // e.preventDefault();
         const data = {'clientId': credentialResponse.clientId, 'credential': credentialResponse.credential};
-        axios.post('http://52.193.252.15/api/1.0/user/google', data, { crossdomain: true })
+        axios.post('https://thrifty-tw.shop/api/1.0/user/google', data, { crossdomain: true })
             .then(response => {
                 console.log(jwt_decode(response.data.message));
-                setCurrentUserInfo.setCurrentUserInfo(jwt_decode(response.data.message));
+                // setCurrentUserInfo.setCurrentUserInfo(jwt_decode(response.data.message));
                 localStorage.setItem('_id', jwt_decode(response.data.message)._id);
                 localStorage.setItem('name', jwt_decode(response.data.message).name);
                 localStorage.setItem('email', jwt_decode(response.data.message).email);

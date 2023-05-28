@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react"
+import { Box, Flex, Stack, Heading, Text } from "@chakra-ui/react"
 import StoreSmallCard from "../Components/StoreSmallCard"
 import Map from '../Components/Map';
 import Toggle from 'react-styled-toggle';
@@ -7,8 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 // import axios from "axios";
 
-export default function HomePage({filteredValues, userLocation, mapCenter, setMapCenter, storesData, setOnHomePage}){
-    const [ifMapMode, setIfMapMode] = useState(true);
+export default function MyFavPage({filteredValues, storesData, setOnHomePage}){
     const [filteredData, setFilteredData] = useState(storesData);
     const [filteredDoubleColData, setFilteredDoubleColData] = useState([]);
     const navigate = useNavigate();
@@ -53,35 +52,18 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
 
     return(
         <Box ml={5}>
-            <Flex>
-                <Toggle labelLeft={t('toggle.map')} labelRight={t('toggle.list')} style={{zIndex:10}}
-                backgroundColorUnchecked='#82BFF3'backgroundColorChecked='#76CFCF'
-                onChange={()=>{setIfMapMode(!ifMapMode)}}/>
-            </Flex>
             <Box>
                 <Flex>
                     {/* <SimpleSidebar/> */}
-                    {ifMapMode?
-                    <Flex w="100%">
-                        <Box w='50%'>
-                            <Map userLocation={userLocation} storesData={filteredData} mapCenter={mapCenter} setMapCenter={setMapCenter}/>
-                        </Box>
-                        <div style={{width: '50%', height: '75vh', overflowY: 'scroll'}}>
-                            <Box>
-                                {filteredData.map((storeData, i)=>{ return(
-                                    <Flex onClick={()=>{
-                                        navigate(`/store/${storeData._id}`, 
-                                            { state: { storeData: storeData } });}} 
-                                        w={{ sm: '100%', md: '100%' }} key={i} >
-                                        {(localStorage.getItem('name') !== null)?
-                                        <StoreSmallCard storeData={storeData} is_favorite={localStorage.getItem('favorite_stores').includes(storeData._id)}/>:
-                                        <StoreSmallCard storeData={storeData} is_favorite={false}/>}
-                                    </Flex>)
-                                })}
-                            </Box>
-                        </div>
-                    </Flex>:
                     <Box w="100%">
+                        <Stack align={'center'}>
+                            <Heading fontSize={'6xl'} textAlign={'center'}>
+                                {t('favorites')}
+                            </Heading>
+                            <Text fontSize={'lg'} color={'gray.600'}>
+                                {localStorage.getItem('name')} | {localStorage.getItem('email')}
+                            </Text>
+                        </Stack>
                         {filteredDoubleColData.map((twoStoresData, i)=>{ return(
                         <Flex key={i}>
                             {twoStoresData.map((storeData, ii)=>{return(
@@ -97,7 +79,7 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
                             )})}
                         </Flex>)
                         })}
-                    </Box>}
+                    </Box>
                 </Flex>
             </Box>
         </Box>
