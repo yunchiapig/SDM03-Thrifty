@@ -12,6 +12,8 @@ import Heart from "react-animated-heart";
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
 import { use } from 'i18next';
+const DefaultImg = require('../images/mainpageDefault.png');
+
 // import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs';
 // import Rating from './Rating';
 
@@ -87,6 +89,7 @@ export default function StoreSmallCard({storeData, is_favorite}) {
                         objectFit="cover"
                         boxSize="100%"
                         src={ storeData.mainpage_img_url }
+                        onError = {(e) => {e.target.src = DefaultImg}}
                     />
                 </Flex>
                 <Stack
