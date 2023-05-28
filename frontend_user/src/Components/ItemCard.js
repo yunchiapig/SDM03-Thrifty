@@ -7,7 +7,7 @@ import {
     Text,
     useColorModeValue,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 const DefaultImg = require('../images/foodImgDefault.png')
 // import Rating from './Rating';
 
@@ -25,7 +25,7 @@ export default function ItemCard(foodData) {
                 borderWidth="1px"
                 borderRadius="lg"
                 // w={{ sm: '100%', md: '45%vw' }}
-                height={{ sm: '476px', md: '15rem' }}
+                minH={{ sm: '476px', md: '15rem' }}
                 direction={{ base: 'column', md: 'row' }}
                 bg={useColorModeValue('white', 'gray.900')}
                 boxShadow={'md'}
@@ -46,12 +46,20 @@ export default function ItemCard(foodData) {
                     p={1} pl={2} pt={2} 
                     spacing="12px">
                     <Heading fontSize={'xl'} fontFamily={'body'}> {foodInfo.food.name} </Heading>
-                    {/* <Text  size="sm" mb={4} color={"gray.500"}> {data.description} </Text> */}
+                    {foodInfo.food.description?
+                        <Text  size="sm" mb={4} color="gray"> {foodInfo.food.description} </Text>
+                        :<></>
+                    }
                     <Box w="100%">
-                        <Heading fontSize={'xl'} fontFamily={'body'} color="red.400"> ＄{foodInfo.food.discount_price} </Heading>
-                        <Text  size="lg"  textDecoration="line-through" color={"red.200"}> ＄{foodInfo.food.original_price} </Text>
+                        {foodInfo.food.discount_price?
+                            <>
+                            <Heading fontSize={'xl'} fontFamily={'body'} color="red.400"> ＄{foodInfo.food.discount_price} </Heading>
+                            <Text size="lg"  textDecoration="line-through" color={"red.200"}> ＄{foodInfo.food.original_price} </Text>
+                            </>:
+                            <Heading fontSize={'xl'} fontFamily={'body'} color="red.400">特價：{foodInfo.food.discount_rate} </Heading>
+                        }
                     </Box>
-                    <Text  size="sm" mb={4}> 庫存：{foodInfo.quantity} </Text>
+                    <Text  size="sm" mb={4} bottom={0}position="relative"> 庫存：{foodInfo.quantity} </Text>
                 </Stack>
             </Stack>
         </Box>
