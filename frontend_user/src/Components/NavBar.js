@@ -55,7 +55,7 @@ export default function NavBar({filterOptions, filteredValues, setFilteredValues
             <Square w="10vw"/>
             <Square>
               {onHomePage?
-                <Filter filterOptions={filterOptions} notificationPos={notificationPos}
+                <Filter filterOptions={filterOptions} 
                   filteredValues={filteredValues} setFilteredValues={setFilteredValues}/>
                 :<></>
               }

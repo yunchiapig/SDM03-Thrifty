@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 // import type { SelectProps } from 'antd';
 
-export default function Filter({filterOptions, filteredValues, setFilteredValues, notificationPos}){
+export default function Filter({filterOptions, filteredValues, setFilteredValues}){
     const [isOpen, setIsOpen] = useState(false);
     const [filterBottom, setFilterBottom] = useState(0); 
     const [filteredCnt, setFilteredCnt] = useState(0);
