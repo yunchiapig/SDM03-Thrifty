@@ -49,7 +49,7 @@ export default ({item}) => {
             h = {{base: '250px', xl:'205px'}}
             w = {{base: '450px',lg: '550px',xl: '80%'}}
             display='grid'
-            gridTemplateColumns =  {{base: 'auto 180px',xl: 'auto 200px'}}
+            gridTemplateColumns =  {{base: 'auto 180px',xl: 'auto 240px'}}
             >
                 <Stack>
                     <CardBody h = '100%' display='grid' gridTemplateRows =  {{base: '40px 145px 65px', xl: '40px 100px 65px'}}>
@@ -84,9 +84,9 @@ export default ({item}) => {
                                 <Box maxH={8} minW={14} borderRadius={1.5} px={1.5} boxShadow='outline' onClick={HandleFocus} cursor='pointer'>{item.quantity}</Box>
                             </Box>
                         </Box>
-                    </CardBody>
+                    </CardBody> 
                 </Stack>
-                <Box  h = {{base: '250px', xl:'205px'}} w= {{lg: '180px', xl:'205px'}} float= 'right' display = 'flex' flexDirection = 'column' justifyContent={{base: 'space-between', xl: 'center'}} py = {{base: '30px', xl: '0'}}alignItems='center' overflow='hidden'>
+                <Box  h = {{base: '250px', xl:'205px'}} w= {{lg: '180px', xl:'230px'}} float= 'right' display = 'flex' flexDirection = 'column' justifyContent={{base: 'space-between', xl: 'center'}} py = {{base: '30px', xl: '0'}}alignItems='center' overflow='hidden'>
                     <Box display = {{base: 'flex', xl:'none'}} mb = '10px'>
                         <Box className = "iconButton" bottom= {2} color='white' mx = {2} onClick={() => {setDrawerMount(true); updateOnOpen()}}>
                             <Icon as={AiOutlineEdit} fontSize={18} fill='gray'/>
@@ -100,8 +100,8 @@ export default ({item}) => {
                         <DeletConfirm isOpen = {deleteIsOpen} onOpen = {deleteOnOpen} onClose = {deleteOnClose} item={item}/>
                     </Box>
                     <Image
-                        h={{base: '136px', xl: '80%'}}
-                        w={{base: '170px', xl: '80%'}}
+                        h={{base: '136px', xl: '180px'}}
+                        w={{base: '170px', xl: '225px'}}
                         objectFit='cover'
                         src= { item.foodInfo.img_url}
                         alt= {item.foodInfo.name}
