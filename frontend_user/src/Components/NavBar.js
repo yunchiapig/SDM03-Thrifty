@@ -69,9 +69,7 @@ export default function NavBar({filterOptions, filteredValues, setFilteredValues
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
-          <Flex display={{ base: 'none', md: 'flex' }} ml={10} w="100%">
-            <LanguageSelector />
-          </Flex>
+          <LanguageSelector />
           <Button
             as={'a'}
             fontSize={'sm'}

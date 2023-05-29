@@ -73,16 +73,25 @@ function Map({userLocation, storesData, mapCenter, setMapCenter}) {
     // useEffect(()=>{
     //     console.log("userLocation", userLocation)
     // }, [userLocation])
-    console.log(map)
+    // console.log(map)
+
     return (
         <>
         {isLoaded && (
             <GoogleMap mapContainerStyle={containerStyle} center={userLocation} zoom={15} 
                 onLoad={onLoad} onDragEnd={() => handleCenterChanged()} onClick={() => handleMarkerClose()}>
                 {storesData.map((storeData) => 
-                    {return(
+                    {
+                        let icon_url;
+                        if (storeData.category === "全家") {
+                            icon_url = "https://play-lh.googleusercontent.com/e3AKbefh3znufeBBSF1anaUZwV7oSkTjNCn67ZdSD18DwE95y7lZY9uHDloXH8fcmg=w240-h480-rw";
+                        }
+                        else {
+                            icon_url = storeData.mainpage_img_url;
+                        }
+                        return(
                         <MarkerF key={storeData._id} position={{lat: storeData.location.coordinates[1], lng: storeData.location.coordinates[0]}}
-                        onClick={() => handleMarkerClick(storeData)} icon={ {url: storeData.mainpage_img_url, scaledSize: new window.google.maps.Size(30, 30) } }>
+                        onClick={() => handleMarkerClick(storeData)} icon={ {url: icon_url, scaledSize: new window.google.maps.Size(30, 30) } }>
                         {selectedMarker === storeData && (
                             <InfoWindowF onCloseClick={() => handleMarkerClose(storeData)}>
                                 <div>
