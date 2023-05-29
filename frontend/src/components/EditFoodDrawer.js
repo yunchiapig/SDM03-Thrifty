@@ -49,8 +49,8 @@ export default ({ isOpen, onOpen, onClose, item, certain, addToTag}) => {
     const QtyRef = React.useRef();
     const [name, setName] = useState(item?.foodInfo.name || "");
     const [nameErr, setNameErr] =useState(false)
-    const [tag, setTag] = useState(item?.foodInfo.tag || addToTag || "");
-    const [tagErr, setTagErr] =useState(false)
+    const [category, setCategory] = useState(item?.foodInfo.category || addToTag || "");
+    const [catErr, setCatErr] =useState(false)
     const [quantity, setQuantity] = useState(item?.quantity || "0");
     const [qtyErr, setQtyErr] =useState(false)
     const [discountedPrice, setDiscountedPrice] = useState(item?.foodInfo.discount_price || "");
@@ -75,12 +75,12 @@ export default ({ isOpen, onOpen, onClose, item, certain, addToTag}) => {
             setNameErr('')
         }
         //tag
-        if (tag == ''){
-            setTagErr('signup.inputBlank')
+        if (category == ''){
+            setCatErr('signup.inputBlank')
             pass = false
         }
         else {
-            setTagErr('')
+            setCatErr('')
         }
         //des
         if (description == ''){
@@ -158,8 +158,7 @@ export default ({ isOpen, onOpen, onClose, item, certain, addToTag}) => {
         formData.append('storeID', storeInfo._id);
         let updateInfo = {
             name,
-            category: "其他",
-            tag,
+            category,
             original_price: price,
             discount_price: discountedPrice,
             description
@@ -192,7 +191,7 @@ export default ({ isOpen, onOpen, onClose, item, certain, addToTag}) => {
             onClose();
         })
         .catch(e => {
-            //console.log(e)
+            
             if(e.response.data.message === '食物品項已存在。') {
                 setNameErr("fooddrawer.existErr")
             }
@@ -219,8 +218,7 @@ export default ({ isOpen, onOpen, onClose, item, certain, addToTag}) => {
         formData.append('foodID', item._id);
         let updateInfo = {
             name,
-            category: "其他",
-            tag,
+            category,
             original_price: price,
             discount_price: discountedPrice,
             description
@@ -298,11 +296,11 @@ export default ({ isOpen, onOpen, onClose, item, certain, addToTag}) => {
                 </Box>
 
                 <Box>
-                    <FormControl isInvalid = {tagErr} isRequired>
+                    <FormControl isInvalid = {catErr} isRequired>
                         <FormLabel htmlFor='owner'>{t('fooddrawer.tag')}</FormLabel>
                         <Text color = '#787878'>{t('fooddrawer.tagdes')}</Text>
-                        <CustomSelect tag = {tag} setTag={setTag}/>
-                        <FormErrorMessage>{t(tagErr)}</FormErrorMessage>
+                        <CustomSelect tag = {category} setTag={setCategory}/>
+                        <FormErrorMessage>{t(catErr)}</FormErrorMessage>
                     </FormControl>
                 </Box>
 
