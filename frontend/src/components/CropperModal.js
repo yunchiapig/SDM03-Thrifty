@@ -97,7 +97,7 @@ function CustomModal({setImageFile, storeImage}) {
         //ctx.putImageData(imageData, 0, 0);
         // Converting to base64
         const newImage = canvas.toDataURL('image/jpeg');
-        console.log(dataURLToFile(newImage, 'newImage.jpeg'))
+       
         setImageFile(dataURLToFile(newImage, 'newImage.jpeg'));
         setCroppedImage(newImage);
         CloseModal();

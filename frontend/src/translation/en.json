@@ -31,7 +31,8 @@
   },
   "profile": {
     "save": "Save", 
-    "success": "Profile has been updated successfully"
+    "success": "Profile has been updated successfully",
+    "fail": "Fail to update profile"
   },
   "nav": {
     "profile": "Profile",

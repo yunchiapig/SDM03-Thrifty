@@ -21,12 +21,12 @@ export default ({typeStocks, r, index}) => {
     return (
         <Box bg='#EDF2F6' textAlign= 'left' w = '100%' ref={r} pb={index === stocks.length - 1 ? '50%' : '0'}>
             <Box ml = {12} mt = {8} display='flex' flexDirection='row' position='relative'>
-                <Text  fontSize= '24px' textAlign = 'left'> {typeStocks.tag} </Text>
+                <Text  fontSize= '24px' textAlign = 'left'> {typeStocks.category} </Text>
                 <Button className = "iconButton" variant='ghost' onClick={() => {setDrawerMount(true); onOpen()}}>
                     <Icon as = {AiOutlinePlusCircle} ml={2} mt={2} fontSize={24} fill='gray'/>
                 </Button>
                 { drawerMount ? 
-                <EditFoodDrawer isOpen = {isOpen} onOpen = {onOpen} onClose = {() => {onClose(); setDrawerMount(false)}} addToTag={typeStocks.tag} /> :
+                <EditFoodDrawer isOpen = {isOpen} onOpen = {onOpen} onClose = {() => {onClose(); setDrawerMount(false)}} addToTag={typeStocks.category} /> :
                 null}
             </Box>
             {typeStocks.items.map(s => {
