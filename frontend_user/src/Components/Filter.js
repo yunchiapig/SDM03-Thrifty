@@ -11,10 +11,6 @@ export default function Filter({filterOptions, filteredValues, setFilteredValues
     const [filteredCnt, setFilteredCnt] = useState(0);
     const [t, i18n] = useTranslation();
 
-    useEffect(()=>{
-        console.log("t", t)
-    }, [t])
-
     const itemOptions = filterOptions.item.map((option)=>{
         return({label: option, value: option})
     })

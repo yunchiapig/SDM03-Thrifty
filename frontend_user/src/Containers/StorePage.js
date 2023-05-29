@@ -28,7 +28,7 @@ const StorePage = ({setOnHomePage}) => {
         axios.get(`https://thrifty-tw.shop/api/1.0/user/foods?id=${storeID}`,  { crossdomain: true })
             .then(response => {
                 var msg = response.data.message;
-                console.log(msg)
+                // console.log(msg)
                 var categories = []
                 msg.forEach((foodItem)=>{
                     var cat = foodItem.food.category;

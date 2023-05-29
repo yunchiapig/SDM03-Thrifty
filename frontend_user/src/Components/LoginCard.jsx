@@ -47,7 +47,7 @@ function LoginCard() {
     if (true) { // Error handling
       axios.get(`https://thrifty-tw.shop/api/1.0/user?email=${email}&password=${password}`, { crossdomain: true })
           .then(response => {
-              console.log(jwt_decode(response.data.message));
+              // console.log(jwt_decode(response.data.message));
               // setCurrentUserInfo(jwt_decode(response.data.message));
               localStorage.setItem('_id', jwt_decode(response.data.message)._id);
               localStorage.setItem('name', jwt_decode(response.data.message).name);
@@ -56,7 +56,7 @@ function LoginCard() {
               localStorage.setItem('iat', jwt_decode(response.data.message).iat);
               window.alert('Login successfully!');
               navigate('/');
-              console.log(localStorage.getItem('favorite_stores'));
+              // console.log(localStorage.getItem('favorite_stores'));
            })
           .catch(error => { window.alert('Login failed!');
           console.log(error);});

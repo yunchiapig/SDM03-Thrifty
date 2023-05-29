@@ -33,7 +33,7 @@ function Map({userLocation, storesData, mapCenter, setMapCenter}) {
 
     const handleCenterChanged = () => {
         if (map !== null) {
-            console.log("center", map.getCenter().lat(), " ", map.getCenter().lng());
+            // console.log("center", map.getCenter().lat(), " ", map.getCenter().lng());
             setMapCenter({ lat: map.getCenter().lat(), lng: map.getCenter().lng() });
         }
     };
