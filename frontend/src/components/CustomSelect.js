@@ -64,8 +64,7 @@ export default ({tag, setTag }) => {
     return (
         <Box>
             <InputGroup>
-                <Input onClick={() => {setFocus(true)}} value={tag} onChange={e => handleInput(e)} />
-                errorBorderColor='crimson'/>
+                <Input onClick={() => {setFocus(true)}} value={tag} onChange={e => handleInput(e)}  errorBorderColor='crimson'/>
                 <InputRightElement children={<ChevronDownIcon color='grey' />} />
                 </InputGroup>
             { focus && stocks?.length > 0?
@@ -77,8 +76,8 @@ export default ({tag, setTag }) => {
                 >
                     {stocks.map(s => {
                         return (
-                            <Box key = {s.tag} as="span" flex='1' textAlign='left' display= 'flex' alignItems='center' h = {10} pl = {3} bg={s.tag === tag ? '#EDF2F6': 'white'} onClick={() => handleSelect(s.tag)} cursor='pointer'>
-                                {s.tag}
+                            <Box key = {s.category} as="span" flex='1' textAlign='left' display= 'flex' alignItems='center' h = {10} pl = {3} bg={s.category === tag ? '#EDF2F6': 'white'} onClick={() => handleSelect(s.category)} cursor='pointer'>
+                                {s.category}
                             </Box>
                         )
                     })}
