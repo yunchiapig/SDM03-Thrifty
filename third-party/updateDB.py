@@ -57,8 +57,8 @@ def reformatFamily(store_infos):
         for cat in data['info']:  # for each category
             category = cat['name']
 
-            for sub_cat in cat['categories']:  # for each sub-category (tag)
-                tag = sub_cat['name']
+            for sub_cat in cat['categories']:  # for each sub-category (tags)
+                tags = sub_cat['name']
 
                 for prod in sub_cat['products']:  # for each food (prduct)
                     pid = prod['code']
@@ -71,7 +71,7 @@ def reformatFamily(store_infos):
                             'brand': '全家',
                             'name': prod['name'],
                             'category': category,
-                            'tag': [tag],
+                            'tags': [tags],
                             'original_price' : 0,
                             'discount_price' : 0,
                             'discount_rate' : '7折',

@@ -482,6 +482,8 @@ CityList = [
     }
 ]
 
+mainpage_img_url = 'https://images.1111.com.tw/discussPic/63/51562263_97023180.2701459.jpg'
+storepage_img_url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/FamilyMart_Logo_%282016-%29.svg/1280px-FamilyMart_Logo_%282016-%29.svg.png'
 
 from pymongo import MongoClient
 import requests
@@ -524,7 +526,8 @@ def initializeFamily(store_infos):
                   'type': 'Point', 
                   'coordinates':[data['longitude'], data['latitude']]
                   },
-              'img_url': 'https://i.imgur.com/u2stOGp.jpg'
+              'mainpage_img_url': mainpage_img_url,
+              'storepage_img_url': storepage_img_url
           }
           msgs.append(store)
     
