@@ -24,7 +24,7 @@ const StoreAdminProvider = (props) => {
 
   const checkTokenExpiration = () => {
     const currentTime = Math.floor(Date.now() / 1000); // Get the current time in seconds
-    console.log(jwt_decode(jwt).exp, currentTime)
+    
     if(jwt_decode(jwt).exp < currentTime) {
       localStorage.removeItem("login");
       localStorage.removeItem("jwt");
@@ -40,50 +40,52 @@ const StoreAdminProvider = (props) => {
   }
 
   const getItems = async() => {
-      console.log(stocks)
+      //console.log(stocks)
       setLoading(true);
       const res
         = await instance.get('/api/1.0/admin/stock', { 
           params: {  
               id: storeInfo._id
-      },}).catch( e => {
+      },})
+      .then( res => {
+        // from stock to items
+        setLoading(false);
+        let tempStocks = res?.data.data;
+        if(tempStocks === undefined) {
+          setStocks([]);
+        }
+      
+        if(res?.status === 200) {
+          // sort items by category
+          let stockList = [];
+          tempStocks.forEach(e => {
+            let added = false
+            stockList.forEach(s => {
+              console.log(s)
+              if(s.category === e.foodInfo.category) {
+                s.items.push(e);
+                added = true;
+                return false;
+              }
+            })
+            if(added === false) {
+              stockList.push({category: e.foodInfo.category, items: [e]});
+            }
+            setStocks(stockList);
+          });
+      }
+      })
+      .catch( e => {
         console.log(e)
           //if(status === 400) {
               setStocks([]);
           //}
       }
       )
-      // from stock to items
-      setLoading(false);
-      let tempStocks = res?.data.data;
-      if(tempStocks === undefined) {
-        setStocks([]);
-      }
-      console.log(tempStocks)
-      if(res?.status === 200) {
-        // sort items by tags
-        let stockList = [];
-        tempStocks.forEach(e => {
-          let added = false
-          stockList.forEach(s => {
-            console.log(s)
-            if(s.tag === e.foodInfo.tag) {
-              s.items.push(e);
-              added = true;
-              return false;
-            }
-          })
-          if(added === false) {
-            stockList.push({tag: e.foodInfo.tag, items: [e]});
-          }
-          setStocks(stockList);
-        });
-        
-      }
   }
 
   const updateStoreInfo = async() => {
-    console.log(storeInfo)
+    //console.log(storeInfo)
     checkTokenExpiration();
     const res
     = await instance.get('/api/1.0/admin/store', { 

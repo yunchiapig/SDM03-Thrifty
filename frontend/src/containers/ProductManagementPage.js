@@ -45,15 +45,15 @@ export default () => {
     //const scrollRefs = useMemo(() => Array.from({ length: stocks.length }, () => createRef()), [stocks]);
     const scrollRefs =useMemo(() => {
         return stocks?.reduce((acc, obj) => {
-          const index = obj.tag;
+          const index = obj.category;
           acc[index] = createRef();
           return acc;
         }, {});
       }, [stocks]);
       
-    const ScrollToTop = (tag) => {
-        setSelectedType(tag);
-        scrollRefs[tag].current?.scrollIntoView({
+    const ScrollToTop = (cat) => {
+        setSelectedType(cat);
+        scrollRefs[cat].current?.scrollIntoView({
             behavior: 'smooth',
             block: 'start',
             inline: 'start'
@@ -74,11 +74,11 @@ export default () => {
                     <Accordion overflow='scroll'>
                         {stocks?.map((s, i) => {
                             return (
-                                <AccordionItem key = {s.tag}>
+                                <AccordionItem key = {s.category}>
                                     <h2>
-                                    <AccordionButton bg={selectedType === s.tag ? "#EDF2F6": 'white'}>
-                                    <Box as="span" flex='1' textAlign='left' display= 'flex' alignItems='center' h = {10} pl = {3} key={s.tag} onClick = {() => ScrollToTop(s.tag)}>
-                                        {s.tag}
+                                    <AccordionButton bg={selectedType === s.category ? "#EDF2F6": 'white'}>
+                                    <Box as="span" flex='1' textAlign='left' display= 'flex' alignItems='center' h = {10} pl = {3} key={s.category} onClick = {() => ScrollToTop(s.category)}>
+                                        {s.category}
                                     </Box>
                                     </AccordionButton>
                                     </h2>
@@ -96,7 +96,7 @@ export default () => {
                     >
                         {stocks?.map((t) => {
                             return (
-                                <TypeCard typeStocks = {t} r = {scrollRefs[t.tag]} key={t.tag}/>
+                                <TypeCard typeStocks = {t} r = {scrollRefs[t.category]} key={t.category}/>
                             )
                         })}
                     </VStack>

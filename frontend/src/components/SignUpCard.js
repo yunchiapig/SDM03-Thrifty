@@ -48,7 +48,7 @@ import {
     const [lonErr, setLonErr] = useState('');
     
     const FormCheck = () => {
-        //console.log('check')
+       
         let pass = true
         // name
         if (name == ''){

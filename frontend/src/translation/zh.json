@@ -31,7 +31,8 @@
     },
     "profile": {
       "save": "儲存",
-      "success": "資料更新成功"
+      "success": "資料更新成功",
+      "fail": "資料更新失敗"
     },
     "nav": {
       "profile": "基本資料",

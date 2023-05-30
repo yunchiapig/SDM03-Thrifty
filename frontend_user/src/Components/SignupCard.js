@@ -46,7 +46,8 @@ function SignupCard() {
       const userData = { 'name': accountName, 'email': email, 'password': password }
       axios.post('https://thrifty-tw.shop/api/1.0/user', userData, { crossdomain: true })
           .then(response => {
-              console.log(jwt_decode(response.data.message)); })
+              // console.log(jwt_decode(response.data.message)); 
+            })
       window.alert('Sign up successfully! Please log in.');
       navigate('/login');
     }

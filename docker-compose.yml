@@ -38,6 +38,7 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./certbot/www:/var/www/certbot/:ro
       - ./certbot/conf:/etc/nginx/ssl/:ro
+      - /usr/tmp/build:/var/www/admin
       # - admin:/var/www/admin
       # - user:/var/www/user
     ports:

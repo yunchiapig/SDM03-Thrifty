@@ -40,7 +40,7 @@ export default () => {
     const [latErr, setLatErr] = useState('');
     const [lonErr, setLonErr] = useState('');
     const toast = useToast()
-    console.log(storeInfo)
+    
     const FormCheck = () => {
         let pass = true
         // name
@@ -119,7 +119,7 @@ export default () => {
         }
         setLoading(true);
         let formData = new FormData();
-        //console.log(imageFile)
+        
         if (imageFile !== null) {
             formData.append('mainpage_img_url', imageFile);
         }
@@ -153,7 +153,11 @@ export default () => {
             })
         })
         .catch(e => {
-            //console.log(e)
+            toast({
+                title: t('profile.fail'),
+                status: 'error',
+                isClosable: true,
+            })
         })
         
         setLoading(false);

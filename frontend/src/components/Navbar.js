@@ -53,7 +53,7 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
     { name: 'nav.profile', icon: FiHome, ref: "/Profile" },
     { name: 'nav.productManagement', icon: FiServer, ref: "/ProductManagement"},
-    {/* name: 'nav.setting', icon: FiSettings, ref: "/Settings" */},
+   
   ];
 
 export default function SidebarWithHeader({
