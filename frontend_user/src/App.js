@@ -25,11 +25,7 @@ function App() {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   // const [currentUserInfo, setCurrentUserInfo] = useState(null);
   const { i18n } = useTranslation();
-<<<<<<< HEAD
-  const [onHomePage, setOnHomePage] = useState(false); 
-=======
   const [onHomePage, setOnHomePage] = useState(false);
->>>>>>> ba0a3c80aeb9c1dd5e1c3d261008e29088d699d4
   const time_interval = 2500;
 
   // useEffect(()=>{
