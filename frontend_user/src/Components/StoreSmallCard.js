@@ -46,10 +46,10 @@ export default function StoreSmallCard({storeData, is_favorite}) {
             favorite_stores += storeData._id;
             localStorage.setItem('favorite_stores', favorite_stores);
             const data = { "userID": localStorage.getItem('_id'), "storeID": storeData._id, "type": "add" };
-            console.log(data);
+            // console.log(data);
             axios.put('https://thrifty-tw.shop/api/1.0/user/fav', data, { crossdomain: true })
                 .then(response => {
-                    console.log(jwt_decode(response.data.message));
+                    // console.log(jwt_decode(response.data.message));
                     // setCurrentUserInfo(jwt_decode(response.data.message));
                 })
                 .catch(error => { console.log(error);});
@@ -58,10 +58,10 @@ export default function StoreSmallCard({storeData, is_favorite}) {
             favorite_stores = favorite_stores.replace(storeData._id, '');
             localStorage.setItem('favorite_stores', favorite_stores);
             const data = { "userID": localStorage.getItem('_id'), "storeID": storeData._id, "type": "remove" };
-            console.log(data);
+            // console.log(data);
             axios.put('https://thrifty-tw.shop/api/1.0/user/fav', data, { crossdomain: true })
                 .then(response => {
-                    console.log(jwt_decode(response.data.message));
+                    // console.log(jwt_decode(response.data.message));
                     // setCurrentUserInfo(jwt_decode(response.data.message));
                 })
                 .catch(error => { console.log(error);});

@@ -31,13 +31,13 @@ function App() {
   //   setLanguageValue(i18n.language);
   // }, [i18n.language])
 
-  useEffect(()=>{
-    console.log('storesData', storesData)
-  }, [storesData])
+  // useEffect(()=>{
+  //   console.log('storesData', storesData)
+  // }, [storesData])
 
   useEffect(()=>{
-    console.log('options', filterOptions.item)
-    console.log('values', filteredValues.item)
+    // console.log('options', filterOptions.item)
+    // console.log('values', filteredValues.item)
     let values = filteredValues
     let storeFV = values.store.filter((v) => { 
       for (const opt of filterOptions.store){
@@ -51,7 +51,7 @@ function App() {
       }
       return false;
     });
-    console.log('item selected', itemFV)
+    // console.log('item selected', itemFV)
     setFilteredValues({'store': storeFV, 'item': itemFV});
   }, [filterOptions])
 
@@ -76,7 +76,7 @@ function App() {
       // trigger 711 cron job
       axios.post(`https://thrifty-tw.shop/third-party`, {Longitude: mapCenter.lng, Latitude: mapCenter.lat}, { crossdomain: true })
         .then(response => {
-          console.log(response.data);
+          // console.log(response.data);
       });
       axios.get(`https://thrifty-tw.shop/api/1.0/user/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
         .then(response => {

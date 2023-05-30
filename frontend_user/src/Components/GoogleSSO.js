@@ -14,7 +14,7 @@ function GoogleSSO() {
         const data = {'clientId': credentialResponse.clientId, 'credential': credentialResponse.credential};
         axios.post('https://thrifty-tw.shop/api/1.0/user/google', data, { crossdomain: true })
             .then(response => {
-                console.log(jwt_decode(response.data.message));
+                // console.log(jwt_decode(response.data.message));
                 // setCurrentUserInfo.setCurrentUserInfo(jwt_decode(response.data.message));
                 localStorage.setItem('_id', jwt_decode(response.data.message)._id);
                 localStorage.setItem('name', jwt_decode(response.data.message).name);
