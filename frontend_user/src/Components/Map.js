@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { GoogleMap, useJsApiLoader, MarkerF, InfoWindowF } from '@react-google-maps/api';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { includes } from 'lodash';
+const DefaultImg = require('../images/iconDefault.png');
 
 function Map({userLocation, storesData, mapCenter, setMapCenter}) {
     const [map, setMap] = useState(null);
@@ -67,13 +69,6 @@ function Map({userLocation, storesData, mapCenter, setMapCenter}) {
         // });
     };
     
-    // useEffect(()=>{
-    //     console.log(storesData);
-    // }, [storesData])
-    // useEffect(()=>{
-    //     console.log("userLocation", userLocation)
-    // }, [userLocation])
-    // console.log(map)
 
     return (
         <>
@@ -87,7 +82,10 @@ function Map({userLocation, storesData, mapCenter, setMapCenter}) {
                             icon_url = "https://play-lh.googleusercontent.com/e3AKbefh3znufeBBSF1anaUZwV7oSkTjNCn67ZdSD18DwE95y7lZY9uHDloXH8fcmg=w240-h480-rw";
                         }
                         else {
-                            icon_url = storeData.mainpage_img_url;
+                            icon_url=DefaultImg;
+                            if(storeData.mainpage_img_url && 'http' === storeData.mainpage_img_url.substring(0, 4)){
+                                icon_url = storeData.mainpage_img_url;
+                            }
                         }
                         return(
                         <MarkerF key={storeData._id} position={{lat: storeData.location.coordinates[1], lng: storeData.location.coordinates[0]}}
