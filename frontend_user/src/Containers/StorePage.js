@@ -147,7 +147,7 @@ const StorePage = ({setOnHomePage}) => {
                         </VStack>
                     </Box>
                     <Square outline={"solid lightgray"} boxShadow={'md'} id="store-classes-bar" bg={useColorModeValue('white')}
-                        top={`${navbarHeight}`}  boxSizing="border-box">
+                        top={`${navbarHeight}`}  boxSizing="border-box" zIndex={1}>
                         <HStack align={'center'} p={3} w="100%" justifyContent={'space-around'}>
                             {foodCategories.map((theClass) =>
                                 <Box h="100%" key={theClass} >
