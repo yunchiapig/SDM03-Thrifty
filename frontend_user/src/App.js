@@ -25,7 +25,8 @@ function App() {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   // const [currentUserInfo, setCurrentUserInfo] = useState(null);
   const { i18n } = useTranslation();
-  const [onHomePage, setOnHomePage] = useState(false); 
+  const [onHomePage, setOnHomePage] = useState(false);
+  const time_interval = 2500;
 
   // useEffect(()=>{
   //   setLanguageValue(i18n.language);
@@ -71,34 +72,39 @@ function App() {
   }, []);
 
   useEffect(() => {
-    
-    if (mapCenter){
-      // trigger 711 cron job
-      axios.post(`https://thrifty-tw.shop/third-party`, {Longitude: mapCenter.lng, Latitude: mapCenter.lat}, { crossdomain: true })
-        .then(response => {
-          // console.log(response.data);
-      });
-      axios.get(`https://thrifty-tw.shop/api/1.0/user/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
-        .then(response => {
-          var stores = response.data.message
-          setStoresData(stores);
-          
-          var storeCategories = stores.map(store => store.category);
-          storeCategories = storeCategories.filter(
-              (s, idx) => storeCategories.indexOf(s) === idx
-          )
-          var itemCategories = Array();
-          stores.forEach((store) => {
-              var cat = store.stocks.map(stock => stock.category)
-              itemCategories = [...itemCategories, ...cat];
-          });
-          itemCategories = itemCategories.filter(
-              (i, idx) => itemCategories.indexOf(i) === idx
-          )
-          setFilterOptions({'store':storeCategories, 'item':itemCategories});
-      });
+    let timeout;
+    timeout = setTimeout(async () => {
+      if (mapCenter){
+        // trigger 711 cron job
+        axios.post(`https://thrifty-tw.shop/third-party`, {Longitude: mapCenter.lng, Latitude: mapCenter.lat}, { crossdomain: true })
+          .then(response => {
+            // console.log(response.data);
+        });
+        axios.get(`https://thrifty-tw.shop/api/1.0/user/stores?longitude=${mapCenter.lng}&latitude=${mapCenter.lat}`,  { crossdomain: true })
+          .then(response => {
+            var stores = response.data.message
+            setStoresData(stores);
+            
+            var storeCategories = stores.map(store => store.category);
+            storeCategories = storeCategories.filter(
+                (s, idx) => storeCategories.indexOf(s) === idx
+            )
+            var itemCategories = Array();
+            stores.forEach((store) => {
+                var cat = store.stocks.map(stock => stock.category)
+                itemCategories = [...itemCategories, ...cat];
+            });
+            itemCategories = itemCategories.filter(
+                (i, idx) => itemCategories.indexOf(i) === idx
+            )
+            setFilterOptions({'store':storeCategories, 'item':itemCategories});
+        });
+        // console.log('storesData', storesData);
+      }
+    }, time_interval);
 
-    }
+    return () => clearTimeout(timeout);
+    
   }, [mapCenter]);
 
   useEffect(() => {
