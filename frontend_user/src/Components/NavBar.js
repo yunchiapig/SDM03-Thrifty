@@ -37,7 +37,7 @@ export default function NavBar({filterOptions, filteredValues, setFilteredValues
         <Flex
           flex={{ base: 1, md: 'auto' }}
           ml={{ base: -2 }}
-          display={{ base: 'flex', md: 'none' }}>
+          display={{ base: 'none', md: 'none' }}>
           <IconButton
             onClick={onToggle}
             icon={
@@ -47,12 +47,13 @@ export default function NavBar({filterOptions, filteredValues, setFilteredValues
             aria-label={'Toggle Navigation'}
           />
         </Flex>
-        <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
+        <Flex flex={{ base: 1 }} justify={'start' }>
           <Box maxW='20vh' onClick={()=>{ navigate(`/`);}} >
-            <img className="logo" src={Logo} alt="Thrifty" style={{cursor:'pointer'}} />
+            <img className="logo" src={Logo} alt="Thrifty" style={{cursor:'pointer', maxHeight:'10vw'}} />
           </Box>
-          <Flex display={{ base: 'none', md: 'flex' }} ml={10} w="100%">
-            <Square w="10vw"/>
+          <Flex  ml={10} w="100%">
+            {window.screen.width >= 821 ?
+              <Square w="10vw"/>:<></>}
             <Square>
               {onHomePage?
                 <Filter filterOptions={filterOptions} 
@@ -80,7 +81,7 @@ export default function NavBar({filterOptions, filteredValues, setFilteredValues
           </Button>
           <Button
             as={'a'}
-            display={{ base: 'none', md: 'inline-flex' }}
+            display={{ base: 'inline-flex', md: 'inline-flex' }}
             fontSize={'sm'}
             fontWeight={600}
             color={'white'}
@@ -110,7 +111,7 @@ export default function NavBar({filterOptions, filteredValues, setFilteredValues
           </Button>
           <Button
             as={'a'}
-            display={{ base: 'none', md: 'inline-flex' }}
+            display={{ base: 'inline-flex', md: 'inline-flex' }}
             fontSize={'sm'}
             fontWeight={600}
             color={'white'}

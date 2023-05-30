@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react"
+import { Box, Flex, Stack } from "@chakra-ui/react"
 import StoreSmallCard from "../Components/StoreSmallCard"
 import Map from '../Components/Map';
 import Toggle from 'react-styled-toggle';
@@ -62,11 +62,14 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
                 <Flex>
                     {/* <SimpleSidebar/> */}
                     {ifMapMode?
-                    <Flex w="100%">
-                        <Box w='50%'>
+                    <Stack w="100%" direction={{ base: "column", lg: "row" }} alignItems="stretch">
+                        <Box w={{base:'100%', lg:'50%'}} h={{base:'65vw' ,lg: '70vh'}}>
                             <Map userLocation={userLocation} storesData={filteredData} mapCenter={mapCenter} setMapCenter={setMapCenter}/>
                         </Box>
-                        <div style={{width: '50%', height: '75vh', overflowY: 'scroll'}}>
+                        {window.screen.width <= 821 ?
+                            <Box h={5}/>:<></>}
+                        <Flex w={{base:'100%', lg:'50%'}} h='75vh' overflowY={'scroll'}>
+                        {/* <div style={{width:{base:'100%', md:'50%'}, height: '75vh', overflowY: 'scroll'}}> */}
                             <Box>
                                 {filteredData.map((storeData, i)=>{ return(
                                     <Flex onClick={()=>{
@@ -79,8 +82,9 @@ export default function HomePage({filteredValues, userLocation, mapCenter, setMa
                                     </Flex>)
                                 })}
                             </Box>
-                        </div>
-                    </Flex>:
+                        </Flex>
+                        {/* </div> */}
+                    </Stack>:
                     <Box w="100%">
                         {filteredDoubleColData.map((twoStoresData, i)=>{ return(
                         <Flex key={i}>

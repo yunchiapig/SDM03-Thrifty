@@ -132,7 +132,7 @@ function App() {
         <NavBar zIndex={100} filterOptions={filterOptions} onHomePage={onHomePage}
           filteredValues={filteredValues} setFilteredValues={setFilteredValues} />
         {/* <SimpleSidebar/> */}
-        <Box w="100%" h="19vh"/>
+        <Box w="100%" h={'12vw'}/>
         
         <Routes>
           <Route path="/" element={<HomePage filteredValues={filteredValues} setOnHomePage={setOnHomePage}
